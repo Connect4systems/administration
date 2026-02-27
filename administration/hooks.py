@@ -242,3 +242,13 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+# ... keep your existing hooks
+
+# Load JS only on the Purchase Order doctype
+doctype_js = {
+    "Purchase Order": "public/js/doctype/purchase_order/create_shipment_request.js",
+}
+
+
+
+fixtures = ["Custom Field", "Property Setter", "DocType Link"]

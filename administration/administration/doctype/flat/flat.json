@@ -1,0 +1,154 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:flat_title",
+ "creation": "2025-10-08 14:21:47.832806",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "flat_title",
+  "governorate",
+  "address",
+  "column_break_itcu",
+  "project",
+  "flat_owner",
+  "owner_name",
+  "no_of_room",
+  "section_break_sxmy",
+  "payment_schedule",
+  "rent",
+  "security_deposit",
+  "column_break_auya",
+  "rent_start_date",
+  "rent_end_date",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "flat_title",
+   "fieldtype": "Data",
+   "label": "Flat Title",
+   "unique": 1
+  },
+  {
+   "fieldname": "governorate",
+   "fieldtype": "Link",
+   "label": "Governorate",
+   "options": "Governorate"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "column_break_itcu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "flat_owner",
+   "fieldtype": "Link",
+   "label": "Flat Owner",
+   "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner name"
+  },
+  {
+   "fieldname": "no_of_room",
+   "fieldtype": "Select",
+   "label": "No of Room",
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
+  },
+  {
+   "fieldname": "section_break_sxmy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "rent_start_date",
+   "fieldtype": "Date",
+   "label": "Rent Start Date"
+  },
+  {
+   "fieldname": "payment_schedule",
+   "fieldtype": "Select",
+   "label": "Payment schedule  ",
+   "options": "Daily\nWeekly\nMonthly\nQuarterly\nSemi Annual\nAnnual"
+  },
+  {
+   "fieldname": "column_break_auya",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rent_end_date",
+   "fieldtype": "Date",
+   "label": "Rent End Date"
+  },
+  {
+   "fieldname": "rent",
+   "fieldtype": "Currency",
+   "label": "Rent"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Flat",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "security_deposit",
+   "fieldtype": "Currency",
+   "label": "Security Deposit"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Room",
+   "link_fieldname": "flat"
+  },
+  {
+   "link_doctype": "Bed",
+   "link_fieldname": "flat"
+  }
+ ],
+ "modified": "2025-10-15 15:05:19.622654",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Flat",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,269 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-01 15:34:31.452339",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "project_name",
+  "purchase_order",
+  "description",
+  "column_break_jawk",
+  "date",
+  "supplier",
+  "supplier_name",
+  "contact",
+  "address",
+  "section_break_ynhj",
+  "type",
+  "transporter",
+  "price_list",
+  "column_break_rhzn",
+  "direction",
+  "rate",
+  "section_break_phle",
+  "contact_details_column",
+  "contact_person_name",
+  "contact_mobile",
+  "contact_phone",
+  "contact_email",
+  "column_break_ourd",
+  "address_title",
+  "addr_line1",
+  "addr_line2",
+  "addr_city",
+  "addr_state",
+  "section_break_4azs",
+  "amended_from",
+  "abr"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_4azs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Shipment Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "column_break_jawk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fetch_from": "purchase_order.project",
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fetch_from": "purchase_order.supplier",
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "purchase_order.supplier_name",
+   "fieldname": "supplier_name",
+   "fieldtype": "Data",
+   "label": "Supplier Name"
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Link",
+   "label": "Direction",
+   "link_filters": "[[\"Item\",\"item_group\",\"=\",\"Direction\"]]",
+   "options": "Item"
+  },
+  {
+   "fieldname": "section_break_ynhj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "Transporter",
+   "link_filters": "[[\"Supplier\",\"is_transporter\",\"=\",1]]",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_rhzn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "Type",
+   "link_filters": "[[\"UOM\",\"custom_transportation\",\"=\",1]]",
+   "options": "UOM"
+  },
+  {
+   "fetch_from": "supplier.default_price_list",
+   "fetch_if_empty": 1,
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "contact",
+   "fieldtype": "Link",
+   "label": "Contact",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Link",
+   "label": "Address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "section_break_phle",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "contact.full_name",
+   "fieldname": "contact_person_name",
+   "fieldtype": "Data",
+   "label": "Contact Person",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contact.phone",
+   "fieldname": "contact_phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contact.mobile_no",
+   "fieldname": "contact_mobile",
+   "fieldtype": "Data",
+   "label": "Mobile",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "contact.email_id",
+   "fieldname": "contact_email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ourd",
+   "fieldtype": "Column Break",
+   "label": "Supplier Address"
+  },
+  {
+   "fetch_from": "address.address_line1",
+   "fieldname": "addr_line1",
+   "fieldtype": "Data",
+   "label": "Line 1",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "address.address_line2",
+   "fieldname": "addr_line2",
+   "fieldtype": "Data",
+   "label": "Line 2",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "address.city",
+   "fieldname": "addr_city",
+   "fieldtype": "Data",
+   "label": "City",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "address.state",
+   "fieldname": "addr_state",
+   "fieldtype": "Data",
+   "label": "State",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contact_details_column",
+   "fieldtype": "Column Break",
+   "label": "Supplier Contact details"
+  },
+  {
+   "fetch_from": "address.address_title",
+   "fieldname": "address_title",
+   "fieldtype": "Data",
+   "label": "Address Title",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "label": "Project Name"
+  },
+  {
+   "fetch_from": "project.custom_abbreviation",
+   "fieldname": "abr",
+   "fieldtype": "Data",
+   "label": "abr"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-11 13:15:06.953072",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Shipment Request",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

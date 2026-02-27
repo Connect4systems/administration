@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-10-05 14:20:09.842387",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "governorate",
+  "city",
+  "area",
+  "address",
+  "column_break_cdrx",
+  "date",
+  "project",
+  "monthly_rent",
+  "rent_period",
+  "payment_cycle",
+  "deposit",
+  "commission",
+  "section_break_epdd",
+  "employee"
+ ],
+ "fields": [
+  {
+   "fieldname": "governorate",
+   "fieldtype": "Link",
+   "label": "Governorate",
+   "options": "Governorate"
+  },
+  {
+   "fieldname": "column_break_cdrx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "monthly_rent",
+   "fieldtype": "Data",
+   "label": "Monthly Rent"
+  },
+  {
+   "fieldname": "rent_period",
+   "fieldtype": "Select",
+   "label": "Rent Period",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+  },
+  {
+   "fieldname": "payment_cycle",
+   "fieldtype": "Select",
+   "label": "Payment Cycle",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+  },
+  {
+   "fieldname": "deposit",
+   "fieldtype": "Currency",
+   "label": "Deposit "
+  },
+  {
+   "fieldname": "commission",
+   "fieldtype": "Currency",
+   "label": "Commission"
+  },
+  {
+   "fieldname": "section_break_epdd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Table",
+   "label": "Employee",
+   "options": "Rent Emp"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-10-05 15:25:29.093419",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Flat Rent Request",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

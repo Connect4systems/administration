@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-13 16:40:12.575120",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_td6m",
+  "employee",
+  "full_name",
+  "column_break_zrdz",
+  "date",
+  "travel_type",
+  "section_break_fovx",
+  "column_break_gfbj",
+  "column_break_jack",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_td6m",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Business Trip Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "column_break_zrdz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_fovx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_gfbj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jack",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "default": "Domastic",
+   "fieldname": "travel_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Travel Type",
+   "options": "Domastic\nInternational",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-08-13 16:54:56.511516",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Business Trip Request",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
