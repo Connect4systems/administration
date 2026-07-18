@@ -9,6 +9,12 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			reqd: 1,
 		},
 		{
+			fieldname: "finance_book",
+			label: __("Finance Book"),
+			fieldtype: "Link",
+			options: "Finance Book",
+		},
+		{
 			fieldname: "from_date",
 			label: __("From Date"),
 			fieldtype: "Date",
@@ -23,11 +29,26 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			reqd: 1,
 		},
 		{
+			fieldname: "account",
+			label: __("Account"),
+			fieldtype: "Link",
+			options: "Account",
+			get_query: () => ({
+				filters: { company: frappe.query_report.get_filter_value("company") },
+			}),
+		},
+		{
+			fieldname: "voucher_no",
+			label: __("Voucher No"),
+			fieldtype: "Data",
+		},
+		{
 			fieldname: "party_type",
 			label: __("Party Type"),
-			fieldtype: "Select",
-			options: ["", "Customer", "Supplier", "Employee", "Employee Group"],
+			fieldtype: "Autocomplete",
+			options: Object.keys(frappe.boot.party_account_types || {}),
 			reqd: 1,
+			on_change: () => frappe.query_report.set_filter_value("party", ""),
 		},
 		{
 			fieldname: "party",
@@ -36,5 +57,32 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			options: "party_type",
 			reqd: 1,
 		},
+		{
+			fieldname: "project",
+			label: __("Project"),
+			fieldtype: "Link",
+			options: "Project",
+		},
+		{
+			fieldname: "cost_center",
+			label: __("Cost Center"),
+			fieldtype: "Link",
+			options: "Cost Center",
+			get_query: () => ({
+				filters: { company: frappe.query_report.get_filter_value("company") },
+			}),
+		},
+		{
+			fieldname: "show_cancelled_entries",
+			label: __("Show Cancelled Entries"),
+			fieldtype: "Check",
+		},
+		{
+			fieldname: "show_remarks",
+			label: __("Show Remarks"),
+			fieldtype: "Check",
+		},
 	],
 };
+
+erpnext.utils.add_dimensions("Party Ledger (Party & Against)", 10);
