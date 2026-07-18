@@ -21,9 +21,7 @@ def execute(filters=None):
 	running_balance = opening_balance
 
 	for row in rows:
-		if row.relation == "Direct Party":
-			running_balance += flt(row.debit) - flt(row.credit)
-
+		running_balance += flt(row.debit) - flt(row.credit)
 		row.balance = running_balance
 		row.company_currency = company_currency
 		row.party_name = get_party_name(row.party_type, row.party)
@@ -54,21 +52,11 @@ def validate_filters(filters):
 def get_gl_entries(filters, dimensions):
 	conditions, params = get_common_conditions(filters, dimensions)
 	conditions.insert(1, "`tabGL Entry`.posting_date BETWEEN %(from_date)s AND %(to_date)s")
-	conditions.append(
-		"""
-		(
-			(`tabGL Entry`.party_type = %(party_type)s AND `tabGL Entry`.party = %(party)s)
-			OR EXISTS (
-				SELECT 1
-				FROM `tabGL Entry` party_gl
-				WHERE party_gl.company = `tabGL Entry`.company
-					AND party_gl.voucher_type = `tabGL Entry`.voucher_type
-					AND party_gl.voucher_no = `tabGL Entry`.voucher_no
-					AND party_gl.party_type = %(party_type)s
-					AND party_gl.party = %(party)s
-			)
-		)
-		"""
+	conditions.extend(
+		[
+			"`tabGL Entry`.party_type = %(party_type)s",
+			"`tabGL Entry`.party = %(party)s",
+		]
 	)
 
 	permission_conditions = build_match_conditions("GL Entry")
@@ -96,13 +84,7 @@ def get_gl_entries(filters, dimensions):
 			`tabGL Entry`.against_voucher_type,
 			`tabGL Entry`.against_voucher,
 			`tabGL Entry`.remarks
-			{dimension_fields},
-			CASE
-				WHEN `tabGL Entry`.party_type = %(party_type)s
-					AND `tabGL Entry`.party = %(party)s
-				THEN 'Direct Party'
-				ELSE 'Voucher Counterpart'
-			END AS relation
+			{dimension_fields}
 		FROM `tabGL Entry`
 		WHERE {" AND ".join(conditions)}
 		ORDER BY
@@ -193,7 +175,6 @@ def get_opening_row(opening_balance, company_currency):
 		"credit": abs(opening_balance) if opening_balance < 0 else 0.0,
 		"balance": opening_balance,
 		"company_currency": company_currency,
-		"relation": _("Opening"),
 	}
 
 
@@ -217,7 +198,6 @@ def get_columns(currency, filters, dimensions):
 		{"fieldname": "debit", "label": _("Debit ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 130},
 		{"fieldname": "credit", "label": _("Credit ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 130},
 		{"fieldname": "balance", "label": _("Party Balance ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 150},
-		{"fieldname": "relation", "label": _("Relation"), "fieldtype": "Data", "width": 145},
 		{"fieldname": "voucher_type", "label": _("Voucher Type"), "fieldtype": "Data", "width": 120},
 		{"fieldname": "voucher_subtype", "label": _("Voucher Subtype"), "fieldtype": "Data", "width": 140},
 		{"fieldname": "voucher_no", "label": _("Voucher No"), "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 170},
