@@ -48,7 +48,8 @@
       "description": "List account names or account codes used for deduction entries (used to include JE returns)"
     }
   ],
-  "roles": ["Accounts Manager"]
-    }
+  "roles": ["Accounts Manager"],
+  "report_script": "from administration.report.party_ledger.party_ledger import execute as _execute\\n\\ndef execute(filters=None):\\n    return _execute(filters)" 
+}
   ]
 }
