@@ -21,7 +21,10 @@ def execute(filters=None):
 	running_balance = opening_balance
 
 	for row in rows:
-		running_balance += flt(row.debit) - flt(row.credit)
+		# Counterpart rows provide the full voucher context, but only the direct
+		# party row changes the party's running balance.
+		if not filters.get("party") or row.is_direct_party:
+			running_balance += flt(row.debit) - flt(row.credit)
 		row.balance = running_balance
 		row.company_currency = company_currency
 		row.party_name = get_party_name(row.party_type, row.party)
@@ -60,16 +63,11 @@ def get_gl_entries(filters, dimensions):
 		conditions.append(permission_conditions)
 
 	dimension_fields = "".join(f", `tabGL Entry`.`{dimension.fieldname}`" for dimension in dimensions)
-	party_type_field = "`tabGL Entry`.party_type"
-	party_field = "`tabGL Entry`.party"
+	direct_party_field = "1"
 	if filters.get("party"):
-		party_type_field = (
-			"CASE WHEN COALESCE(`tabGL Entry`.party, '') = '' "
-			"THEN %(party_type)s ELSE `tabGL Entry`.party_type END"
-		)
-		party_field = (
-			"CASE WHEN COALESCE(`tabGL Entry`.party, '') = '' "
-			"THEN %(party)s ELSE `tabGL Entry`.party END"
+		direct_party_field = (
+			"CASE WHEN `tabGL Entry`.party_type = %(party_type)s "
+			"AND `tabGL Entry`.party = %(party)s THEN 1 ELSE 0 END"
 		)
 
 	return frappe.db.sql(
@@ -84,13 +82,14 @@ def get_gl_entries(filters, dimensions):
 			`tabGL Entry`.voucher_subtype,
 			`tabGL Entry`.voucher_no,
 			`tabGL Entry`.against,
-			{party_type_field} AS party_type,
-			{party_field} AS party,
+			`tabGL Entry`.party_type,
+			`tabGL Entry`.party,
 			`tabGL Entry`.project,
 			`tabGL Entry`.cost_center,
 			`tabGL Entry`.against_voucher_type,
 			`tabGL Entry`.against_voucher,
-			`tabGL Entry`.remarks
+			`tabGL Entry`.remarks,
+			{direct_party_field} AS is_direct_party
 			{dimension_fields}
 		FROM `tabGL Entry`
 		WHERE {" AND ".join(conditions)}
@@ -109,7 +108,13 @@ def get_gl_entries(filters, dimensions):
 def get_opening_balance(filters, dimensions):
 	conditions, params = get_common_conditions(filters, dimensions)
 	conditions.append("`tabGL Entry`.posting_date < %(from_date)s")
-	add_party_condition(conditions, filters)
+	if filters.get("party"):
+		conditions.extend(
+			[
+				"`tabGL Entry`.party_type = %(party_type)s",
+				"`tabGL Entry`.party = %(party)s",
+			]
+		)
 
 	permission_conditions = build_match_conditions("GL Entry")
 	if permission_conditions:
@@ -131,8 +136,8 @@ def add_party_condition(conditions, filters):
 	if not filters.get("party"):
 		return
 
-	# Include an untagged counterpart only when its account is explicitly listed
-	# as the against account of this party's GL entry in the same voucher.
+	# A party filter returns the complete GL voucher: the row tagged with the
+	# selected party and every account posted against it in that voucher.
 	conditions.append(
 		"""
 		(
@@ -146,17 +151,6 @@ def add_party_condition(conditions, filters):
 					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
 					AND party_gl.party_type = %(party_type)s
 					AND party_gl.party = %(party)s
-					AND (
-						COALESCE(`tabGL Entry`.party, '') = ''
-						OR (
-							`tabGL Entry`.party_type = %(party_type)s
-							AND `tabGL Entry`.party = %(party)s
-						)
-					)
-					AND FIND_IN_SET(
-						`tabGL Entry`.account,
-						REPLACE(party_gl.against, ', ', ',')
-					) > 0
 			)
 		)
 		"""
