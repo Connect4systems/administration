@@ -136,32 +136,16 @@ def add_party_condition(conditions, filters):
 	if not filters.get("party"):
 		return
 
-	# Return the direct party row and only counterpart rows whose Against Account
-	# explicitly contains the account used by that party row in the same voucher.
+	# Return only the selected party row or an untagged counterpart whose Against
+	# Account is exactly that party. Composite Against values belong to a voucher
+	# covering multiple parties and must not be attributed wholly to one party.
 	conditions.append(
 		"""
 		(
 			(`tabGL Entry`.party_type = %(party_type)s AND `tabGL Entry`.party = %(party)s)
-			OR EXISTS (
-				SELECT 1
-				FROM `tabGL Entry` party_gl
-				WHERE party_gl.company = `tabGL Entry`.company
-					AND party_gl.voucher_type = `tabGL Entry`.voucher_type
-					AND party_gl.voucher_no = `tabGL Entry`.voucher_no
-					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
-					AND party_gl.party_type = %(party_type)s
-					AND party_gl.party = %(party)s
-					AND (
-						COALESCE(`tabGL Entry`.party, '') = ''
-						OR (
-							`tabGL Entry`.party_type = %(party_type)s
-							AND `tabGL Entry`.party = %(party)s
-						)
-					)
-					AND FIND_IN_SET(
-						party_gl.account,
-						REPLACE(`tabGL Entry`.against, ', ', ',')
-					) > 0
+			OR (
+				COALESCE(`tabGL Entry`.party, '') = ''
+				AND TRIM(COALESCE(`tabGL Entry`.against, '')) = %(party)s
 			)
 		)
 		"""
@@ -235,7 +219,6 @@ def get_party_name(party_type, party):
 def get_columns(currency, filters, dimensions):
 	currency_options = "company_currency"
 	columns = [
-		{"fieldname": "gl_entry", "label": _("GL Entry"), "fieldtype": "Link", "options": "GL Entry", "hidden": 1},
 		{"fieldname": "posting_date", "label": _("Posting Date"), "fieldtype": "Date", "width": 110},
 		{"fieldname": "account", "label": _("Account"), "fieldtype": "Link", "options": "Account", "width": 210},
 		{"fieldname": "debit", "label": _("Debit ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 130},
@@ -269,5 +252,10 @@ def get_columns(currency, filters, dimensions):
 	)
 	if filters.get("show_remarks"):
 		columns.append({"fieldname": "remarks", "label": _("Remarks"), "fieldtype": "Data", "width": 300})
+	# Keep hidden columns last so Frappe's XLSX total row remains aligned with
+	# the visible Debit, Credit, and Balance columns.
+	columns.append(
+		{"fieldname": "gl_entry", "label": _("GL Entry"), "fieldtype": "Link", "options": "GL Entry", "hidden": 1}
+	)
 
 	return columns
