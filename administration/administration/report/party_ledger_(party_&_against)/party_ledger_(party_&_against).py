@@ -35,8 +35,6 @@ def validate_filters(filters):
 		"company": _("Company"),
 		"from_date": _("From Date"),
 		"to_date": _("To Date"),
-		"party_type": _("Party Type"),
-		"party": _("Party"),
 	}
 	missing = [label for fieldname, label in required_filters.items() if not filters.get(fieldname)]
 	if missing:
@@ -45,19 +43,17 @@ def validate_filters(filters):
 	if getdate(filters.from_date) > getdate(filters.to_date):
 		frappe.throw(_("From Date cannot be after To Date"))
 
-	if not frappe.db.exists(filters.party_type, filters.party):
+	if filters.get("party") and not filters.get("party_type"):
+		frappe.throw(_("Please provide Party Type when filtering by Party"))
+
+	if filters.get("party") and not frappe.db.exists(filters.party_type, filters.party):
 		frappe.throw(_("Invalid {0}: {1}").format(filters.party_type, filters.party))
 
 
 def get_gl_entries(filters, dimensions):
 	conditions, params = get_common_conditions(filters, dimensions)
 	conditions.insert(1, "`tabGL Entry`.posting_date BETWEEN %(from_date)s AND %(to_date)s")
-	conditions.extend(
-		[
-			"`tabGL Entry`.party_type = %(party_type)s",
-			"`tabGL Entry`.party = %(party)s",
-		]
-	)
+	add_party_condition(conditions, filters)
 
 	permission_conditions = build_match_conditions("GL Entry")
 	if permission_conditions:
@@ -101,13 +97,8 @@ def get_gl_entries(filters, dimensions):
 
 def get_opening_balance(filters, dimensions):
 	conditions, params = get_common_conditions(filters, dimensions)
-	conditions.extend(
-		[
-			"`tabGL Entry`.posting_date < %(from_date)s",
-			"`tabGL Entry`.party_type = %(party_type)s",
-			"`tabGL Entry`.party = %(party)s",
-		]
-	)
+	conditions.append("`tabGL Entry`.posting_date < %(from_date)s")
+	add_party_condition(conditions, filters)
 
 	permission_conditions = build_match_conditions("GL Entry")
 	if permission_conditions:
@@ -123,6 +114,35 @@ def get_opening_balance(filters, dimensions):
 		as_dict=True,
 	)
 	return flt(result[0].opening_balance)
+
+
+def add_party_condition(conditions, filters):
+	if not filters.get("party"):
+		return
+
+	# Include an untagged counterpart only when its account is explicitly listed
+	# as the against account of this party's GL entry in the same voucher.
+	conditions.append(
+		"""
+		(
+			(`tabGL Entry`.party_type = %(party_type)s AND `tabGL Entry`.party = %(party)s)
+			OR EXISTS (
+				SELECT 1
+				FROM `tabGL Entry` party_gl
+				WHERE party_gl.company = `tabGL Entry`.company
+					AND party_gl.voucher_type = `tabGL Entry`.voucher_type
+					AND party_gl.voucher_no = `tabGL Entry`.voucher_no
+					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
+					AND party_gl.party_type = %(party_type)s
+					AND party_gl.party = %(party)s
+					AND FIND_IN_SET(
+						`tabGL Entry`.account,
+						REPLACE(party_gl.against, ', ', ',')
+					) > 0
+			)
+		)
+		"""
+	)
 
 
 def get_common_conditions(filters, dimensions):
@@ -197,7 +217,7 @@ def get_columns(currency, filters, dimensions):
 		{"fieldname": "account", "label": _("Account"), "fieldtype": "Link", "options": "Account", "width": 210},
 		{"fieldname": "debit", "label": _("Debit ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 130},
 		{"fieldname": "credit", "label": _("Credit ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 130},
-		{"fieldname": "balance", "label": _("Party Balance ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 150},
+		{"fieldname": "balance", "label": _("Balance ({0})").format(currency), "fieldtype": "Currency", "options": currency_options, "width": 150},
 		{"fieldname": "voucher_type", "label": _("Voucher Type"), "fieldtype": "Data", "width": 120},
 		{"fieldname": "voucher_subtype", "label": _("Voucher Subtype"), "fieldtype": "Data", "width": 140},
 		{"fieldname": "voucher_no", "label": _("Voucher No"), "fieldtype": "Dynamic Link", "options": "voucher_type", "width": 170},

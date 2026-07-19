@@ -47,7 +47,6 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			label: __("Party Type"),
 			fieldtype: "Autocomplete",
 			options: Object.keys(frappe.boot.party_account_types || {}),
-			reqd: 1,
 			on_change: () => frappe.query_report.set_filter_value("party", ""),
 		},
 		{
@@ -55,7 +54,6 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			label: __("Party"),
 			fieldtype: "Dynamic Link",
 			options: "party_type",
-			reqd: 1,
 		},
 		{
 			fieldname: "project",
