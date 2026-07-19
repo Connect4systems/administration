@@ -60,6 +60,17 @@ def get_gl_entries(filters, dimensions):
 		conditions.append(permission_conditions)
 
 	dimension_fields = "".join(f", `tabGL Entry`.`{dimension.fieldname}`" for dimension in dimensions)
+	party_type_field = "`tabGL Entry`.party_type"
+	party_field = "`tabGL Entry`.party"
+	if filters.get("party"):
+		party_type_field = (
+			"CASE WHEN COALESCE(`tabGL Entry`.party, '') = '' "
+			"THEN %(party_type)s ELSE `tabGL Entry`.party_type END"
+		)
+		party_field = (
+			"CASE WHEN COALESCE(`tabGL Entry`.party, '') = '' "
+			"THEN %(party)s ELSE `tabGL Entry`.party END"
+		)
 
 	return frappe.db.sql(
 		f"""
@@ -73,8 +84,8 @@ def get_gl_entries(filters, dimensions):
 			`tabGL Entry`.voucher_subtype,
 			`tabGL Entry`.voucher_no,
 			`tabGL Entry`.against,
-			`tabGL Entry`.party_type,
-			`tabGL Entry`.party,
+			{party_type_field} AS party_type,
+			{party_field} AS party,
 			`tabGL Entry`.project,
 			`tabGL Entry`.cost_center,
 			`tabGL Entry`.against_voucher_type,
@@ -135,6 +146,13 @@ def add_party_condition(conditions, filters):
 					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
 					AND party_gl.party_type = %(party_type)s
 					AND party_gl.party = %(party)s
+					AND (
+						COALESCE(`tabGL Entry`.party, '') = ''
+						OR (
+							`tabGL Entry`.party_type = %(party_type)s
+							AND `tabGL Entry`.party = %(party)s
+						)
+					)
 					AND FIND_IN_SET(
 						`tabGL Entry`.account,
 						REPLACE(party_gl.against, ', ', ',')
