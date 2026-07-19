@@ -136,8 +136,8 @@ def add_party_condition(conditions, filters):
 	if not filters.get("party"):
 		return
 
-	# A party filter returns the complete GL voucher: the row tagged with the
-	# selected party and every account posted against it in that voucher.
+	# Return the direct party row and only counterpart rows whose Against Account
+	# explicitly contains the account used by that party row in the same voucher.
 	conditions.append(
 		"""
 		(
@@ -151,6 +151,10 @@ def add_party_condition(conditions, filters):
 					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
 					AND party_gl.party_type = %(party_type)s
 					AND party_gl.party = %(party)s
+					AND FIND_IN_SET(
+						party_gl.account,
+						REPLACE(`tabGL Entry`.against, ', ', ',')
+					) > 0
 			)
 		)
 		"""
