@@ -151,6 +151,13 @@ def add_party_condition(conditions, filters):
 					AND party_gl.is_cancelled = `tabGL Entry`.is_cancelled
 					AND party_gl.party_type = %(party_type)s
 					AND party_gl.party = %(party)s
+					AND (
+						COALESCE(`tabGL Entry`.party, '') = ''
+						OR (
+							`tabGL Entry`.party_type = %(party_type)s
+							AND `tabGL Entry`.party = %(party)s
+						)
+					)
 					AND FIND_IN_SET(
 						party_gl.account,
 						REPLACE(`tabGL Entry`.against, ', ', ',')
