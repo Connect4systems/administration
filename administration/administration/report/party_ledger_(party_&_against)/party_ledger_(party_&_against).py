@@ -21,12 +21,9 @@ def execute(filters=None):
 	running_balance = opening_balance
 
 	for row in rows:
-		# Counterpart rows provide the full voucher context, but only the direct
-		# party row changes a party-wide running balance. When an account is
-		# selected, every returned row belongs to that account and must affect its
-		# balance, including Purchase Invoice rows linked through `against`.
-		if row_changes_balance(row, filters):
-			running_balance += flt(row.debit) - flt(row.credit)
+		# Every displayed GL row contributes to the report balance. This includes
+		# direct party rows and Purchase Invoice counterpart rows.
+		running_balance += flt(row.debit) - flt(row.credit)
 		row.balance = running_balance
 		row.company_currency = company_currency
 		row.party_name = get_party_name(row.party_type, row.party)
@@ -111,17 +108,8 @@ def get_opening_balance(filters, dimensions):
 	conditions, params = get_common_conditions(filters, dimensions)
 	conditions.append("`tabGL Entry`.posting_date < %(from_date)s")
 	if filters.get("party"):
-		if filters.get("account"):
-			# Match the same direct and counterpart rows used by the report. This
-			# keeps an account-filtered opening balance consistent with its rows.
-			add_party_condition(conditions, filters)
-		else:
-			conditions.extend(
-				[
-					"`tabGL Entry`.party_type = %(party_type)s",
-					"`tabGL Entry`.party = %(party)s",
-				]
-			)
+		# Use the same direct and counterpart row scope as the report body.
+		add_party_condition(conditions, filters)
 
 	permission_conditions = build_match_conditions("GL Entry")
 	if permission_conditions:
@@ -137,10 +125,6 @@ def get_opening_balance(filters, dimensions):
 		as_dict=True,
 	)
 	return flt(result[0].opening_balance)
-
-
-def row_changes_balance(row, filters):
-	return bool(filters.get("account") or not filters.get("party") or row.is_direct_party)
 
 
 def add_party_condition(conditions, filters):
