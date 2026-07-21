@@ -18,13 +18,11 @@ def execute(filters=None):
 	company_currency = frappe.get_cached_value("Company", filters.company, "default_currency")
 
 	data = [get_opening_row(opening_balance, company_currency)]
-	running_balance = opening_balance
 
 	for row in rows:
-		# Every displayed GL row contributes to the report balance. This includes
-		# direct party rows and Purchase Invoice counterpart rows.
-		running_balance += flt(row.debit) - flt(row.credit)
-		row.balance = running_balance
+		# Show the net movement for this GL row. The report's total row then sums
+		# to total debit minus total credit.
+		row.balance = flt(row.debit) - flt(row.credit)
 		row.company_currency = company_currency
 		row.party_name = get_party_name(row.party_type, row.party)
 		data.append(row)
