@@ -31,11 +31,12 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 		{
 			fieldname: "account",
 			label: __("Account"),
-			fieldtype: "Link",
+			fieldtype: "MultiSelectList",
 			options: "Account",
-			get_query: () => ({
-				filters: { company: frappe.query_report.get_filter_value("company") },
-			}),
+			get_data: (txt) =>
+				frappe.db.get_link_options("Account", txt, {
+					company: frappe.query_report.get_filter_value("company"),
+				}),
 		},
 		{
 			fieldname: "voucher_no",

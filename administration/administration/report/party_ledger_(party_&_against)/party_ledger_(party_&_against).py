@@ -10,6 +10,7 @@ from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 
 def execute(filters=None):
 	filters = frappe._dict(filters or {})
+	normalize_account_filter(filters)
 	validate_filters(filters)
 	dimensions = get_report_dimensions()
 
@@ -28,6 +29,21 @@ def execute(filters=None):
 		data.append(row)
 
 	return get_columns(company_currency, filters, dimensions), data
+
+
+def normalize_account_filter(filters):
+	if not filters.get("account"):
+		return
+
+	accounts = (
+		frappe.parse_json(filters.account)
+		if isinstance(filters.account, str) and filters.account.lstrip().startswith("[")
+		else filters.account
+	)
+	if not isinstance(accounts, (list, tuple)):
+		accounts = [accounts]
+
+	filters.account = tuple(account for account in accounts if account)
 
 
 def validate_filters(filters):
@@ -153,12 +169,14 @@ def get_common_conditions(filters, dimensions):
 		conditions.append("`tabGL Entry`.is_cancelled = 0")
 
 	optional_filters = {
-		"account": "`tabGL Entry`.account = %(account)s",
 		"voucher_no": "`tabGL Entry`.voucher_no = %(voucher_no)s",
 		"finance_book": "`tabGL Entry`.finance_book = %(finance_book)s",
 		"project": "`tabGL Entry`.project = %(project)s",
 		"cost_center": "`tabGL Entry`.cost_center = %(cost_center)s",
 	}
+	if filters.get("account"):
+		conditions.append("`tabGL Entry`.account IN %(account)s")
+
 	for fieldname, condition in optional_filters.items():
 		if filters.get(fieldname):
 			conditions.append(condition)
