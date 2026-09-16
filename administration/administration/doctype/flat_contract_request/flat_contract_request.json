@@ -1,0 +1,251 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-16 14:01:51.734814",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "monthly_rent",
+  "deposit",
+  "insurance",
+  "column_break_vimy",
+  "date",
+  "payment_cycle",
+  "contract_start_date",
+  "contract_end_date",
+  "owner_details_section",
+  "flat_owner",
+  "owner_id",
+  "attach_id",
+  "column_break_kdzl",
+  "bank",
+  "iban",
+  "ownership_documentation",
+  "section_break_pvie",
+  "governorate",
+  "city",
+  "area",
+  "address",
+  "column_break_kcth",
+  "flat_no",
+  "floor_no",
+  "no_of_rooms",
+  "no_of_beds",
+  "section_break_atsd",
+  "flat_contents",
+  "section_break_mrhf",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_mrhf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Flat Contract Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "flat_owner",
+   "fieldtype": "Link",
+   "label": "Flat Owner",
+   "link_filters": "[[\"Supplier\",\"custom_accommodation_\",\"=\",1]]",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_vimy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Data",
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_filter": 1,
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "owner_id",
+   "fieldtype": "Data",
+   "label": "Owner ID"
+  },
+  {
+   "fieldname": "attach_id",
+   "fieldtype": "Attach",
+   "label": "Attach ID"
+  },
+  {
+   "fieldname": "contract_start_date",
+   "fieldtype": "Date",
+   "label": "Contract Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "contract_end_date",
+   "fieldtype": "Date",
+   "label": "Contract End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_pvie",
+   "fieldtype": "Section Break",
+   "label": "Flat Details"
+  },
+  {
+   "fieldname": "governorate",
+   "fieldtype": "Link",
+   "label": "Governorate",
+   "options": "Governorate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City",
+   "reqd": 1
+  },
+  {
+   "fieldname": "area",
+   "fieldtype": "Data",
+   "label": "Area"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_kcth",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "flat_no",
+   "fieldtype": "Data",
+   "label": "Flat No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "floor_no",
+   "fieldtype": "Data",
+   "label": "Floor No.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_rooms",
+   "fieldtype": "Float",
+   "label": "No of rooms",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_beds",
+   "fieldtype": "Float",
+   "label": "No of Beds"
+  },
+  {
+   "fieldname": "monthly_rent",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Monthly Rent",
+   "reqd": 1
+  },
+  {
+   "default": "Monthly",
+   "fieldname": "payment_cycle",
+   "fieldtype": "Select",
+   "label": "Payment Cycle",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly",
+   "reqd": 1
+  },
+  {
+   "fieldname": "deposit",
+   "fieldtype": "Currency",
+   "label": "Deposit"
+  },
+  {
+   "fieldname": "insurance",
+   "fieldtype": "Currency",
+   "label": "Insurance"
+  },
+  {
+   "fieldname": "owner_details_section",
+   "fieldtype": "Section Break",
+   "label": "Owner details"
+  },
+  {
+   "fieldname": "column_break_kdzl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank"
+  },
+  {
+   "fieldname": "iban",
+   "fieldtype": "Data",
+   "label": "IBAN"
+  },
+  {
+   "fieldname": "section_break_atsd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "flat_contents",
+   "fieldtype": "Table",
+   "label": "Flat Contents ",
+   "options": "Flat Contents"
+  },
+  {
+   "fieldname": "ownership_documentation",
+   "fieldtype": "Attach",
+   "label": "Ownership Documentation "
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-16 14:37:10.685960",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Flat Contract Request",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
