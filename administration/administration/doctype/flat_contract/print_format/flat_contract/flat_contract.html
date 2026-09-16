@@ -1,100 +1,108 @@
 <style>
-	@page { size: A4; margin: 14mm 12mm; }
-	.contract { color: #20252b; font-family: Georgia, "Times New Roman", serif; font-size: 10.5pt; line-height: 1.45; }
-	.contract-header { border-bottom: 2px solid #2f6fae; margin-bottom: 16px; padding-bottom: 10px; text-align: center; }
-	.contract-header h1 { font-size: 20pt; margin: 4px 0; }
-	.contract-header h2 { font-size: 13pt; margin: 0; text-decoration: underline; }
-	.contract-header .company { color: #2f6fae; font-size: 12pt; font-weight: bold; }
-	.meta, .details, .signatures { width: 100%; border-collapse: collapse; }
-	.meta td, .details td { padding: 4px 6px; vertical-align: top; }
-	.meta td:first-child, .details td:first-child { font-weight: bold; width: 23%; }
-	.block-title { background: #edf3f8; border-bottom: 1px solid #8daac2; font-size: 12pt; font-weight: bold; margin-top: 14px; padding: 5px 7px; }
-	.party { border: 1px solid #c8d3dc; padding: 7px; vertical-align: top; width: 50%; }
-	.party h3 { margin: 0 0 4px; text-decoration: underline; }
+	@page { size: A4; margin: 13mm 14mm; }
+	.contract { color: #171717; font-family: Georgia, "Times New Roman", serif; font-size: 10.5pt; line-height: 1.42; }
+	.cover { min-height: 255mm; page-break-after: always; position: relative; text-align: center; }
+	.cover .company { color: #2f6fae; font-size: 17pt; font-weight: bold; margin-top: 8mm; }
+	.cover .company-ar { color: #2f6fae; direction: rtl; font-family: Arial, sans-serif; font-size: 15pt; font-weight: bold; }
+	.cover h1 { margin: 31mm 0 2mm; font-size: 22pt; text-decoration: underline; }
+	.cover h2 { margin: 0; font-size: 15pt; text-decoration: underline; }
+	.cover .ar-title { direction: rtl; font-family: Arial, sans-serif; font-size: 17pt; font-weight: bold; margin-top: 7mm; text-decoration: underline; }
+	.cover .between { font-size: 15pt; font-weight: bold; margin: 19mm 0 8mm; }
+	.cover .party { font-size: 13pt; font-weight: bold; margin: 8mm auto; max-width: 175mm; }
+	.cover .party-ar { direction: rtl; font-family: Arial, sans-serif; font-size: 12pt; }
+	.cover .and { font-size: 15pt; font-weight: bold; margin: 10mm 0 5mm; }
+	.cover .date { font-size: 13pt; margin-top: 28mm; }
+	.footer { border-top: 1px solid #4e85b6; bottom: 0; color: #4e85b6; font-size: 9pt; left: 0; padding-top: 4px; position: absolute; right: 0; }
+	.page { page-break-after: always; }
+	.heading { font-size: 15pt; margin: 5mm 0 3mm; text-align: center; text-decoration: underline; }
+	.heading-ar { direction: rtl; font-family: Arial, sans-serif; font-size: 14pt; font-weight: bold; text-align: center; text-decoration: underline; }
+	.lead { font-weight: bold; margin: 5mm 0; }
+	.arabic { direction: rtl; font-family: Arial, sans-serif; text-align: right; }
+	.bilingual { margin: 4mm 0; }
+	.bilingual .english { direction: ltr; text-align: left; }
+	.bilingual .arabic { direction: rtl; text-align: right; }
+	.details, .signatures, .contents { border-collapse: collapse; width: 100%; }
+	.details td { padding: 3px 5px; vertical-align: top; }
+	.details td:nth-child(odd) { font-weight: bold; width: 20%; }
+	.section-title { border-bottom: 1px solid #777; font-size: 13pt; margin: 6mm 0 2mm; padding-bottom: 2px; text-align: center; text-decoration: underline; }
+	.contents { margin-top: 3mm; }
+	.contents th, .contents td { border: 1px solid #777; padding: 4px; }
+	.contents th { background: #eeeeee; }
 	.terms { page-break-before: always; }
-	.term-row { border-bottom: 1px solid #c5cdd3; page-break-inside: avoid; padding: 9px 0; }
-	.term-row h3 { font-size: 12pt; margin: 0 0 4px; text-align: center; text-decoration: underline; }
-	.english { direction: ltr; text-align: left; }
-	.arabic { direction: rtl; text-align: right; font-family: "Arial", sans-serif; }
-	.term-language { margin: 4px 0; }
-	.contents { border-collapse: collapse; margin-top: 6px; width: 100%; }
-	.contents th, .contents td { border: 1px solid #aeb9c2; padding: 5px; }
-	.contents th { background: #edf3f8; }
-	.signatures { margin-top: 38px; }
-	.signatures td { padding: 8px 18px; text-align: center; vertical-align: bottom; width: 50%; }
-	.signature-line { border-top: 1px solid #20252b; margin-top: 42px; padding-top: 5px; }
-	.signature-image { height: 42px; max-width: 150px; object-fit: contain; }
-	.small { color: #56616b; font-size: 9pt; }
+	.term-row { page-break-inside: avoid; padding: 5mm 0 3mm; }
+	.term-row h3 { font-size: 13pt; margin: 0 0 2mm; text-align: center; text-decoration: underline; }
+	.term-row .english { direction: ltr; margin: 2mm 0; text-align: left; }
+	.term-row .arabic { direction: rtl; margin: 2mm 0; text-align: right; }
+	.signature-page { page-break-before: always; }
+	.signatures { margin-top: 30mm; }
+	.signatures td { padding: 7px 15px; text-align: center; vertical-align: bottom; width: 50%; }
+	.signature-image { height: 45px; max-width: 160px; object-fit: contain; }
+	.signature-line { border-top: 1px solid #222; margin-top: 38px; padding-top: 5px; }
 </style>
 
 <div class="contract">
-	<div class="contract-header">
+	<div class="cover">
 		<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
-		<div class="small">{{ doc.first_party_address or "" }}</div>
+		<div class="company-ar">شركة سي اس اي سي انترناشونال ايجيبت للمقاولات</div>
 		<h1>Unit Lease Agreement</h1>
 		<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
-		<div class="arabic" style="font-size: 13pt; font-weight: bold; margin-top: 4px;">عقد إيجار وحدة سكنية مفروشة</div>
-		<div class="arabic" style="font-size: 10pt;">(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
+		<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
+		<div class="between">Between / بين كلاً من</div>
+		<div class="party">First Party / الطرف الأول<br>{{ doc.first_party_name }}<br><span class="party-ar">{{ doc.first_party_representative }}</span></div>
+		<div class="and">And / و</div>
+		<div class="party">Second Party / الطرف الثاني<br>{{ doc.second_party_name }}<br><span class="party-ar">{{ doc.second_party_id }}</span></div>
+		<div class="date">Dated: {{ frappe.format_date(doc.date) }}<br><span class="party-ar">بتاريخ: {{ frappe.format_date(doc.date) }}</span></div>
+		<div class="footer">Address: {{ doc.first_party_address or "The NOX Plaza, Fifth Settlement, New Cairo" }}<br>Web: www.cscec.com</div>
 	</div>
 
-	<table class="meta">
-		<tr><td>Contract No. / رقم العقد</td><td>{{ doc.name }}</td><td>Date / التاريخ</td><td>{{ frappe.format_date(doc.date) }}</td></tr>
-		<tr><td>Start / بداية العقد</td><td>{{ frappe.format_date(doc.contract_start_date) }}</td><td>End / نهاية العقد</td><td>{{ frappe.format_date(doc.contract_end_date) }}</td></tr>
-	</table>
-
-	<div class="block-title">Parties / أطراف العقد</div>
-	<table class="details">
-		<tr>
-			<td class="party"><h3>First Party / الطرف الأول</h3>{{ doc.first_party_name }}<br>{{ doc.first_party_address }}<br>{{ doc.first_party_representative }}</td>
-			<td class="party arabic"><h3>الطرف الأول / First Party</h3>{{ doc.first_party_name }}<br>{{ doc.first_party_address }}<br>{{ doc.first_party_representative }}</td>
-		</tr>
-		<tr>
-			<td class="party"><h3>Second Party / الطرف الثاني</h3>{{ doc.second_party_name }}<br>{{ doc.second_party_address }}<br>ID: {{ doc.second_party_id }}</td>
-			<td class="party arabic"><h3>الطرف الثاني / Second Party</h3>{{ doc.second_party_name }}<br>{{ doc.second_party_address }}<br>الرقم القومي: {{ doc.second_party_id }}</td>
-		</tr>
-	</table>
-
-	<div class="block-title">Leased Unit / العين المؤجرة</div>
-	<table class="details">
-		<tr><td>Governorate / المحافظة</td><td>{{ doc.governorate }}</td><td>City / المدينة</td><td>{{ doc.city }}</td></tr>
-		<tr><td>Area / المنطقة</td><td>{{ doc.area }}</td><td>Address / العنوان</td><td>{{ doc.address }}</td></tr>
-		<tr><td>Unit No. / رقم الوحدة</td><td>{{ doc.flat_no }}</td><td>Floor / الدور</td><td>{{ doc.floor_no }}</td></tr>
-		<tr><td>Area / المساحة</td><td>{{ doc.total_flat_area }}</td><td>Rooms / الغرف</td><td>{{ doc.no_of_rooms }}</td></tr>
-		<tr><td>Beds / الأسرة</td><td>{{ doc.no_of_beds }}</td><td>Bathrooms / الحمامات</td><td>{{ doc.no_of_bathroom }}</td></tr>
-	</table>
-
-	<div class="block-title">Rent and Payment / القيمة الإيجارية والسداد</div>
-	<table class="details">
-		<tr><td>Monthly Rent / الإيجار الشهري</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>Payment Cycle / دورة السداد</td><td>{{ doc.payment_cycle }}</td></tr>
-		<tr><td>Deposit / الوديعة</td><td>{{ frappe.format(doc.deposit, {"fieldtype": "Currency"}) }}</td><td>Insurance / التأمين</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
-		<tr><td>Bank / البنك</td><td>{{ doc.bank }}</td><td>IBAN</td><td>{{ doc.iban }}</td></tr>
-	</table>
-
-	{% if doc.flat_contents %}
-	<div class="block-title">Contents / محتويات الوحدة</div>
-	<table class="contents">
-		<tr><th>Item / الصنف</th><th>Description / الوصف</th><th>Qty / الكمية</th></tr>
-		{% for item in doc.flat_contents %}<tr><td>{{ item.item_name }}</td><td>{{ item.description }}</td><td>{{ item.qty }}</td></tr>{% endfor %}
-	</table>
-	{% endif %}
+	<div class="page">
+		<div class="heading-ar">إنه في يوم {{ frappe.format_date(doc.date) }}م</div>
+		<div class="heading">This contract is made on {{ frappe.format_date(doc.date) }}</div>
+		<div class="lead">First Party / الطرف الأول</div>
+		<div class="bilingual"><div class="english">First Party: {{ doc.first_party_name }}, represented by {{ doc.first_party_representative }}, with address at {{ doc.first_party_address }}.</div><div class="arabic">الطرف الأول: {{ doc.first_party_name }} ويمثله {{ doc.first_party_representative }} وعنوانه {{ doc.first_party_address }}.</div></div>
+		<div class="lead">Second Party / الطرف الثاني</div>
+		<div class="bilingual"><div class="english">Second Party: {{ doc.second_party_name }}, ID {{ doc.second_party_id }}, residing at {{ doc.second_party_address }}.</div><div class="arabic">الطرف الثاني: {{ doc.second_party_name }}، ويحمل رقم هوية {{ doc.second_party_id }}، والمقيم في {{ doc.second_party_address }}.</div></div>
+		<div class="section-title">Preamble / تمهيد</div>
+		<div class="bilingual"><div class="english">The parties have agreed to enter into this fixed-term unit lease agreement for the leased premises described below, for use as accommodation for the company's employees.</div><div class="arabic">اتفق الطرفان على إبرام عقد إيجار الوحدة السكنية محددة المدة الموضحة أدناه لاستخدامها كسكن خاص بالعاملين لدى الشركة.</div></div>
+		<div class="section-title">Leased Unit Details / بيانات العين المؤجرة</div>
+		<table class="details">
+			<tr><td>Governorate / المحافظة</td><td>{{ doc.governorate }}</td><td>City / المدينة</td><td>{{ doc.city }}</td></tr>
+			<tr><td>Area / المنطقة</td><td>{{ doc.area }}</td><td>Address / العنوان</td><td>{{ doc.address }}</td></tr>
+			<tr><td>Unit No. / رقم الوحدة</td><td>{{ doc.flat_no }}</td><td>Floor / الدور</td><td>{{ doc.floor_no }}</td></tr>
+			<tr><td>Total Area / إجمالي المساحة</td><td>{{ doc.total_flat_area }}</td><td>Rooms / الغرف</td><td>{{ doc.no_of_rooms }}</td></tr>
+			<tr><td>Monthly Rent / الإيجار الشهري</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>Insurance / التأمين</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
+		</table>
+	</div>
 
 	<div class="terms">
-		<div class="block-title">Terms and Conditions / الشروط والأحكام</div>
 		{% for term in doc.terms %}
 		<div class="term-row">
-			<h3>Article {{ term.term_no }} / البند {{ term.term_no }}</h3>
-			<div class="term-language english">{{ term.english_term | replace("\n", "<br>") }}</div>
-			<div class="term-language arabic">{{ term.arabic_term | replace("\n", "<br>") }}</div>
+			<h3>{{ term.english_term.split("\n")[0] }} / {{ term.arabic_term.split("\n")[0] }}</h3>
+			<div class="english">{{ term.english_term.split("\n")[1:] | join("<br>") }}</div>
+			<div class="arabic">{{ term.arabic_term.split("\n")[1:] | join("<br>") }}</div>
 		</div>
 		{% endfor %}
 	</div>
 
-	{% if doc.notes %}<div class="block-title">Notes / ملاحظات</div><p>{{ doc.notes }}</p>{% endif %}
+	{% if doc.flat_contents %}
+	<div class="page">
+		<div class="section-title">Furnishings and Contents / المنقولات والمحتويات</div>
+		<table class="contents">
+			<tr><th>Item / الصنف</th><th>Description / الوصف</th><th>Qty / الكمية</th></tr>
+			{% for item in doc.flat_contents %}<tr><td>{{ item.item_name }}</td><td>{{ item.description }}</td><td>{{ item.qty }}</td></tr>{% endfor %}
+		</table>
+	</div>
+	{% endif %}
 
-	<table class="signatures">
-		<tr>
-			<td><strong>First Party / الطرف الأول</strong>{% if doc.first_party_signature %}<br><img class="signature-image" src="{{ doc.first_party_signature }}">{% endif %}<div class="signature-line">{{ doc.first_party_name }}<br>{{ doc.first_party_title }}</div></td>
-			<td><strong>Second Party / الطرف الثاني</strong>{% if doc.second_party_signature %}<br><img class="signature-image" src="{{ doc.second_party_signature }}">{% endif %}<div class="signature-line">{{ doc.second_party_name }}<br>{{ doc.second_party_title }}</div></td>
-		</tr>
-	</table>
+	<div class="signature-page">
+		<div class="heading">Article Fifteen / البند الخامس عشر<br>Contract Copies / نسخ العقد</div>
+		<div class="bilingual"><div class="english">This contract has been made in two original copies. Each party shall retain one copy to act upon when necessary.</div><div class="arabic">حرر هذا العقد من نسختين أصليتين، يحتفظ كل طرف بنسخة للعمل بموجبها عند اللزوم.</div></div>
+		{% if doc.notes %}<div class="section-title">Notes / ملاحظات</div><p>{{ doc.notes }}</p>{% endif %}
+		<table class="signatures">
+			<tr>
+				<td><strong>First Party / الطرف الأول</strong>{% if doc.first_party_signature %}<br><img class="signature-image" src="{{ doc.first_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.first_party_name }}<br>Title: {{ doc.first_party_title }}<br>Signature:</div></td>
+				<td><strong>Second Party / الطرف الثاني</strong>{% if doc.second_party_signature %}<br><img class="signature-image" src="{{ doc.second_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.second_party_name }}<br>Title: {{ doc.second_party_title }}<br>Signature:</div></td>
+			</tr>
+		</table>
+	</div>
 </div>
