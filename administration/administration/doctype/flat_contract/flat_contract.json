@@ -10,7 +10,9 @@
   "project",
   "date",
   "column_break_eqmm",
+  "flat_rent_request",
   "flat_contract_request",
+  "flat_owner",
   "contract_start_date",
   "contract_end_date",
   "section_break_parties",
@@ -58,6 +60,14 @@
  ],
  "fields": [
   {
+     "fieldname": "flat_rent_request",
+     "fieldtype": "Link",
+     "in_list_view": 1,
+     "label": "Flat Rent Request",
+     "options": "Flat Rent Request",
+     "read_only": 1
+    },
+    {
    "fieldname": "flat_contract_request",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -81,6 +91,15 @@
    "reqd": 1
   },
   {
+    "fetch_from": "flat_contract_request.flat_owner",
+    "fieldname": "flat_owner",
+    "fieldtype": "Link",
+    "hidden": 1,
+    "label": "Flat Owner",
+    "options": "Supplier",
+    "read_only": 1
+    },
+    {
    "fieldname": "contract_start_date",
    "fieldtype": "Date",
    "label": "Contract Start Date",

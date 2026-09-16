@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project",
+  "flat_rent_request",
   "monthly_rent",
   "deposit",
   "insurance",
@@ -47,6 +48,13 @@
  ],
  "fields": [
   {
+     "fieldname": "flat_rent_request",
+     "fieldtype": "Link",
+     "label": "Flat Rent Request",
+     "options": "Flat Rent Request",
+     "read_only": 1
+    },
+    {
    "fieldname": "section_break_mrhf",
    "fieldtype": "Section Break"
   },

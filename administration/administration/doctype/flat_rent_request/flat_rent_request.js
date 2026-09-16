@@ -14,6 +14,7 @@ frappe.ui.form.on("Flat Rent Request", {
 					contract_meta.fields.map((field) => field.fieldname)
 				);
 				const contract_values = {};
+				contract_values.flat_rent_request = frm.doc.name;
 
 				frm.meta.fields.forEach((field) => {
 					if (
