@@ -114,6 +114,7 @@
    "label": "First Party Representative"
   },
   {
+    "fetch_from": "flat_contract_request.flat_owner",
    "fieldname": "second_party_name",
    "fieldtype": "Data",
    "label": "Second Party Name (English)",
@@ -135,6 +136,7 @@
    "fieldtype": "Column Break"
   },
   {
+    "fetch_from": "flat_contract_request.attach_id",
    "fieldname": "attach_id",
    "fieldtype": "Attach",
    "label": "Owner ID Attachment"
@@ -322,6 +324,7 @@
    "fieldtype": "Column Break"
   },
   {
+    "fetch_from": "flat_contract_request.legal_name",
    "fieldname": "second_party_name_arabic",
    "fieldtype": "Data",
    "label": "Second Party Name (Arabic)",

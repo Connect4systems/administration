@@ -141,7 +141,9 @@ frappe.ui.form.on("Flat Contract Request", {
 				contract.first_party_address = "3rd Floor, The NOX Mall, Third Sector, North 90th Street, Fifth Settlement, New Cairo, Cairo";
 				contract.first_party_representative = "Authorized Manager";
 				contract.second_party_name = frm.doc.flat_owner || "";
+				contract.second_party_name_arabic = frm.doc.legal_name || "";
 				contract.second_party_id = frm.doc.owner_id || "";
+				contract.attach_id = frm.doc.attach_id || "";
 				build_default_terms(frm.doc).forEach((term, index) => {
 					const contract_term = frappe.model.add_child(contract, "Flat Contract Term", "terms");
 					contract_term.term_no = index + 1;
