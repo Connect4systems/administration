@@ -7,11 +7,13 @@
 	.cover h1 { margin: 31mm 0 2mm; font-size: 22pt; text-decoration: underline; }
 	.cover h2 { margin: 0; font-size: 15pt; text-decoration: underline; }
 	.cover .ar-title { direction: rtl; font-family: Arial, sans-serif; font-size: 17pt; font-weight: bold; margin-top: 7mm; text-decoration: underline; }
-	.cover .between { font-size: 15pt; font-weight: bold; margin: 19mm 0 8mm; }
+	.cover .between { font-size: 15pt; font-weight: bold; margin: 8mm 0 5mm; }
 	.cover .party { font-size: 13pt; font-weight: bold; margin: 8mm auto; max-width: 175mm; }
 	.cover .party-ar { direction: rtl; font-family: Arial, sans-serif; font-size: 12pt; }
 	.cover .and { font-size: 15pt; font-weight: bold; margin: 10mm 0 5mm; }
 	.cover .date { font-size: 13pt; margin-top: 28mm; }
+	.cover .english-cover { margin-top: 8mm; }
+	.cover .arabic-cover { direction: rtl; font-family: Arial, sans-serif; }
 	.footer { border-top: 1px solid #4e85b6; bottom: 0; color: #4e85b6; font-size: 9pt; left: 0; padding-top: 4px; position: absolute; right: 0; }
 	.page { page-break-after: always; }
 	.heading { font-size: 15pt; margin: 5mm 0 3mm; text-align: center; text-decoration: underline; }
@@ -49,21 +51,29 @@
 
 <div class="contract">
 	{% set payment_cycle_ar = {"Daily": "يومياً", "Monthly": "شهرياً", "Quarterly": "ربع سنوي", "Semi Annual": "نصف سنوي", "Yearly": "سنوياً"}.get(doc.payment_cycle, doc.payment_cycle or "شهرياً") %}
+	{% set first_party_name_ar = "شركة سي إس إي سي إنترناشونال إيجيبت للمقاولات" %}
+	{% set first_party_representative_ar = "المدير المفوض" %}
+	{% set first_party_address_ar = "الدور الثالث، مول ذا نوكس، القطاع الثالث، شارع التسعين الشمالي، التجمع الخامس، القاهرة الجديدة، القاهرة" %}
 	<div class="cover">
-		<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
-		<div class="company-ar">شركة سي اس اي سي انترناشونال ايجيبت للمقاولات</div>
-		<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
-		<h1>Unit Lease Agreement</h1>
-		<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
-		<div class="between">بين كلاً من</div>
-		<div class="party party-ar">الطرف الأول<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
-		<div class="and">و</div>
-		<div class="party party-ar">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>{{ doc.second_party_id }}</div>
-		<div class="between">Between</div>
-		<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
-		<div class="and">And</div>
-		<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}</div>
-		<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}<br>Dated: {{ frappe.format_date(doc.date) }}</div>
+		<div class="arabic-cover">
+			<div class="company-ar">{{ first_party_name_ar }}</div>
+			<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
+			<div class="between">بين كلاً من</div>
+			<div class="party">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}</div>
+			<div class="and">و</div>
+			<div class="party">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>يحمل بطاقة رقم {{ doc.second_party_id }}</div>
+			<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}</div>
+		</div>
+		<div class="english-cover">
+			<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
+			<h1>Unit Lease Agreement</h1>
+			<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
+			<div class="between">Between</div>
+			<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
+			<div class="and">And</div>
+			<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}</div>
+			<div class="date">Dated: {{ frappe.format_date(doc.date) }}</div>
+		</div>
 		<div class="footer">Address: {{ doc.first_party_address or "The NOX Plaza, Fifth Settlement, New Cairo" }}<br>Web: www.cscec.com</div>
 	</div>
 
@@ -72,7 +82,7 @@
 		<div class="heading">This contract is made on {{ frappe.format_date(doc.date) }}</div>
 		<div class="language-block arabic">
 			<div class="lead">الطرف الأول</div>
-			<p>الطرف الأول: {{ doc.first_party_name }} ويمثله {{ doc.first_party_representative }} وعنوانه {{ doc.first_party_address }}.</p>
+			<p>الطرف الأول: {{ first_party_name_ar }} ويمثله {{ first_party_representative_ar }} وعنوانه {{ first_party_address_ar }}.</p>
 			<div class="lead">الطرف الثاني</div>
 			<p>الطرف الثاني: {{ doc.second_party_name_arabic }}، ويحمل رقم هوية {{ doc.second_party_id }}، والمقيم في {{ doc.second_party_address }}.</p>
 			<div class="section-title">تمهيد</div>
