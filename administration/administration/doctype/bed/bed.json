@@ -58,6 +58,7 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Employee",
+   "link_filters": "[[\"Employee\",\"status\",\"=\",\"Active\"]]",
    "options": "Employee"
   },
   {
@@ -104,7 +105,7 @@
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2026-09-16 18:40:13.989991",
+ "modified": "2026-09-16 19:55:31.925320",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Bed",

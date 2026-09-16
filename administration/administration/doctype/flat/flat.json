@@ -14,7 +14,6 @@
   "address",
   "column_break_itcu",
   "project",
-  "flat_owner",
   "owner_name",
   "no_of_room",
   "no_of_beds",
@@ -33,12 +32,18 @@
   {
    "fieldname": "flat_title",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Flat Title",
    "unique": 1
   },
   {
    "fieldname": "governorate",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Governorate",
    "options": "Governorate"
   },
@@ -52,15 +57,9 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "flat_owner",
-   "fieldtype": "Link",
-   "label": "Flat Owner",
-   "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
-   "options": "Supplier"
-  },
-  {
    "fieldname": "owner_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Owner name"
   },
   {
@@ -116,12 +115,19 @@
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "reqd": 1
   },
   {
    "fieldname": "rent_contract",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Rent Contract",
    "options": "Flat Contract"
   },
@@ -165,7 +171,7 @@
    "link_fieldname": "flat"
   }
  ],
- "modified": "2026-09-16 18:45:02.390995",
+ "modified": "2026-09-16 19:59:13.038005",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat",
