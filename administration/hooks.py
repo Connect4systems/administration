@@ -137,6 +137,12 @@ app_license = "mit"
 # ---------------
 # Hook on document methods and events
 
+doc_events = {
+    "Employee": {
+        "validate": "administration.employee.validate_accommodation_status",
+    }
+}
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
