@@ -12,11 +12,12 @@
 	.cover .party-ar { direction: rtl; font-family: Arial, sans-serif; font-size: 12pt; }
 	.cover .and { font-size: 15pt; font-weight: bold; margin: 10mm 0 5mm; }
 	.cover .date { font-size: 13pt; margin-top: 28mm; }
-	.cover .english-cover { margin-top: 8mm; }
-	.cover .arabic-cover { direction: rtl; font-family: Arial, sans-serif; unicode-bidi: isolate; }
-	.cover .arabic-cover .party { font-size: 12pt; line-height: 1.55; }
-	.cover .english-cover { direction: ltr; unicode-bidi: isolate; }
-	.cover .english-cover .party { line-height: 1.55; }
+	.cover .arabic-line { direction: rtl; font-family: Arial, sans-serif; }
+	.cover .english-line { direction: ltr; }
+	.cover .party { line-height: 1.45; }
+	.cover .party-ar { font-size: 12pt; }
+	.cover .party-en { font-size: 13pt; }
+	.cover .language-pair { margin: 2mm auto; }
 	.cover-letterhead { margin-bottom: 8mm; }
 	.cover-letterhead img { max-height: 28mm; max-width: 100%; object-fit: contain; }
 	.footer { border-top: 1px solid #4e85b6; bottom: 0; color: #4e85b6; font-size: 9pt; left: 0; padding-top: 4px; position: absolute; right: 0; }
@@ -61,23 +62,26 @@
 	{% set first_party_address_ar = "الدور الثالث، مول ذا نوكس، القطاع الثالث، شارع التسعين الشمالي، التجمع الخامس، القاهرة الجديدة، القاهرة" %}
 	<div class="cover">
 		<div class="cover-letterhead">{{ letter_head or "" }}</div>
-		<div class="arabic-cover">
-			<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
-			<div class="between">بين كلاً من</div>
-			<div class="party">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}<br>ويشار إليه فيما بعد بالطرف الأول</div>
-			<div class="and">و</div>
-			<div class="party">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>يحمل بطاقة رقم {{ doc.second_party_id }}<br>ويشار إليه فيما بعد بالطرف الثاني</div>
-			<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}</div>
+		<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
+		<h1>Unit Lease Agreement</h1>
+		<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
+		<div class="language-pair">
+			<div class="between arabic-line">بين كلاً من</div>
+			<div class="between english-line">Between</div>
 		</div>
-		<div class="english-cover">
-			<h1>Unit Lease Agreement</h1>
-			<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
-			<div class="between">Between</div>
-			<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}<br>Hereinafter referred to as the "First Party"</div>
-			<div class="and">And</div>
-			<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}<br>Hereinafter referred to as the "Second Party"</div>
-			<div class="date">Dated: {{ frappe.format_date(doc.date) }}</div>
+		<div class="language-pair party">
+			<div class="party-ar arabic-line">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}<br>ويشار إليه فيما بعد بالطرف الأول</div>
+			<div class="party-en english-line">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}<br>Hereinafter referred to as the "First Party"</div>
 		</div>
+		<div class="language-pair">
+			<div class="and arabic-line">و</div>
+			<div class="and english-line">And</div>
+		</div>
+		<div class="language-pair party">
+			<div class="party-ar arabic-line">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>يحمل بطاقة رقم {{ doc.second_party_id }}<br>ويشار إليه فيما بعد بالطرف الثاني</div>
+			<div class="party-en english-line">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}<br>Hereinafter referred to as the "Second Party"</div>
+		</div>
+		<div class="date language-pair"><span class="arabic-line">بتاريخ: {{ frappe.format_date(doc.date) }}</span><br><span class="english-line">Dated: {{ frappe.format_date(doc.date) }}</span></div>
 		<div class="footer">Address: {{ doc.first_party_address or "The NOX Plaza, Fifth Settlement, New Cairo" }}<br>Web: www.cscec.com</div>
 	</div>
 
