@@ -11,8 +11,11 @@
   "bed_no",
   "column_break_ugbq",
   "status",
-  "type",
   "employee",
+  "employee_status",
+  "department",
+  "type",
+  "employee_left",
   "casual"
  ],
  "fields": [
@@ -66,26 +69,46 @@
    "options": "1\n2\n3\n4\n5\n6\n7\n8"
   },
   {
-   "fieldname": "type",
-   "fieldtype": "Select",
-   "label": "Type",
-   "options": "Employee\nCasual"
-  },
-  {
    "fieldname": "casual",
    "fieldtype": "Data",
    "label": "Casual"
+  },
+  {
+   "fieldname": "employee_left",
+   "fieldtype": "Button",
+   "label": "Employee Left"
+  },
+  {
+   "fetch_from": "employee.status",
+   "fieldname": "employee_status",
+   "fieldtype": "Data",
+   "label": "Employee Status",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.employment_type",
+   "fieldname": "type",
+   "fieldtype": "Data",
+   "label": "Type",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2025-10-08 15:36:25.258818",
+ "modified": "2026-09-16 18:40:13.989991",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Bed",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -103,6 +126,7 @@
  ],
  "quick_entry": 1,
  "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

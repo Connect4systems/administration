@@ -17,6 +17,7 @@
   "contract_end_date",
   "owner_details_section",
   "flat_owner",
+  "legal_name",
   "owner_id",
   "attach_id",
   "column_break_kdzl",
@@ -62,7 +63,7 @@
    "fieldname": "flat_owner",
    "fieldtype": "Link",
    "label": "Flat Owner",
-   "link_filters": "[[\"Supplier\",\"custom_accommodation_\",\"=\",1]]",
+   "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
    "options": "Supplier"
   },
   {
@@ -88,6 +89,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "flat_owner.tax_id",
    "fieldname": "owner_id",
    "fieldtype": "Data",
    "label": "Owner ID"
@@ -200,11 +202,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "flat_owner.custom_bank",
    "fieldname": "bank",
    "fieldtype": "Data",
    "label": "Bank"
   },
   {
+   "fetch_from": "flat_owner.custom_iban",
    "fieldname": "iban",
    "fieldtype": "Data",
    "label": "IBAN"
@@ -249,13 +253,19 @@
    "fieldname": "notes",
    "fieldtype": "Data",
    "label": "Notes"
+  },
+  {
+   "fetch_from": "flat_owner.custom_legal_name",
+   "fieldname": "legal_name",
+   "fieldtype": "Data",
+   "label": "Legal Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 14:50:06.762112",
+ "modified": "2026-09-16 19:13:14.699330",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",

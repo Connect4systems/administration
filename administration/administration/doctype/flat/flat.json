@@ -6,14 +6,18 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "flat_information_section",
+  "rent_contract",
   "flat_title",
   "governorate",
+  "city",
   "address",
   "column_break_itcu",
   "project",
   "flat_owner",
   "owner_name",
   "no_of_room",
+  "no_of_beds",
   "section_break_sxmy",
   "payment_schedule",
   "rent",
@@ -21,7 +25,9 @@
   "column_break_auya",
   "rent_start_date",
   "rent_end_date",
-  "amended_from"
+  "amended_from",
+  "flact_contents_tab",
+  "flat_contents"
  ],
  "fields": [
   {
@@ -112,6 +118,38 @@
    "fieldtype": "Link",
    "label": "Project",
    "options": "Project"
+  },
+  {
+   "fieldname": "rent_contract",
+   "fieldtype": "Link",
+   "label": "Rent Contract",
+   "options": "Flat Contract"
+  },
+  {
+   "fieldname": "no_of_beds",
+   "fieldtype": "Float",
+   "label": "No Of Beds"
+  },
+  {
+   "fieldname": "flat_information_section",
+   "fieldtype": "Section Break",
+   "label": "Flat Information"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "flact_contents_tab",
+   "fieldtype": "Tab Break",
+   "label": "Flact Contents"
+  },
+  {
+   "fieldname": "flat_contents",
+   "fieldtype": "Table",
+   "label": "Flat Contents",
+   "options": "Flat Contents"
   }
  ],
  "grid_page_length": 50,
@@ -127,7 +165,7 @@
    "link_fieldname": "flat"
   }
  ],
- "modified": "2025-10-15 15:05:19.622654",
+ "modified": "2026-09-16 18:45:02.390995",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat",
@@ -148,6 +186,7 @@
   }
  ],
  "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

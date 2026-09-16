@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Rent Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":3}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":3}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":3}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PCCpKNDpz8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}}]",
+ "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Rent Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"AHlpsqc5NG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":4}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":3}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PCCpKNDpz8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}}]",
  "creation": "2025-10-08 14:55:15.430530",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Accommodation",
  "links": [],
- "modified": "2026-09-16 15:03:39.022486",
+ "modified": "2026-09-16 18:54:01.948419",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Accommodation",
@@ -51,9 +51,17 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Flat Contract",
+   "link_to": "Flat Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Flat Owners",
    "link_to": "Supplier",
-   "stats_filter": "[[\"Supplier\",\"custom_accommodation_\",\"=\",1,false]]",
+   "stats_filter": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\",false]]",
    "type": "DocType"
   },
   {

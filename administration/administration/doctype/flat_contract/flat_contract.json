@@ -2,27 +2,27 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:naming_series",
- "creation": "2026-09-16 15:00:00.000000",
+ "creation": "2026-09-16 15:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "flat_contract_request",
   "project",
   "date",
+  "column_break_eqmm",
+  "flat_contract_request",
   "contract_start_date",
   "contract_end_date",
   "section_break_parties",
   "first_party_name",
   "first_party_address",
   "first_party_representative",
-  "second_party_name",
-  "second_party_address",
-  "second_party_id",
   "column_break_party",
-  "flat_owner",
-  "owner_id",
+  "second_party_name",
+  "second_party_name_arabic",
+  "second_party_id",
   "attach_id",
+  "second_party_address",
   "section_break_property",
   "governorate",
   "city",
@@ -46,7 +46,7 @@
   "section_break_contents",
   "flat_contents",
   "section_break_terms",
-    "terms",
+  "terms",
   "section_break_signatures",
   "first_party_title",
   "first_party_signature",
@@ -116,7 +116,7 @@
   {
    "fieldname": "second_party_name",
    "fieldtype": "Data",
-   "label": "Second Party Name",
+   "label": "Second Party Name (English)",
    "reqd": 1
   },
   {
@@ -125,6 +125,7 @@
    "label": "Second Party Address"
   },
   {
+   "fetch_from": "flat_owner.tax_id",
    "fieldname": "second_party_id",
    "fieldtype": "Data",
    "label": "Second Party ID"
@@ -132,17 +133,6 @@
   {
    "fieldname": "column_break_party",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "flat_owner",
-   "fieldtype": "Link",
-   "label": "Flat Owner",
-   "options": "Supplier"
-  },
-  {
-   "fieldname": "owner_id",
-   "fieldtype": "Data",
-   "label": "Owner ID"
   },
   {
    "fieldname": "attach_id",
@@ -243,11 +233,13 @@
    "label": "Insurance"
   },
   {
+   "fetch_from": "flat_owner.custom_bank",
    "fieldname": "bank",
    "fieldtype": "Data",
    "label": "Bank"
   },
   {
+   "fetch_from": "flat_owner.custom_iban",
    "fieldname": "iban",
    "fieldtype": "Data",
    "label": "IBAN"
@@ -273,12 +265,12 @@
    "fieldtype": "Section Break",
    "label": "Editable Agreement Terms"
   },
-    {
-     "fieldname": "terms",
-     "fieldtype": "Table",
-     "label": "Terms and Conditions / الشروط والأحكام",
-     "options": "Flat Contract Term"
-    },
+  {
+   "fieldname": "terms",
+   "fieldtype": "Table",
+   "label": "Terms and Conditions / \u0627\u0644\u0634\u0631\u0648\u0637 \u0648\u0627\u0644\u0623\u062d\u0643\u0627\u0645",
+   "options": "Flat Contract Term"
+  },
   {
    "fieldname": "section_break_signatures",
    "fieldtype": "Section Break",
@@ -324,13 +316,23 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "column_break_eqmm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "second_party_name_arabic",
+   "fieldtype": "Data",
+   "label": "Second Party Name (Arabic)",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 15:00:00.000000",
+ "modified": "2026-09-16 19:10:14.514714",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract",
