@@ -7,6 +7,11 @@ from frappe.model.document import Document
 
 class Bed(Document):
 	def validate(self):
+		if self.flat and self.room:
+			room_flat = frappe.db.get_value("Room", self.room, "flat")
+			if room_flat != self.flat:
+				frappe.throw("Room must belong to the selected Flat.")
+
 		if self.employee:
 			self.status = "Booked"
 		else:
