@@ -20,6 +20,7 @@
   "payment_cycle",
   "deposit",
   "commission",
+  "flat_owner",
   "section_break_epdd",
   "employee",
   "amended_from",
@@ -96,6 +97,13 @@
    "fieldtype": "Currency",
    "label": "Commission"
   },
+    {
+     "fieldname": "flat_owner",
+     "fieldtype": "Link",
+     "label": "Flat Owner",
+     "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
+     "options": "Supplier"
+    },
   {
    "fieldname": "section_break_epdd",
    "fieldtype": "Section Break"
