@@ -38,70 +38,109 @@
 	.signatures td { padding: 7px 15px; text-align: center; vertical-align: bottom; width: 50%; }
 	.signature-image { height: 45px; max-width: 160px; object-fit: contain; }
 	.signature-line { border-top: 1px solid #222; margin-top: 38px; padding-top: 5px; }
+	.language-block { margin: 5mm 0; }
+	.language-block p { margin: 2mm 0; }
+	.details-ar { direction: rtl; font-family: Arial, sans-serif; text-align: right; }
+	.details-ar td:nth-child(odd) { text-align: right; }
+	.details-en { direction: ltr; text-align: left; }
+	.details-en td:nth-child(odd) { text-align: left; }
+	.contents-ar { direction: rtl; font-family: Arial, sans-serif; text-align: right; }
 </style>
 
 <div class="contract">
+	{% set payment_cycle_ar = {"Daily": "يومياً", "Monthly": "شهرياً", "Quarterly": "ربع سنوي", "Semi Annual": "نصف سنوي", "Yearly": "سنوياً"}.get(doc.payment_cycle, doc.payment_cycle or "شهرياً") %}
 	<div class="cover">
 		<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
 		<div class="company-ar">شركة سي اس اي سي انترناشونال ايجيبت للمقاولات</div>
+		<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
 		<h1>Unit Lease Agreement</h1>
 		<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
-		<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
-		<div class="between">Between / بين كلاً من</div>
-		<div class="party">First Party / الطرف الأول<br>{{ doc.first_party_name }}<br><span class="party-ar">{{ doc.first_party_representative }}</span></div>
-		<div class="and">And / و</div>
-		<div class="party">Second Party / الطرف الثاني<br>{{ doc.second_party_name }}<br><span class="party-ar">{{ doc.second_party_id }}</span></div>
-		<div class="date">Dated: {{ frappe.format_date(doc.date) }}<br><span class="party-ar">بتاريخ: {{ frappe.format_date(doc.date) }}</span></div>
+		<div class="between">بين كلاً من</div>
+		<div class="party party-ar">الطرف الأول<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
+		<div class="and">و</div>
+		<div class="party party-ar">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>{{ doc.second_party_id }}</div>
+		<div class="between">Between</div>
+		<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
+		<div class="and">And</div>
+		<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}</div>
+		<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}<br>Dated: {{ frappe.format_date(doc.date) }}</div>
 		<div class="footer">Address: {{ doc.first_party_address or "The NOX Plaza, Fifth Settlement, New Cairo" }}<br>Web: www.cscec.com</div>
 	</div>
 
 	<div class="page">
 		<div class="heading-ar">إنه في يوم {{ frappe.format_date(doc.date) }}م</div>
 		<div class="heading">This contract is made on {{ frappe.format_date(doc.date) }}</div>
-		<div class="lead">First Party / الطرف الأول</div>
-		<div class="bilingual"><div class="english">First Party: {{ doc.first_party_name }}, represented by {{ doc.first_party_representative }}, with address at {{ doc.first_party_address }}.</div><div class="arabic">الطرف الأول: {{ doc.first_party_name }} ويمثله {{ doc.first_party_representative }} وعنوانه {{ doc.first_party_address }}.</div></div>
-		<div class="lead">Second Party / الطرف الثاني</div>
-		<div class="bilingual"><div class="english">Second Party: {{ doc.second_party_name }}, ID {{ doc.second_party_id }}, residing at {{ doc.second_party_address }}.</div><div class="arabic">الطرف الثاني: {{ doc.second_party_name }}، ويحمل رقم هوية {{ doc.second_party_id }}، والمقيم في {{ doc.second_party_address }}.</div></div>
-		<div class="section-title">Preamble / تمهيد</div>
-		<div class="bilingual"><div class="english">The parties have agreed to enter into this fixed-term unit lease agreement for the leased premises described below, for use as accommodation for the company's employees.</div><div class="arabic">اتفق الطرفان على إبرام عقد إيجار الوحدة السكنية محددة المدة الموضحة أدناه لاستخدامها كسكن خاص بالعاملين لدى الشركة.</div></div>
-		<div class="section-title">Leased Unit Details / بيانات العين المؤجرة</div>
-		<table class="details">
-			<tr><td>Governorate / المحافظة</td><td>{{ doc.governorate }}</td><td>City / المدينة</td><td>{{ doc.city }}</td></tr>
-			<tr><td>Area / المنطقة</td><td>{{ doc.area }}</td><td>Address / العنوان</td><td>{{ doc.address }}</td></tr>
-			<tr><td>Unit No. / رقم الوحدة</td><td>{{ doc.flat_no }}</td><td>Floor / الدور</td><td>{{ doc.floor_no }}</td></tr>
-			<tr><td>Total Area / إجمالي المساحة</td><td>{{ doc.total_flat_area }}</td><td>Rooms / الغرف</td><td>{{ doc.no_of_rooms }}</td></tr>
-			<tr><td>Monthly Rent / الإيجار الشهري</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>Insurance / التأمين</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
-		</table>
+		<div class="language-block arabic">
+			<div class="lead">الطرف الأول</div>
+			<p>الطرف الأول: {{ doc.first_party_name }} ويمثله {{ doc.first_party_representative }} وعنوانه {{ doc.first_party_address }}.</p>
+			<div class="lead">الطرف الثاني</div>
+			<p>الطرف الثاني: {{ doc.second_party_name_arabic }}، ويحمل رقم هوية {{ doc.second_party_id }}، والمقيم في {{ doc.second_party_address }}.</p>
+			<div class="section-title">تمهيد</div>
+			<p>اتفق الطرفان على إبرام عقد إيجار الوحدة السكنية محددة المدة الموضحة أدناه لاستخدامها كسكن خاص بالعاملين لدى الشركة.</p>
+			<div class="section-title">بيانات العين المؤجرة</div>
+			<table class="details details-ar">
+				<tr><td>المحافظة</td><td>{{ doc.governorate }}</td><td>المدينة</td><td>{{ doc.city }}</td></tr>
+				<tr><td>المنطقة</td><td>{{ doc.area }}</td><td>العنوان</td><td>{{ doc.address }}</td></tr>
+				<tr><td>رقم الوحدة</td><td>{{ doc.flat_no }}</td><td>الدور</td><td>{{ doc.floor_no }}</td></tr>
+				<tr><td>إجمالي المساحة</td><td>{{ doc.total_flat_area }}</td><td>الغرف</td><td>{{ doc.no_of_rooms }}</td></tr>
+				<tr><td>الإيجار الشهري</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>التأمين</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
+			</table>
+		</div>
+		<div class="language-block english">
+			<div class="lead">First Party</div>
+			<p>First Party: {{ doc.first_party_name }}, represented by {{ doc.first_party_representative }}, with address at {{ doc.first_party_address }}.</p>
+			<div class="lead">Second Party</div>
+			<p>Second Party: {{ doc.second_party_name }}, ID {{ doc.second_party_id }}, residing at {{ doc.second_party_address }}.</p>
+			<div class="section-title">Preamble</div>
+			<p>The parties have agreed to enter into this fixed-term unit lease agreement for the leased premises described below, for use as accommodation for the company's employees.</p>
+			<div class="section-title">Leased Unit Details</div>
+			<table class="details details-en">
+				<tr><td>Governorate</td><td>{{ doc.governorate }}</td><td>City</td><td>{{ doc.city }}</td></tr>
+				<tr><td>Area</td><td>{{ doc.area }}</td><td>Address</td><td>{{ doc.address }}</td></tr>
+				<tr><td>Unit No.</td><td>{{ doc.flat_no }}</td><td>Floor</td><td>{{ doc.floor_no }}</td></tr>
+				<tr><td>Total Area</td><td>{{ doc.total_flat_area }}</td><td>Rooms</td><td>{{ doc.no_of_rooms }}</td></tr>
+				<tr><td>Monthly Rent</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>Insurance</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
+			</table>
+		</div>
 	</div>
 
 	<div class="terms">
 		{% for term in doc.terms %}
 		<div class="term-row">
-			<h3>{{ term.english_term.split("\n")[0] }} / {{ term.arabic_term.split("\n")[0] }}</h3>
-			<div class="english">{{ term.english_term.split("\n")[1:] | join("<br>") }}</div>
-			<div class="arabic">{{ term.arabic_term.split("\n")[1:] | join("<br>") }}</div>
+				{% set arabic_term = term.arabic_term.replace("الطرف الثاني", doc.second_party_name_arabic or "الطرف الثاني") %}
+				{% if doc.payment_cycle %}{% set arabic_term = arabic_term.replace(doc.payment_cycle, payment_cycle_ar) %}{% endif %}
+				{% set english_term = term.english_term.replace("Second Party", doc.second_party_name or "Second Party") %}
+				<div class="arabic"><h3>{{ arabic_term.split("\n")[0] }}</h3>{{ arabic_term.split("\n")[1:] | join("<br>") }}</div>
+				<div class="english"><h3>{{ english_term.split("\n")[0] }}</h3>{{ english_term.split("\n")[1:] | join("<br>") }}</div>
 		</div>
 		{% endfor %}
 	</div>
 
 	{% if doc.flat_contents %}
 	<div class="page">
-		<div class="section-title">Furnishings and Contents / المنقولات والمحتويات</div>
+		<div class="section-title arabic">المنقولات والمحتويات</div>
+		<table class="contents contents-ar">
+			<tr><th>الصنف</th><th>الوصف</th><th>الكمية</th></tr>
+			{% for item in doc.flat_contents %}<tr><td>{{ item.item_name }}</td><td>{{ item.description }}</td><td>{{ item.qty }}</td></tr>{% endfor %}
+		</table>
+		<div class="section-title">Furnishings and Contents</div>
 		<table class="contents">
-			<tr><th>Item / الصنف</th><th>Description / الوصف</th><th>Qty / الكمية</th></tr>
+			<tr><th>Item</th><th>Description</th><th>Qty</th></tr>
 			{% for item in doc.flat_contents %}<tr><td>{{ item.item_name }}</td><td>{{ item.description }}</td><td>{{ item.qty }}</td></tr>{% endfor %}
 		</table>
 	</div>
 	{% endif %}
 
 	<div class="signature-page">
-		<div class="heading">Article Fifteen / البند الخامس عشر<br>Contract Copies / نسخ العقد</div>
-		<div class="bilingual"><div class="english">This contract has been made in two original copies. Each party shall retain one copy to act upon when necessary.</div><div class="arabic">حرر هذا العقد من نسختين أصليتين، يحتفظ كل طرف بنسخة للعمل بموجبها عند اللزوم.</div></div>
+		<div class="heading-ar">البند الخامس عشر<br>نسخ العقد</div>
+		<div class="arabic">حرر هذا العقد من نسختين أصليتين، يحتفظ كل طرف بنسخة للعمل بموجبها عند اللزوم.</div>
+		<div class="heading">Article Fifteen<br>Contract Copies</div>
+		<div class="english">This contract has been made in two original copies. Each party shall retain one copy to act upon when necessary.</div>
 		{% if doc.notes %}<div class="section-title">Notes / ملاحظات</div><p>{{ doc.notes }}</p>{% endif %}
 		<table class="signatures">
 			<tr>
-				<td><strong>First Party / الطرف الأول</strong>{% if doc.first_party_signature %}<br><img class="signature-image" src="{{ doc.first_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.first_party_name }}<br>Title: {{ doc.first_party_title }}<br>Signature:</div></td>
-				<td><strong>Second Party / الطرف الثاني</strong>{% if doc.second_party_signature %}<br><img class="signature-image" src="{{ doc.second_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.second_party_name }}<br>Title: {{ doc.second_party_title }}<br>Signature:</div></td>
+				<td><strong>الطرف الأول</strong><br><strong>First Party</strong>{% if doc.first_party_signature %}<br><img class="signature-image" src="{{ doc.first_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.first_party_name }}<br>Title: {{ doc.first_party_title }}<br>Signature:</div></td>
+				<td><strong>الطرف الثاني</strong><br><strong>Second Party</strong>{% if doc.second_party_signature %}<br><img class="signature-image" src="{{ doc.second_party_signature }}">{% endif %}<div class="signature-line">Name: {{ doc.second_party_name }}<br>Title: {{ doc.second_party_title }}<br>Signature:</div></td>
 			</tr>
 		</table>
 	</div>
