@@ -17,6 +17,7 @@
   "contract_end_date",
   "owner_details_section",
   "flat_owner",
+    "flat_owner_name",
   "legal_name",
   "owner_id",
   "attach_id",
@@ -66,6 +67,14 @@
    "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
    "options": "Supplier"
   },
+    {
+     "fetch_from": "flat_owner.supplier_name",
+     "fieldname": "flat_owner_name",
+     "fieldtype": "Data",
+     "hidden": 1,
+     "label": "Flat Owner Name",
+     "read_only": 1
+    },
   {
    "fieldname": "column_break_vimy",
    "fieldtype": "Column Break"

@@ -100,7 +100,14 @@ frappe.ui.form.on("Flat Contract Request", {
 			return;
 		}
 
-		frm.add_custom_button(__("Create Flat Contract"), () => {
+		frm.add_custom_button(__("Create Flat Contract"), async () => {
+			const supplier_name =
+				frm.doc.flat_owner_name ||
+				(
+					await frappe.db.get_value("Supplier", frm.doc.flat_owner, "supplier_name")
+				).message?.supplier_name ||
+				"";
+
 			frappe.model.with_doctype("Flat Contract", () => {
 				const contract = frappe.model.get_new_doc("Flat Contract");
 				const copied_fields = [
@@ -140,7 +147,7 @@ frappe.ui.form.on("Flat Contract Request", {
 				contract.first_party_name = "CSCEC International Egypt for Construction Company Co., LTD s.s.c";
 				contract.first_party_address = "3rd Floor, The NOX Mall, Third Sector, North 90th Street, Fifth Settlement, New Cairo, Cairo";
 				contract.first_party_representative = "Authorized Manager";
-				contract.second_party_name = frm.doc.flat_owner || "";
+				contract.second_party_name = supplier_name;
 				contract.second_party_name_arabic = frm.doc.legal_name || "";
 				contract.second_party_id = frm.doc.owner_id || "";
 				contract.attach_id = frm.doc.attach_id || "";

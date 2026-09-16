@@ -114,7 +114,7 @@
    "label": "First Party Representative"
   },
   {
-    "fetch_from": "flat_contract_request.flat_owner",
+    "fetch_from": "flat_contract_request.flat_owner_name",
    "fieldname": "second_party_name",
    "fieldtype": "Data",
    "label": "Second Party Name (English)",
