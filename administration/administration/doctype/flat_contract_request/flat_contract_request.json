@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:naming_series",
  "creation": "2026-09-16 14:01:51.734814",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -27,15 +28,20 @@
   "city",
   "area",
   "address",
-  "column_break_kcth",
   "flat_no",
   "floor_no",
+  "column_break_kcth",
+  "total_flat_area",
   "no_of_rooms",
   "no_of_beds",
+  "no_of_ketchen_room",
+  "no_of_bathroom",
+  "notes",
   "section_break_atsd",
   "flat_contents",
   "section_break_mrhf",
-  "amended_from"
+  "amended_from",
+  "naming_series"
  ],
  "fields": [
   {
@@ -217,16 +223,43 @@
    "fieldname": "ownership_documentation",
    "fieldtype": "Attach",
    "label": "Ownership Documentation "
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "FCR-.YY.-.###"
+  },
+  {
+   "fieldname": "total_flat_area",
+   "fieldtype": "Float",
+   "label": "Total Flat Area"
+  },
+  {
+   "fieldname": "no_of_ketchen_room",
+   "fieldtype": "Float",
+   "label": "No of Ketchen Room"
+  },
+  {
+   "fieldname": "no_of_bathroom",
+   "fieldtype": "Float",
+   "label": "No of Bathroom"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Data",
+   "label": "Notes"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 14:37:10.685960",
+ "modified": "2026-09-16 14:50:06.762112",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
