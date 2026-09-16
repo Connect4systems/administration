@@ -13,7 +13,10 @@
 	.cover .and { font-size: 15pt; font-weight: bold; margin: 10mm 0 5mm; }
 	.cover .date { font-size: 13pt; margin-top: 28mm; }
 	.cover .english-cover { margin-top: 8mm; }
-	.cover .arabic-cover { direction: rtl; font-family: Arial, sans-serif; }
+	.cover .arabic-cover { direction: rtl; font-family: Arial, sans-serif; unicode-bidi: isolate; }
+	.cover .arabic-cover .party { font-size: 12pt; line-height: 1.55; }
+	.cover .english-cover { direction: ltr; unicode-bidi: isolate; }
+	.cover .english-cover .party { line-height: 1.55; }
 	.footer { border-top: 1px solid #4e85b6; bottom: 0; color: #4e85b6; font-size: 9pt; left: 0; padding-top: 4px; position: absolute; right: 0; }
 	.page { page-break-after: always; }
 	.heading { font-size: 15pt; margin: 5mm 0 3mm; text-align: center; text-decoration: underline; }
@@ -59,9 +62,9 @@
 			<div class="company-ar">{{ first_party_name_ar }}</div>
 			<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
 			<div class="between">بين كلاً من</div>
-			<div class="party">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}</div>
+			<div class="party">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}<br>ويشار إليه فيما بعد بالطرف الأول</div>
 			<div class="and">و</div>
-			<div class="party">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>يحمل بطاقة رقم {{ doc.second_party_id }}</div>
+			<div class="party">الطرف الثاني<br>{{ doc.second_party_name_arabic }}<br>يحمل بطاقة رقم {{ doc.second_party_id }}<br>ويشار إليه فيما بعد بالطرف الثاني</div>
 			<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}</div>
 		</div>
 		<div class="english-cover">
@@ -69,9 +72,9 @@
 			<h1>Unit Lease Agreement</h1>
 			<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
 			<div class="between">Between</div>
-			<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}</div>
+			<div class="party">First Party<br>{{ doc.first_party_name }}<br>{{ doc.first_party_representative }}<br>Hereinafter referred to as the "First Party"</div>
 			<div class="and">And</div>
-			<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}</div>
+			<div class="party">Second Party<br>{{ doc.second_party_name }}<br>ID {{ doc.second_party_id }}<br>Hereinafter referred to as the "Second Party"</div>
 			<div class="date">Dated: {{ frappe.format_date(doc.date) }}</div>
 		</div>
 		<div class="footer">Address: {{ doc.first_party_address or "The NOX Plaza, Fifth Settlement, New Cairo" }}<br>Web: www.cscec.com</div>
