@@ -17,6 +17,8 @@
 	.cover .arabic-cover .party { font-size: 12pt; line-height: 1.55; }
 	.cover .english-cover { direction: ltr; unicode-bidi: isolate; }
 	.cover .english-cover .party { line-height: 1.55; }
+	.cover-letterhead { margin-bottom: 8mm; }
+	.cover-letterhead img { max-height: 28mm; max-width: 100%; object-fit: contain; }
 	.footer { border-top: 1px solid #4e85b6; bottom: 0; color: #4e85b6; font-size: 9pt; left: 0; padding-top: 4px; position: absolute; right: 0; }
 	.page { page-break-after: always; }
 	.heading { font-size: 15pt; margin: 5mm 0 3mm; text-align: center; text-decoration: underline; }
@@ -58,8 +60,8 @@
 	{% set first_party_representative_ar = "المدير المفوض" %}
 	{% set first_party_address_ar = "الدور الثالث، مول ذا نوكس، القطاع الثالث، شارع التسعين الشمالي، التجمع الخامس، القاهرة الجديدة، القاهرة" %}
 	<div class="cover">
+		<div class="cover-letterhead">{{ letter_head or "" }}</div>
 		<div class="arabic-cover">
-			<div class="company-ar">{{ first_party_name_ar }}</div>
 			<div class="ar-title">عقد إيجار وحدة سكنية مفروشة<br>(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
 			<div class="between">بين كلاً من</div>
 			<div class="party">الطرف الأول<br>{{ first_party_name_ar }}<br>{{ first_party_representative_ar }}<br>ويشار إليه فيما بعد بالطرف الأول</div>
@@ -68,7 +70,6 @@
 			<div class="date">بتاريخ: {{ frappe.format_date(doc.date) }}</div>
 		</div>
 		<div class="english-cover">
-			<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
 			<h1>Unit Lease Agreement</h1>
 			<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
 			<div class="between">Between</div>
