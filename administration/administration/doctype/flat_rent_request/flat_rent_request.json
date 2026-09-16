@@ -1,25 +1,29 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "naming_series:naming_series",
  "creation": "2025-10-05 14:20:09.842387",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "project",
+  "no_of_employees",
   "governorate",
   "city",
   "area",
   "address",
   "column_break_cdrx",
   "date",
-  "project",
   "monthly_rent",
   "rent_period",
   "payment_cycle",
   "deposit",
   "commission",
   "section_break_epdd",
-  "employee"
+  "employee",
+  "amended_from",
+  "naming_series"
  ],
  "fields": [
   {
@@ -35,7 +39,9 @@
   {
    "fieldname": "city",
    "fieldtype": "Data",
-   "label": "City"
+   "in_list_view": 1,
+   "label": "City",
+   "reqd": 1
   },
   {
    "fieldname": "area",
@@ -51,13 +57,17 @@
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
   },
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "reqd": 1
   },
   {
    "fieldname": "monthly_rent",
@@ -95,15 +105,41 @@
    "fieldtype": "Table",
    "label": "Employee",
    "options": "Rent Emp"
+  },
+  {
+   "default": "1",
+   "fieldname": "no_of_employees",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "No of Employees",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Flat Rent Request",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series ",
+   "options": "FRQ-.YY.-.###"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2025-10-05 15:25:29.093419",
+ "modified": "2026-09-16 13:58:24.833578",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Rent Request",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {
@@ -120,6 +156,7 @@
   }
  ],
  "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
