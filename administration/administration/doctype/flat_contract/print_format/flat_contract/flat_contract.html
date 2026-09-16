@@ -12,9 +12,11 @@
 	.party { border: 1px solid #c8d3dc; padding: 7px; vertical-align: top; width: 50%; }
 	.party h3 { margin: 0 0 4px; text-decoration: underline; }
 	.terms { page-break-before: always; }
-	.terms h3 { border-bottom: 1px solid #a9b5bf; font-size: 12pt; margin: 12px 0 4px; }
+	.term-row { border-bottom: 1px solid #c5cdd3; page-break-inside: avoid; padding: 9px 0; }
+	.term-row h3 { font-size: 12pt; margin: 0 0 4px; text-align: center; text-decoration: underline; }
 	.english { direction: ltr; text-align: left; }
 	.arabic { direction: rtl; text-align: right; font-family: "Arial", sans-serif; }
+	.term-language { margin: 4px 0; }
 	.contents { border-collapse: collapse; margin-top: 6px; width: 100%; }
 	.contents th, .contents td { border: 1px solid #aeb9c2; padding: 5px; }
 	.contents th { background: #edf3f8; }
@@ -76,13 +78,15 @@
 	</table>
 	{% endif %}
 
-	<div class="terms english">
-		<div class="block-title">Terms and Conditions</div>
-		{{ doc.english_terms or "" }}
-	</div>
-	<div class="terms arabic">
-		<div class="block-title">الشروط والأحكام</div>
-		{{ doc.arabic_terms or "" }}
+	<div class="terms">
+		<div class="block-title">Terms and Conditions / الشروط والأحكام</div>
+		{% for term in doc.terms %}
+		<div class="term-row">
+			<h3>Article {{ term.term_no }} / البند {{ term.term_no }}</h3>
+			<div class="term-language english">{{ term.english_term | replace("\n", "<br>") }}</div>
+			<div class="term-language arabic">{{ term.arabic_term | replace("\n", "<br>") }}</div>
+		</div>
+		{% endfor %}
 	</div>
 
 	{% if doc.notes %}<div class="block-title">Notes / ملاحظات</div><p>{{ doc.notes }}</p>{% endif %}

@@ -46,8 +46,7 @@
   "section_break_contents",
   "flat_contents",
   "section_break_terms",
-  "english_terms",
-  "arabic_terms",
+    "terms",
   "section_break_signatures",
   "first_party_title",
   "first_party_signature",
@@ -274,18 +273,12 @@
    "fieldtype": "Section Break",
    "label": "Editable Agreement Terms"
   },
-  {
-   "fieldname": "english_terms",
-   "fieldtype": "Text Editor",
-   "label": "Terms and Conditions (English)",
-   "reqd": 1
-  },
-  {
-   "fieldname": "arabic_terms",
-   "fieldtype": "Text Editor",
-   "label": "الشروط والأحكام (العربية)",
-   "reqd": 1
-  },
+    {
+     "fieldname": "terms",
+     "fieldtype": "Table",
+     "label": "Terms and Conditions / الشروط والأحكام",
+     "options": "Flat Contract Term"
+    },
   {
    "fieldname": "section_break_signatures",
    "fieldtype": "Section Break",
