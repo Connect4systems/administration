@@ -1,0 +1,96 @@
+<style>
+	@page { size: A4; margin: 14mm 12mm; }
+	.contract { color: #20252b; font-family: Georgia, "Times New Roman", serif; font-size: 10.5pt; line-height: 1.45; }
+	.contract-header { border-bottom: 2px solid #2f6fae; margin-bottom: 16px; padding-bottom: 10px; text-align: center; }
+	.contract-header h1 { font-size: 20pt; margin: 4px 0; }
+	.contract-header h2 { font-size: 13pt; margin: 0; text-decoration: underline; }
+	.contract-header .company { color: #2f6fae; font-size: 12pt; font-weight: bold; }
+	.meta, .details, .signatures { width: 100%; border-collapse: collapse; }
+	.meta td, .details td { padding: 4px 6px; vertical-align: top; }
+	.meta td:first-child, .details td:first-child { font-weight: bold; width: 23%; }
+	.block-title { background: #edf3f8; border-bottom: 1px solid #8daac2; font-size: 12pt; font-weight: bold; margin-top: 14px; padding: 5px 7px; }
+	.party { border: 1px solid #c8d3dc; padding: 7px; vertical-align: top; width: 50%; }
+	.party h3 { margin: 0 0 4px; text-decoration: underline; }
+	.terms { page-break-before: always; }
+	.terms h3 { border-bottom: 1px solid #a9b5bf; font-size: 12pt; margin: 12px 0 4px; }
+	.english { direction: ltr; text-align: left; }
+	.arabic { direction: rtl; text-align: right; font-family: "Arial", sans-serif; }
+	.contents { border-collapse: collapse; margin-top: 6px; width: 100%; }
+	.contents th, .contents td { border: 1px solid #aeb9c2; padding: 5px; }
+	.contents th { background: #edf3f8; }
+	.signatures { margin-top: 38px; }
+	.signatures td { padding: 8px 18px; text-align: center; vertical-align: bottom; width: 50%; }
+	.signature-line { border-top: 1px solid #20252b; margin-top: 42px; padding-top: 5px; }
+	.signature-image { height: 42px; max-width: 150px; object-fit: contain; }
+	.small { color: #56616b; font-size: 9pt; }
+</style>
+
+<div class="contract">
+	<div class="contract-header">
+		<div class="company">{{ doc.first_party_name or "CSCEC International Egypt for Construction Company Co., LTD s.s.c" }}</div>
+		<div class="small">{{ doc.first_party_address or "" }}</div>
+		<h1>Unit Lease Agreement</h1>
+		<h2>Fixed-Term Agreement Pursuant to Law No. 4 of 1996</h2>
+		<div class="arabic" style="font-size: 13pt; font-weight: bold; margin-top: 4px;">عقد إيجار وحدة سكنية مفروشة</div>
+		<div class="arabic" style="font-size: 10pt;">(محدد المدة طبقاً للقانون رقم 4 لسنة 1996)</div>
+	</div>
+
+	<table class="meta">
+		<tr><td>Contract No. / رقم العقد</td><td>{{ doc.name }}</td><td>Date / التاريخ</td><td>{{ frappe.format_date(doc.date) }}</td></tr>
+		<tr><td>Start / بداية العقد</td><td>{{ frappe.format_date(doc.contract_start_date) }}</td><td>End / نهاية العقد</td><td>{{ frappe.format_date(doc.contract_end_date) }}</td></tr>
+	</table>
+
+	<div class="block-title">Parties / أطراف العقد</div>
+	<table class="details">
+		<tr>
+			<td class="party"><h3>First Party / الطرف الأول</h3>{{ doc.first_party_name }}<br>{{ doc.first_party_address }}<br>{{ doc.first_party_representative }}</td>
+			<td class="party arabic"><h3>الطرف الأول / First Party</h3>{{ doc.first_party_name }}<br>{{ doc.first_party_address }}<br>{{ doc.first_party_representative }}</td>
+		</tr>
+		<tr>
+			<td class="party"><h3>Second Party / الطرف الثاني</h3>{{ doc.second_party_name }}<br>{{ doc.second_party_address }}<br>ID: {{ doc.second_party_id }}</td>
+			<td class="party arabic"><h3>الطرف الثاني / Second Party</h3>{{ doc.second_party_name }}<br>{{ doc.second_party_address }}<br>الرقم القومي: {{ doc.second_party_id }}</td>
+		</tr>
+	</table>
+
+	<div class="block-title">Leased Unit / العين المؤجرة</div>
+	<table class="details">
+		<tr><td>Governorate / المحافظة</td><td>{{ doc.governorate }}</td><td>City / المدينة</td><td>{{ doc.city }}</td></tr>
+		<tr><td>Area / المنطقة</td><td>{{ doc.area }}</td><td>Address / العنوان</td><td>{{ doc.address }}</td></tr>
+		<tr><td>Unit No. / رقم الوحدة</td><td>{{ doc.flat_no }}</td><td>Floor / الدور</td><td>{{ doc.floor_no }}</td></tr>
+		<tr><td>Area / المساحة</td><td>{{ doc.total_flat_area }}</td><td>Rooms / الغرف</td><td>{{ doc.no_of_rooms }}</td></tr>
+		<tr><td>Beds / الأسرة</td><td>{{ doc.no_of_beds }}</td><td>Bathrooms / الحمامات</td><td>{{ doc.no_of_bathroom }}</td></tr>
+	</table>
+
+	<div class="block-title">Rent and Payment / القيمة الإيجارية والسداد</div>
+	<table class="details">
+		<tr><td>Monthly Rent / الإيجار الشهري</td><td>{{ frappe.format(doc.monthly_rent, {"fieldtype": "Currency"}) }}</td><td>Payment Cycle / دورة السداد</td><td>{{ doc.payment_cycle }}</td></tr>
+		<tr><td>Deposit / الوديعة</td><td>{{ frappe.format(doc.deposit, {"fieldtype": "Currency"}) }}</td><td>Insurance / التأمين</td><td>{{ frappe.format(doc.insurance, {"fieldtype": "Currency"}) }}</td></tr>
+		<tr><td>Bank / البنك</td><td>{{ doc.bank }}</td><td>IBAN</td><td>{{ doc.iban }}</td></tr>
+	</table>
+
+	{% if doc.flat_contents %}
+	<div class="block-title">Contents / محتويات الوحدة</div>
+	<table class="contents">
+		<tr><th>Item / الصنف</th><th>Description / الوصف</th><th>Qty / الكمية</th></tr>
+		{% for item in doc.flat_contents %}<tr><td>{{ item.item_name }}</td><td>{{ item.description }}</td><td>{{ item.qty }}</td></tr>{% endfor %}
+	</table>
+	{% endif %}
+
+	<div class="terms english">
+		<div class="block-title">Terms and Conditions</div>
+		{{ doc.english_terms or "" }}
+	</div>
+	<div class="terms arabic">
+		<div class="block-title">الشروط والأحكام</div>
+		{{ doc.arabic_terms or "" }}
+	</div>
+
+	{% if doc.notes %}<div class="block-title">Notes / ملاحظات</div><p>{{ doc.notes }}</p>{% endif %}
+
+	<table class="signatures">
+		<tr>
+			<td><strong>First Party / الطرف الأول</strong>{% if doc.first_party_signature %}<br><img class="signature-image" src="{{ doc.first_party_signature }}">{% endif %}<div class="signature-line">{{ doc.first_party_name }}<br>{{ doc.first_party_title }}</div></td>
+			<td><strong>Second Party / الطرف الثاني</strong>{% if doc.second_party_signature %}<br><img class="signature-image" src="{{ doc.second_party_signature }}">{% endif %}<div class="signature-line">{{ doc.second_party_name }}<br>{{ doc.second_party_title }}</div></td>
+		</tr>
+	</table>
+</div>
