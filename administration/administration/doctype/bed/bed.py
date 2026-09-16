@@ -16,6 +16,9 @@ class Bed(Document):
 			self.status = "Booked"
 		else:
 			self.status = "Open"
+			self.employee_status = None
+			self.department = None
+			self.type = None
 
 	def on_update(self):
 		if self.has_value_changed("employee") or self.has_value_changed("room"):
