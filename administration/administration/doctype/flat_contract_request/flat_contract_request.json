@@ -16,9 +16,10 @@
   "payment_cycle",
   "contract_start_date",
   "contract_end_date",
+  "tax_deduction",
   "owner_details_section",
   "flat_owner",
-    "flat_owner_name",
+  "flat_owner_name",
   "legal_name",
   "owner_id",
   "attach_id",
@@ -48,13 +49,13 @@
  ],
  "fields": [
   {
-     "fieldname": "flat_rent_request",
-     "fieldtype": "Link",
-     "label": "Flat Rent Request",
-     "options": "Flat Rent Request",
-     "read_only": 1
-    },
-    {
+   "fieldname": "flat_rent_request",
+   "fieldtype": "Link",
+   "label": "Flat Rent Request",
+   "options": "Flat Rent Request",
+   "read_only": 1
+  },
+  {
    "fieldname": "section_break_mrhf",
    "fieldtype": "Section Break"
   },
@@ -75,14 +76,14 @@
    "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
    "options": "Supplier"
   },
-    {
-     "fetch_from": "flat_owner.supplier_name",
-     "fieldname": "flat_owner_name",
-     "fieldtype": "Data",
-     "hidden": 1,
-     "label": "Flat Owner Name",
-     "read_only": 1
-    },
+  {
+   "fetch_from": "flat_owner.supplier_name",
+   "fieldname": "flat_owner_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Flat Owner Name",
+   "read_only": 1
+  },
   {
    "fieldname": "column_break_vimy",
    "fieldtype": "Column Break"
@@ -276,13 +277,18 @@
    "fieldname": "legal_name",
    "fieldtype": "Data",
    "label": "Legal Name"
+  },
+  {
+   "fieldname": "tax_deduction",
+   "fieldtype": "Float",
+   "label": "Tax Deduction"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 19:13:14.699330",
+ "modified": "2026-09-17 13:12:24.495527",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",
