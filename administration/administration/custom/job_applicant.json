@@ -1315,6 +1315,287 @@
      "label": "I confirm that the information provided is true and complete",
      "name": "Job Applicant-custom_declaration",
      "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_additional_information",
+     "fieldtype": "Section Break",
+     "insert_after": "custom_declaration",
+     "label": "Additional Information"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_personality_characteristics",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_declaration",
+     "label": "Personality Characteristics"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_personal_strengths_hobbies",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_personality_characteristics",
+     "label": "Personal Strengths and Hobbies"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_health_condition_details",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_personal_strengths_hobbies",
+     "label": "Health Condition Details"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_infectious_disease",
+     "fieldtype": "Check",
+     "insert_after": "custom_health_condition_details",
+     "label": "Health: Infectious Disease"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_mental_illness",
+     "fieldtype": "Check",
+     "insert_after": "custom_has_infectious_disease",
+     "label": "Health: Mental Illness"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_heart_disease",
+     "fieldtype": "Check",
+     "insert_after": "custom_has_mental_illness",
+     "label": "Health: Heart Disease"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_tumor",
+     "fieldtype": "Check",
+     "insert_after": "custom_has_heart_disease",
+     "label": "Health: Tumor"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_disability",
+     "fieldtype": "Check",
+     "insert_after": "custom_has_tumor",
+     "label": "Health: Disability"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_health_other",
+     "fieldtype": "Check",
+     "insert_after": "custom_has_disability",
+     "label": "Health: Other"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_health_none",
+     "fieldtype": "Check",
+     "insert_after": "custom_health_other",
+     "label": "Health: None"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_work_location_egypt",
+     "fieldtype": "Check",
+     "insert_after": "custom_health_none",
+     "label": "Preferred Work Location: Egypt"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_work_location_outside_egypt",
+     "fieldtype": "Check",
+     "insert_after": "custom_work_location_egypt",
+     "label": "Preferred Work Location: Outside Egypt"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_work_location_other",
+     "fieldtype": "Check",
+     "insert_after": "custom_work_location_outside_egypt",
+     "label": "Preferred Work Location: Other"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_work_location_other_details",
+     "fieldtype": "Data",
+     "insert_after": "custom_work_location_other",
+     "label": "Other Preferred Work Location"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_expected_joining_date",
+     "fieldtype": "Date",
+     "insert_after": "custom_work_location_other_details",
+     "label": "Expected Date of Joining"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_passport",
+     "fieldtype": "Check",
+     "insert_after": "custom_expected_joining_date",
+     "label": "I Have a Passport"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_passport_number",
+     "fieldtype": "Data",
+     "insert_after": "custom_has_passport",
+     "label": "Passport Number"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_passport_expiry_date",
+     "fieldtype": "Date",
+     "insert_after": "custom_passport_number",
+     "label": "Passport Expiry Date"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_passport_issue_date",
+     "fieldtype": "Date",
+     "insert_after": "custom_passport_expiry_date",
+     "label": "Passport Issue Date"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_passport_issue_country",
+     "fieldtype": "Link",
+     "insert_after": "custom_passport_issue_date",
+     "label": "Passport Issue Country",
+     "options": "Country"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_other_company_relationship",
+     "fieldtype": "Check",
+     "insert_after": "custom_passport_issue_country",
+     "label": "Relationship with Other Company"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_other_company_relationship_details",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_other_company_relationship",
+     "label": "Other Company Relationship Details"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_non_disclosure_or_non_compete",
+     "fieldtype": "Check",
+     "insert_after": "custom_other_company_relationship_details",
+     "label": "Non-Disclosure or Non-Compete Agreement"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_non_disclosure_details",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_has_non_disclosure_or_non_compete",
+     "label": "Non-Disclosure or Non-Compete Details"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_rewards_achievements",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_non_disclosure_details",
+     "label": "Rewards or Achievements"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_has_criminal_record",
+     "fieldtype": "Check",
+     "insert_after": "custom_rewards_achievements",
+     "label": "Criminal Record"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_criminal_record_details",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_has_criminal_record",
+     "label": "Criminal Record Details"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_current_annual_salary",
+     "fieldtype": "Currency",
+     "insert_after": "custom_criminal_record_details",
+     "label": "Total Annual Current Salary"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_monthly_basic_salary",
+     "fieldtype": "Currency",
+     "insert_after": "custom_current_annual_salary",
+     "label": "Monthly Basic Salary"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_monthly_allowances",
+     "fieldtype": "Currency",
+     "insert_after": "custom_monthly_basic_salary",
+     "label": "Monthly Allowances"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_expected_monthly_gross_salary",
+     "fieldtype": "Currency",
+     "insert_after": "custom_monthly_allowances",
+     "label": "Expected Monthly Gross Salary (Including Housing & Transportation)"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_expected_annual_gross_salary",
+     "fieldtype": "Currency",
+     "insert_after": "custom_expected_monthly_gross_salary",
+     "label": "Expected Annual Gross Salary"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_linkedin",
+     "fieldtype": "Check",
+     "insert_after": "custom_expected_annual_gross_salary",
+     "label": "Recruitment Channel: LinkedIn"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_naukrigulf",
+     "fieldtype": "Check",
+     "insert_after": "custom_recruitment_channel_linkedin",
+     "label": "Recruitment Channel: Naukrigulf"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_friend",
+     "fieldtype": "Check",
+     "insert_after": "custom_recruitment_channel_naukrigulf",
+     "label": "Recruitment Channel: Friend"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_wechat",
+     "fieldtype": "Check",
+     "insert_after": "custom_recruitment_channel_friend",
+     "label": "Recruitment Channel: WeChat"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_facebook",
+     "fieldtype": "Check",
+     "insert_after": "custom_recruitment_channel_wechat",
+     "label": "Recruitment Channel: Facebook"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_recruitment_channel_other",
+     "fieldtype": "Check",
+     "insert_after": "custom_recruitment_channel_facebook",
+     "label": "Recruitment Channel: Other"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_other_information",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_recruitment_channel_other",
+     "label": "Other Information"
     }
  ],
  "custom_perms": [
@@ -1549,7 +1830,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"job_title\", \"custom_application_date\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"custom_id_number\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_place_of_birth\", \"custom_military_status\", \"custom_religion\", \"custom_address\", \"custom_photo\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_total_years_of_experience\", \"custom_emergency_contact\", \"custom_marital_status\", \"custom_num_of_children\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_family_members\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"custom_reason_for_leaving\", \"custom_declaration\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
+  "value": "[\"job_title\", \"custom_application_date\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"custom_id_number\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_place_of_birth\", \"custom_military_status\", \"custom_religion\", \"custom_address\", \"custom_photo\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_total_years_of_experience\", \"custom_emergency_contact\", \"custom_marital_status\", \"custom_num_of_children\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_family_members\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"custom_reason_for_leaving\", \"custom_additional_information\", \"custom_personality_characteristics\", \"custom_personal_strengths_hobbies\", \"custom_has_infectious_disease\", \"custom_has_mental_illness\", \"custom_has_heart_disease\", \"custom_has_tumor\", \"custom_has_disability\", \"custom_health_other\", \"custom_health_none\", \"custom_health_condition_details\", \"custom_work_location_egypt\", \"custom_work_location_outside_egypt\", \"custom_work_location_other\", \"custom_work_location_other_details\", \"custom_expected_joining_date\", \"custom_has_passport\", \"custom_passport_number\", \"custom_passport_expiry_date\", \"custom_passport_issue_date\", \"custom_passport_issue_country\", \"custom_other_company_relationship\", \"custom_other_company_relationship_details\", \"custom_has_non_disclosure_or_non_compete\", \"custom_non_disclosure_details\", \"custom_rewards_achievements\", \"custom_has_criminal_record\", \"custom_criminal_record_details\", \"custom_current_annual_salary\", \"custom_monthly_basic_salary\", \"custom_monthly_allowances\", \"custom_expected_monthly_gross_salary\", \"custom_expected_annual_gross_salary\", \"custom_recruitment_channel_linkedin\", \"custom_recruitment_channel_naukrigulf\", \"custom_recruitment_channel_friend\", \"custom_recruitment_channel_wechat\", \"custom_recruitment_channel_facebook\", \"custom_recruitment_channel_other\", \"custom_other_information\", \"custom_declaration\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
   },
   {
    "_assign": null,
