@@ -1215,7 +1215,96 @@
    "translatable": 0,
    "unique": 0,
    "width": null
-  }
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_id_number",
+     "fieldtype": "Data",
+     "insert_after": "applicant_name",
+     "label": "ID Number",
+     "name": "Job Applicant-custom_id_number",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_place_of_birth",
+     "fieldtype": "Data",
+     "insert_after": "custom_id_number",
+     "label": "Place of Birth",
+     "name": "Job Applicant-custom_place_of_birth",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_num_of_children",
+     "fieldtype": "Int",
+     "insert_after": "custom_marital_status",
+     "label": "Number of Children",
+     "name": "Job Applicant-custom_num_of_children",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_religion",
+     "fieldtype": "Data",
+     "insert_after": "custom_num_of_children",
+     "label": "Religion",
+     "name": "Job Applicant-custom_religion",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_total_years_of_experience",
+     "fieldtype": "Float",
+     "insert_after": "custom_age",
+     "label": "Total Years of Experience",
+     "name": "Job Applicant-custom_total_years_of_experience",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_emergency_contact",
+     "fieldtype": "Data",
+     "insert_after": "custom_total_years_of_experience",
+     "label": "Emergency Contact",
+     "name": "Job Applicant-custom_emergency_contact",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_photo",
+     "fieldtype": "Attach Image",
+     "insert_after": "custom_address",
+     "label": "Photo",
+     "name": "Job Applicant-custom_photo",
+     "reqd": 1
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_family_members",
+     "fieldtype": "Table",
+     "insert_after": "custom_photo",
+     "label": "Family Member Information",
+     "name": "Job Applicant-custom_family_members",
+     "options": "Job Applicant Family Member"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_reason_for_leaving",
+     "fieldtype": "Small Text",
+     "insert_after": "custom_work_history",
+     "label": "Reason for Leaving Previous Company",
+     "name": "Job Applicant-custom_reason_for_leaving"
+    },
+    {
+     "dt": "Job Applicant",
+     "fieldname": "custom_declaration",
+     "fieldtype": "Check",
+     "insert_after": "custom_reason_for_leaving",
+     "label": "I confirm that the information provided is true and complete",
+     "name": "Job Applicant-custom_declaration",
+     "reqd": 1
+    }
  ],
  "custom_perms": [
   {
@@ -1449,7 +1538,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"job_title\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_military_status\", \"custom_address\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_marital_status\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
+   "value": "[\"job_title\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"custom_id_number\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_place_of_birth\", \"custom_military_status\", \"custom_religion\", \"custom_address\", \"custom_photo\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_total_years_of_experience\", \"custom_emergency_contact\", \"custom_marital_status\", \"custom_num_of_children\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_family_members\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"custom_reason_for_leaving\", \"custom_declaration\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
   },
   {
    "_assign": null,

@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-20 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "family_member_name",
+  "relationship",
+  "employer",
+  "job_title",
+  "contact_information"
+ ],
+ "fields": [
+  {
+   "fieldname": "family_member_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "relationship",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Relationship",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employer",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employer"
+  },
+  {
+   "fieldname": "job_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Job Title"
+  },
+  {
+   "fieldname": "contact_information",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Contact Information"
+  }
+ ],
+ "istable": 1,
+ "module": "Administration",
+ "name": "Job Applicant Family Member",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

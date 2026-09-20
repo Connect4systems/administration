@@ -257,4 +257,4 @@ doctype_js = {
 
 
 
-fixtures = ["Custom Field", "Property Setter", "DocType Link"]
+fixtures = ["Custom Field", "Property Setter", "DocType Link", "Web Form"]

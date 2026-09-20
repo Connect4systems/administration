@@ -63,7 +63,63 @@
    "translatable": 0,
    "unique": 0,
    "width": null
-  }
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_start_date",
+     "fieldtype": "Date",
+     "insert_after": "company_name",
+     "label": "Start Date",
+     "name": "Employee External Work History-custom_start_date"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_end_date",
+     "fieldtype": "Date",
+     "insert_after": "custom_start_date",
+     "label": "End Date",
+     "name": "Employee External Work History-custom_end_date"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_work_content",
+     "fieldtype": "Small Text",
+     "insert_after": "designation",
+     "label": "Overview of Work Content",
+     "name": "Employee External Work History-custom_work_content"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_referee",
+     "fieldtype": "Data",
+     "insert_after": "custom_work_content",
+     "label": "Referee",
+     "name": "Employee External Work History-custom_referee"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_relationship",
+     "fieldtype": "Data",
+     "insert_after": "custom_referee",
+     "label": "Relationship",
+     "name": "Employee External Work History-custom_relationship"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_work_location",
+     "fieldtype": "Data",
+     "insert_after": "address",
+     "label": "Work Location",
+     "name": "Employee External Work History-custom_work_location"
+    },
+    {
+     "dt": "Employee External Work History",
+     "fieldname": "custom_contact_number",
+     "fieldtype": "Data",
+     "insert_after": "contact",
+     "label": "Contact Number",
+     "name": "Employee External Work History-custom_contact_number"
+    }
  ],
  "custom_perms": [],
  "doctype": "Employee External Work History",
@@ -90,7 +146,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"company_name\", \"designation\", \"salary\", \"address\", \"contact\", \"total_experience\", \"attach_certificate\"]"
+    "value": "[\"custom_start_date\", \"custom_end_date\", \"company_name\", \"designation\", \"custom_work_content\", \"custom_referee\", \"custom_relationship\", \"custom_work_location\", \"custom_contact_number\", \"salary\", \"address\", \"contact\", \"total_experience\", \"attach_certificate\"]"
   }
  ],
  "sync_on_migrate": 1

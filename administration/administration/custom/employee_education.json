@@ -63,7 +63,48 @@
    "translatable": 0,
    "unique": 0,
    "width": null
-  }
+    },
+    {
+     "dt": "Employee Education",
+     "fieldname": "custom_start_date",
+     "fieldtype": "Date",
+     "insert_after": "school_univ",
+     "label": "Start Date",
+     "name": "Employee Education-custom_start_date"
+    },
+    {
+     "dt": "Employee Education",
+     "fieldname": "custom_end_date",
+     "fieldtype": "Date",
+     "insert_after": "custom_start_date",
+     "label": "End Date",
+     "name": "Employee Education-custom_end_date"
+    },
+    {
+     "dt": "Employee Education",
+     "fieldname": "custom_profession",
+     "fieldtype": "Data",
+     "insert_after": "qualification",
+     "label": "Profession / Specialization",
+     "name": "Employee Education-custom_profession"
+    },
+    {
+     "dt": "Employee Education",
+     "fieldname": "custom_major_subject",
+     "fieldtype": "Data",
+     "insert_after": "custom_profession",
+     "label": "Major Subject",
+     "name": "Employee Education-custom_major_subject"
+    },
+    {
+     "dt": "Employee Education",
+     "fieldname": "custom_obtained_degree",
+     "fieldtype": "Select",
+     "insert_after": "custom_major_subject",
+     "label": "Obtained Degree",
+     "name": "Employee Education-custom_obtained_degree",
+     "options": "Master Degree\nBachelor Degree\nPHD\nOther"
+    }
  ],
  "custom_perms": [],
  "doctype": "Employee Education",
@@ -90,7 +131,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"school_univ\", \"qualification\", \"level\", \"year_of_passing\", \"class_per\", \"maj_opt_subj\", \"attach_certificate\"]"
+    "value": "[\"custom_start_date\", \"custom_end_date\", \"school_univ\", \"qualification\", \"custom_profession\", \"custom_major_subject\", \"custom_obtained_degree\", \"level\", \"year_of_passing\", \"class_per\", \"maj_opt_subj\", \"attach_certificate\"]"
   }
  ],
  "sync_on_migrate": 1
