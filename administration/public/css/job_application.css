@@ -26,45 +26,45 @@
 
 .web-form .section-head,
 .web-form-wrapper .section-head {
-	border-bottom: 2px solid #1683d8;
-	border-top: 1px solid #d7dee8;
-	color: #171717;
-	font-size: 16px;
-	font-weight: 700;
-	margin: 28px 0 16px;
-	padding: 10px 12px 8px;
+	color: var(--heading-color, #171717);
+	font-size: var(--text-base, 14px);
+	font-weight: 600;
+	margin: 0 0 16px;
+	padding: 0;
 	text-align: left;
 }
 
 .web-form .form-control,
 .web-form-wrapper .form-control {
-	border-color: #cbd5e1;
-	border-radius: 2px;
+	background-color: var(--control-bg, #f3f3f3);
+	border-color: var(--control-bg, #f3f3f3);
+	border-radius: var(--border-radius, 6px);
 }
 
 .web-form .btn-primary,
 .web-form-wrapper .btn-primary {
-	background: #1683d8;
-	border-color: #1683d8;
-	border-radius: 2px;
+	background: var(--primary, #171717);
+	border-color: var(--primary, #171717);
+	border-radius: var(--border-radius, 6px);
 }
 
 .web-form .form-label,
 .web-form-wrapper .form-label {
-	color: #334155;
-	font-weight: 600;
+	color: var(--text-muted, #7c7c7c);
+	font-weight: 400;
 }
 
 .web-form .form-section,
 .web-form-wrapper .form-section {
-	background: #fff;
-	border: 1px solid #d7dee8;
-	padding: 0 18px 18px;
+	background: var(--fg-color, #fff);
+	border: 0;
+	border-bottom: 1px solid var(--border-color, #ededed);
+	padding: 24px 0;
 }
 
 @media (max-width: 767px) {
 	.web-form .form-section,
 	.web-form-wrapper .form-section {
-		padding: 0 10px 12px;
+		padding: 20px 0;
 	}
 }
