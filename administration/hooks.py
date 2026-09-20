@@ -253,6 +253,7 @@ doc_events = {
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "Job Applicant": "public/js/doctype/job_applicant/job_applicant.js",
     "Purchase Order": "public/js/doctype/purchase_order/create_shipment_request.js",
 }
 

@@ -2736,7 +2736,7 @@
    "name": "Job Applicant-custom_image",
    "no_copy": 0,
    "non_negative": 0,
-   "options": null,
+   "options": "custom_photo",
    "owner": "Administrator",
    "permlevel": 0,
    "placeholder": null,
