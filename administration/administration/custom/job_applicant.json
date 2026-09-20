@@ -1218,6 +1218,16 @@
     },
     {
      "dt": "Job Applicant",
+    "default": "Today",
+      "fieldname": "custom_application_date",
+      "fieldtype": "Date",
+      "insert_after": "job_title",
+      "label": "Application Date",
+      "name": "Job Applicant-custom_application_date",
+      "reqd": 1
+     },
+     {
+      "dt": "Job Applicant",
      "fieldname": "custom_id_number",
      "fieldtype": "Data",
      "insert_after": "applicant_name",
@@ -1291,10 +1301,11 @@
     {
      "dt": "Job Applicant",
      "fieldname": "custom_reason_for_leaving",
-     "fieldtype": "Small Text",
+      "fieldtype": "Select",
      "insert_after": "custom_work_history",
      "label": "Reason for Leaving Previous Company",
-     "name": "Job Applicant-custom_reason_for_leaving"
+      "name": "Job Applicant-custom_reason_for_leaving",
+      "options": "Low salary\nDisagree with company culture\nThe company's prospects are not optimistic\nInterpersonal reasons\nSeek better development\nPersonal family reasons\nOther"
     },
     {
      "dt": "Job Applicant",
@@ -1538,7 +1549,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"job_title\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"custom_id_number\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_place_of_birth\", \"custom_military_status\", \"custom_religion\", \"custom_address\", \"custom_photo\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_total_years_of_experience\", \"custom_emergency_contact\", \"custom_marital_status\", \"custom_num_of_children\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_family_members\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"custom_reason_for_leaving\", \"custom_declaration\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
+   "value": "[\"job_title\", \"custom_application_date\", \"custom_column_break_ucnc8\", \"status\", \"details_section\", \"applicant_name\", \"custom_id_number\", \"email_id\", \"custom_gender\", \"country\", \"column_break_3\", \"phone_number\", \"custom_date_of_birth\", \"custom_place_of_birth\", \"custom_military_status\", \"custom_religion\", \"custom_address\", \"custom_photo\", \"custom_column_break_njmrb\", \"custom_whatsapp_\", \"custom_age\", \"custom_total_years_of_experience\", \"custom_emergency_contact\", \"custom_marital_status\", \"custom_num_of_children\", \"custom_position\", \"designation\", \"custom_column_break_ohiml\", \"custom_employment_desired\", \"custom_available_to_join_date\", \"custom_family_members\", \"custom_education_and_training_\", \"custom_employee_education\", \"custom_languages\", \"custom_language\", \"custom_employment_history\", \"custom_work_history\", \"custom_reason_for_leaving\", \"custom_declaration\", \"source_and_rating_section\", \"source\", \"source_name\", \"employee_referral\", \"column_break_13\", \"applicant_rating\", \"section_break_6\", \"notes\", \"cover_letter\", \"resume_attachment\", \"resume_link\", \"section_break_16\", \"currency\", \"column_break_18\", \"lower_range\", \"upper_range\"]"
   },
   {
    "_assign": null,

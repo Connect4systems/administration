@@ -1,0 +1,48 @@
+.application-heading {
+	border-bottom: 3px solid #1683d8;
+	margin-bottom: 28px;
+	padding: 8px 0 18px;
+	text-align: center;
+}
+
+.application-company {
+	color: #1683d8;
+	font-size: 18px;
+	font-weight: 700;
+	letter-spacing: .04em;
+	text-transform: uppercase;
+}
+
+.application-heading h1 {
+	color: #171717;
+	font-size: 26px;
+	margin: 8px 0;
+}
+
+.application-heading p {
+	color: #6b7280;
+	margin: 0;
+}
+
+.web-form .section-head,
+.web-form-wrapper .section-head {
+	border-bottom: 2px solid #1683d8;
+	color: #171717;
+	font-size: 16px;
+	font-weight: 700;
+	margin: 28px 0 16px;
+	padding-bottom: 8px;
+}
+
+.web-form .form-control,
+.web-form-wrapper .form-control {
+	border-color: #cbd5e1;
+	border-radius: 2px;
+}
+
+.web-form .btn-primary,
+.web-form-wrapper .btn-primary {
+	background: #1683d8;
+	border-color: #1683d8;
+	border-radius: 2px;
+}
