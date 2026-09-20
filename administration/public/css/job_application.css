@@ -27,11 +27,13 @@
 .web-form .section-head,
 .web-form-wrapper .section-head {
 	border-bottom: 2px solid #1683d8;
+	border-top: 1px solid #d7dee8;
 	color: #171717;
 	font-size: 16px;
 	font-weight: 700;
 	margin: 28px 0 16px;
-	padding-bottom: 8px;
+	padding: 10px 12px 8px;
+	text-align: left;
 }
 
 .web-form .form-control,
@@ -45,4 +47,24 @@
 	background: #1683d8;
 	border-color: #1683d8;
 	border-radius: 2px;
+}
+
+.web-form .form-label,
+.web-form-wrapper .form-label {
+	color: #334155;
+	font-weight: 600;
+}
+
+.web-form .form-section,
+.web-form-wrapper .form-section {
+	background: #fff;
+	border: 1px solid #d7dee8;
+	padding: 0 18px 18px;
+}
+
+@media (max-width: 767px) {
+	.web-form .form-section,
+	.web-form-wrapper .form-section {
+		padding: 0 10px 12px;
+	}
 }

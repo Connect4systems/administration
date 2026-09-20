@@ -1217,13 +1217,14 @@
    "width": null
     },
     {
-     "dt": "Job Applicant",
+    "dt": "Job Applicant",
     "default": "Today",
       "fieldname": "custom_application_date",
       "fieldtype": "Date",
       "insert_after": "job_title",
       "label": "Application Date",
       "name": "Job Applicant-custom_application_date",
+      "read_only": 1,
       "reqd": 1
      },
      {
@@ -1395,22 +1396,34 @@
     },
     {
      "dt": "Job Applicant",
+     "fieldname": "custom_preferred_job_location",
+     "fieldtype": "Select",
+     "insert_after": "custom_health_none",
+     "label": "Preferred Job Location",
+     "name": "Job Applicant-custom_preferred_job_location",
+     "options": "Egypt\nOutside Egypt\nOther"
+    },
+    {
+     "dt": "Job Applicant",
      "fieldname": "custom_work_location_egypt",
      "fieldtype": "Check",
+     "hidden": 1,
      "insert_after": "custom_health_none",
      "label": "Preferred Work Location: Egypt"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_work_location_outside_egypt",
-     "fieldtype": "Check",
+    "fieldtype": "Check",
+    "hidden": 1,
      "insert_after": "custom_work_location_egypt",
      "label": "Preferred Work Location: Outside Egypt"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_work_location_other",
-     "fieldtype": "Check",
+    "fieldtype": "Check",
+    "hidden": 1,
      "insert_after": "custom_work_location_outside_egypt",
      "label": "Preferred Work Location: Other"
     },
@@ -1418,8 +1431,9 @@
      "dt": "Job Applicant",
      "fieldname": "custom_work_location_other_details",
      "fieldtype": "Data",
-     "insert_after": "custom_work_location_other",
-     "label": "Other Preferred Work Location"
+    "insert_after": "custom_work_location_other",
+    "label": "Other Preferred Work Location",
+    "depends_on": "eval:doc.custom_preferred_job_location == 'Other'"
     },
     {
      "dt": "Job Applicant",
@@ -1439,22 +1453,25 @@
      "dt": "Job Applicant",
      "fieldname": "custom_passport_number",
      "fieldtype": "Data",
-     "insert_after": "custom_has_passport",
-     "label": "Passport Number"
+    "insert_after": "custom_has_passport",
+    "label": "Passport Number",
+    "depends_on": "eval:doc.custom_has_passport == 1"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_passport_expiry_date",
      "fieldtype": "Date",
-     "insert_after": "custom_passport_number",
-     "label": "Passport Expiry Date"
+    "insert_after": "custom_passport_number",
+    "label": "Passport Expiry Date",
+    "depends_on": "eval:doc.custom_has_passport == 1"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_passport_issue_date",
      "fieldtype": "Date",
-     "insert_after": "custom_passport_expiry_date",
-     "label": "Passport Issue Date"
+    "insert_after": "custom_passport_expiry_date",
+    "label": "Passport Issue Date",
+    "depends_on": "eval:doc.custom_has_passport == 1"
     },
     {
      "dt": "Job Applicant",
@@ -1462,21 +1479,24 @@
      "fieldtype": "Link",
      "insert_after": "custom_passport_issue_date",
      "label": "Passport Issue Country",
-     "options": "Country"
+    "options": "Country",
+    "depends_on": "eval:doc.custom_has_passport == 1"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_other_company_relationship",
-     "fieldtype": "Check",
+    "fieldtype": "Select",
      "insert_after": "custom_passport_issue_country",
-     "label": "Relationship with Other Company"
+    "label": "Do you have a labor relationship with other company (including employment contracts, labor services, etc.)?",
+    "options": "No\nYes"
     },
     {
      "dt": "Job Applicant",
      "fieldname": "custom_other_company_relationship_details",
      "fieldtype": "Small Text",
-     "insert_after": "custom_other_company_relationship",
-     "label": "Other Company Relationship Details"
+    "insert_after": "custom_other_company_relationship",
+    "label": "Please explain the labor relationship",
+    "depends_on": "eval:doc.custom_other_company_relationship == 'Yes'"
     },
     {
      "dt": "Job Applicant",
