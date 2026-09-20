@@ -1,0 +1,112 @@
+<style>
+	@page { size: A4; margin: 12mm; }
+	.applicant-print { color: #171717; font-family: Arial, sans-serif; font-size: 9pt; line-height: 1.4; }
+	.applicant-print .application-heading { border-bottom: 3px solid #1683d8; margin-bottom: 18px; padding-bottom: 14px; text-align: center; }
+	.applicant-print .company { color: #1683d8; font-size: 15pt; font-weight: bold; }
+	.applicant-print h1 { font-size: 19pt; margin: 6px 0; }
+	.applicant-print .reference { color: #666; font-size: 8pt; }
+	.applicant-print .section { border-bottom: 1px solid #ddd; padding: 14px 0; }
+	.applicant-print h2 { font-size: 11pt; margin: 0 0 10px; page-break-after: avoid; }
+	.applicant-print .description { color: #666; font-size: 8pt; margin: 3px 0 8px; }
+	.applicant-print .columns { display: table; table-layout: fixed; width: 100%; }
+	.applicant-print .column { display: table-cell; padding-right: 12px; vertical-align: top; }
+	.applicant-print .column:last-child { padding-right: 0; }
+	.applicant-print .field { margin-bottom: 9px; page-break-inside: avoid; }
+	.applicant-print .label-text { color: #666; margin-bottom: 3px; }
+	.applicant-print .value { background: #f3f3f3; border-radius: 4px; min-height: 24px; padding: 5px 7px; overflow-wrap: anywhere; word-wrap: break-word; }
+	.applicant-print .multiline { white-space: pre-wrap; }
+	.applicant-print .photo { display: block; max-height: 140px; max-width: 100%; margin-bottom: 10px; }
+	.applicant-print .records { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 8pt; }
+	.applicant-print .records th, .applicant-print .records td { border: 1px solid #ddd; padding: 5px !important; vertical-align: top; word-wrap: break-word; }
+	.applicant-print .records th { background: #f3f3f3; }
+	.applicant-print thead { display: table-header-group; }
+	.applicant-print tr { page-break-inside: avoid; }
+	.applicant-print .table-field { margin-bottom: 12px; }
+</style>
+
+{# Keep the same sections and columns as the customized Job Applicant metadata. #}
+{% set conditions = {
+	'custom_criminal_record_details': doc.custom_has_criminal_record,
+	'custom_non_disclosure_details': doc.custom_has_non_disclosure_or_non_compete,
+	'custom_passport_number': doc.custom_has_passport,
+	'custom_passport_issue_date': doc.custom_has_passport,
+	'custom_passport_expiry_date': doc.custom_has_passport,
+	'custom_passport_issue_country': doc.custom_has_passport,
+	'custom_other_company_relationship_details': doc.custom_other_company_relationship == 'Yes',
+	'custom_work_location_other_details': doc.custom_preferred_job_location == 'Other'
+} %}
+{% set layout = namespace(sections=[], section={'label': '', 'description': '', 'columns': [[]]}) %}
+{% for df in doc.meta.fields %}
+	{% if df.fieldtype in ['Section Break', 'Tab Break'] %}
+		{% set ignored = layout.sections.append(layout.section) %}
+		{% set layout.section = {'label': df.label, 'description': df.description, 'columns': [[]]} %}
+	{% elif df.fieldtype == 'Column Break' %}
+		{% set ignored = layout.section.columns.append([]) %}
+	{% elif not df.hidden and not df.print_hide and not df.permlevel
+		and df.fieldtype not in ['HTML', 'Button', 'Fold', 'Heading']
+		and df.fieldname != 'custom_photo'
+		and (df.fieldname not in conditions or conditions[df.fieldname]) %}
+		{% set ignored = layout.section.columns[-1].append(df) %}
+	{% endif %}
+{% endfor %}
+{% set ignored = layout.sections.append(layout.section) %}
+
+<div class="applicant-print">
+	<div class="application-heading">
+		<div class="company">CSCEC International Egypt</div>
+		<h1>{{ _("Application Registration Form") }}</h1>
+		<div class="reference">{{ doc.name | e }}</div>
+	</div>
+	{% for section in layout.sections %}
+		{% if section.columns | map('length') | sum %}
+		<div class="section">
+			{% if section.label %}<h2>{{ _(section.label) | e }}</h2>{% endif %}
+			{% if section.description %}<div class="description">{{ _(section.description) | e }}</div>{% endif %}
+			<div class="columns">
+			{% for column in section.columns %}
+				<div class="column" style="width: {{ 100 / section.columns | length }}%;">
+				{% for df in column %}
+					{% set value = doc.get(df.fieldname) %}
+					{% if df.fieldtype == 'Image' %}
+						{% if doc.get(df.options or 'custom_photo') %}
+						<img class="photo" src="{{ doc.get(df.options or 'custom_photo') | e }}" alt="{{ _('Applicant photo') | e }}">
+						{% endif %}
+					{% elif df.fieldtype == 'Table' %}
+						<div class="table-field">
+							<div class="label-text">{{ _(df.label or df.fieldname) | e }}</div>
+							{% if df.description %}<div class="description">{{ _(df.description) | e }}</div>{% endif %}
+							{% set table = namespace(fields=[]) %}
+							{% for child in frappe.get_meta(df.options).fields %}
+								{% if not child.hidden and not child.print_hide and not child.permlevel and child.fieldtype not in ['Section Break', 'Column Break', 'Tab Break', 'HTML', 'Button', 'Image', 'Table', 'Table MultiSelect'] %}
+									{% set ignored = table.fields.append(child) %}
+								{% endif %}
+							{% endfor %}
+							<table class="records">
+								<thead><tr>{% for child in table.fields %}<th>{{ _(child.label or child.fieldname) | e }}</th>{% endfor %}</tr></thead>
+								<tbody>
+								{% for row in value or [] %}
+									<tr>{% for child in table.fields %}<td>{{ row.get_formatted(child.fieldname) or '—' }}</td>{% endfor %}</tr>
+								{% else %}<tr><td colspan="{{ table.fields | length }}">—</td></tr>{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					{% else %}
+						<div class="field">
+							<div class="label-text">{{ _(df.label or df.fieldname) | e }}</div>
+							<div class="value{% if df.fieldtype in ['Text', 'Small Text', 'Long Text'] %} multiline{% endif %}">
+								{%- if df.fieldtype == 'Check' -%}{{ _('Yes') if value else _('No') }}
+								{%- elif df.fieldtype in ['Attach', 'Attach Image'] -%}{{ (value or '').split('/')[-1] | e if value else '—' }}
+								{%- elif value is not none and value != '' -%}{{ doc.get_formatted(df.fieldname) }}
+								{%- else -%}—{%- endif -%}
+							</div>
+							{% if df.description %}<div class="description">{{ _(df.description) | e }}</div>{% endif %}
+						</div>
+					{% endif %}
+				{% endfor %}
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+</div>
