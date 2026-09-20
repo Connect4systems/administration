@@ -1,0 +1,19 @@
+{
+ "custom_fields": [],
+ "custom_perms": [],
+ "doctype": "Job Opening",
+ "links": [],
+ "property_setters": [
+  {
+   "doc_type": "Job Opening",
+   "doctype_or_field": "DocField",
+   "field_name": "job_application_route",
+   "is_system_generated": 0,
+   "name": "Job Opening-job_application_route-default",
+   "property": "default",
+   "property_type": "Text",
+   "value": "job-application"
+  }
+ ],
+ "sync_on_migrate": 1
+}
