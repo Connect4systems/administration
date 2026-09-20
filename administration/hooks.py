@@ -85,6 +85,8 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 
 # before_install = "administration.install.before_install"
 # after_install = "administration.install.after_install"
+after_install = "administration.user_employee.setup_employee_details"
+after_migrate = "administration.user_employee.setup_employee_details"
 
 # Uninstallation
 # ------------
@@ -141,7 +143,12 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 doc_events = {
     "Employee": {
         "validate": "administration.employee.validate_accommodation_status",
-    }
+        "on_update": "administration.user_employee.sync_employee_to_user",
+        "on_trash": "administration.user_employee.clear_employee_from_user",
+    },
+    "User": {
+        "validate": "administration.user_employee.set_user_employee_details",
+    },
 }
 
 # doc_events = {
