@@ -7,22 +7,24 @@
  "engine": "InnoDB",
  "field_order": [
   "flat_information_section",
-  "rent_type",
-  "rent_contract",
-  "flat_contract_request",
-  "add_flat_to_contract",
-  "rent_contract_type",
-  "accommodation_contract",
-  "party",
   "flat_title",
   "governorate",
   "city",
   "address",
   "column_break_itcu",
   "project",
-  "owner_name",
   "no_of_room",
   "no_of_beds",
+  "owner_details_section",
+  "rent_type",
+  "owner_name",
+  "party",
+  "owner_details_column",
+  "rent_contract",
+  "flat_contract_request",
+  "add_flat_to_contract",
+  "rent_contract_type",
+  "accommodation_contract",
   "section_break_sxmy",
   "payment_schedule",
   "rent",
@@ -220,6 +222,15 @@
    "no_copy": 1,
    "in_list_view": 1,
    "in_standard_filter": 1
+  },
+  {
+   "fieldname": "owner_details_section",
+   "fieldtype": "Section Break",
+   "label": "Owner details"
+  },
+  {
+   "fieldname": "owner_details_column",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
@@ -235,7 +246,7 @@
    "link_fieldname": "flat"
   }
  ],
- "modified": "2026-09-16 19:59:13.038005",
+ "modified": "2026-09-24 19:51:41.923794",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat",
