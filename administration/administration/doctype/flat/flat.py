@@ -6,8 +6,15 @@ from frappe import _
 from frappe.model.document import Document
 
 
+SOURCE_FIELDS = {"Flat Contract": "flat_contract", "Add Flat to Contract": "add_flat_to_contract"}
+# Identity cannot be supplied through document JSON, imports, or the REST API.
+_CREATE_FLAT_TOKEN = object()
+
+
 class Flat(Document):
 	def before_insert(self):
+		if self.flags.get("creation_action") is not _CREATE_FLAT_TOKEN:
+			frappe.throw(_("Use Create Flat on a submitted Flat Contract or Add Flat to Contract."))
 		# Serialize creation for this source, including simultaneous browser/API saves.
 		source = _get_source(self, for_update=True)
 		existing = _existing_flat(source, for_update=True)
@@ -18,33 +25,29 @@ class Flat(Document):
 	def validate(self):
 		if self.get("add_flat_to_contract"):
 			self.rent_type = "Contract"
-		elif self.get("flat_contract_request"):
+		elif self.get("flat_contract") or self.get("flat_contract_request"):
 			self.rent_type = "Direct Rent"
 		previous = self.get_doc_before_save()
 		if previous:
-			for field in ("flat_contract_request", "add_flat_to_contract", "rent_contract", "rent_contract_type", "accommodation_contract"):
+			for field in ("flat_contract", "flat_contract_request", "add_flat_to_contract", "rent_contract", "rent_contract_type", "accommodation_contract"):
 				if (self.get(field) or "") != (previous.get(field) or ""):
 					frappe.throw(_("The Flat's source and contract cannot be changed."))
 		if self.get("accommodation_contract"):
 			self.party = frappe.db.get_value("Accommodation Contract", self.accommodation_contract, "party")
+		elif self.get("flat_contract"):
+			self.party = frappe.db.get_value("Flat Contract", self.flat_contract, "flat_owner")
 		elif self.get("flat_contract_request"):
 			self.party = frappe.db.get_value("Flat Contract Request", self.flat_contract_request, "flat_owner")
-
-
-SOURCE_FIELDS = {"Flat Contract Request": "flat_contract_request", "Add Flat to Contract": "add_flat_to_contract"}
 
 
 def _get_source(flat, for_update=False):
 	sources = [
 		(doctype, flat.get(field))
-		for doctype, field in (
-			("Flat Contract Request", "flat_contract_request"),
-			("Add Flat to Contract", "add_flat_to_contract"),
-		)
+		for doctype, field in SOURCE_FIELDS.items()
 		if flat.get(field)
 	]
 	if len(sources) != 1:
-		frappe.throw(_("Create a Flat from a Flat Contract Request or Add Flat to Contract."))
+		frappe.throw(_("Create a Flat from a Flat Contract or Add Flat to Contract."))
 	source = frappe.get_doc(*sources[0], for_update=for_update)
 	source.check_permission("read")
 	if source.docstatus != 1:
@@ -59,9 +62,9 @@ def _existing_flat(source, for_update=False):
 
 
 def _set_source_values(flat, source):
-	flat_name = (source.get("flat_name") or "").strip()
+	flat_name = (source.get("flat_title") or "").strip()
 	if not flat_name:
-		frappe.throw(_("Set Flat Name on the source document and save it before creating a Flat."))
+		frappe.throw(_("Set Flat Title on the source document and save it before creating a Flat."))
 	for target, origin in {
 		"project": "project",
 		"governorate": "governorate",
@@ -91,15 +94,17 @@ def _set_source_values(flat, source):
 			frappe.throw(_("The Accommodation Contract is cancelled."))
 		flat.accommodation_contract = contract.name
 		flat.rent_contract = None
+		flat.flat_contract_request = None
 		flat.party = contract.party
 		flat.owner_name = source.flat_owner
 	else:
 		flat.rent_type = "Direct Rent"
-		flat.rent_contract_type = "Flat Contract Request"
+		flat.rent_contract_type = "Flat Contract"
 		flat.rent_contract = source.name
+		flat.flat_contract_request = source.get("flat_contract_request")
 		flat.accommodation_contract = None
 		flat.party = source.flat_owner
-		flat.owner_name = source.get("flat_owner_name") or (
+		flat.owner_name = source.get("second_party_name") or (
 			frappe.db.get_value("Supplier", source.flat_owner, "supplier_name") if source.flat_owner else ""
 		)
 
@@ -107,15 +112,25 @@ def _set_source_values(flat, source):
 @frappe.whitelist()
 def make_flat(source_doctype, source_name):
 	if source_doctype not in SOURCE_FIELDS:
-		frappe.throw(_("Create a Flat from a Flat Contract Request or Add Flat to Contract."))
+		frappe.throw(_("Create a Flat from a Flat Contract or Add Flat to Contract."))
 	flat = frappe.new_doc("Flat")
 	flat.set(SOURCE_FIELDS[source_doctype], source_name)
-	source = _get_source(flat)
-	existing = _existing_flat(source)
+	source = _get_source(flat, for_update=True)
+	source.check_permission("write")
+	existing = _existing_flat(source, for_update=True)
 	if existing:
-		doc = frappe.get_doc("Flat", existing)
-		doc.check_permission("read")
-		return doc
-	flat.check_permission("create")
-	_set_source_values(flat, source)
+		flat = frappe.get_doc("Flat", existing)
+		flat.check_permission("read")
+	else:
+		flat.check_permission("create")
+		flat.check_permission("submit")
+		flat.flags.creation_action = _CREATE_FLAT_TOKEN
+		try:
+			flat.insert()
+		finally:
+			flat.flags.pop("creation_action", None)
+	if flat.docstatus == 0:
+		flat.submit()
+	# Keep the result visible on the source even after leaving the Flat form.
+	source.db_set({"created_flat": flat.name, "flat_title": flat.flat_title})
 	return flat

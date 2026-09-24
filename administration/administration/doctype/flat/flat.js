@@ -3,9 +3,9 @@
 
 frappe.ui.form.on("Flat", {
 	refresh(frm) {
-		if (frm.is_new() && !frm.doc.flat_contract_request && !frm.doc.add_flat_to_contract) {
+		if (frm.is_new()) {
 			frm.disable_save();
-			frm.set_intro(__("Create a Flat using the Create Flat button on a submitted Flat Contract Request or Add Flat to Contract."));
+			frm.set_intro(__("Create a Flat using the Create Flat button on a submitted Flat Contract or Add Flat to Contract."));
 		}
 	},
 });

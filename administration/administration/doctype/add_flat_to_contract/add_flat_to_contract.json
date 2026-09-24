@@ -30,7 +30,8 @@
   "city",
   "area",
   "address",
-  "flat_name",
+  "flat_title",
+  "created_flat",
   "flat_no",
   "floor_no",
   "column_break_kcth",
@@ -267,19 +268,29 @@
    "options": "Accommodation Contract"
   },
   {
-   "fieldname": "flat_name",
+   "fieldname": "flat_title",
    "fieldtype": "Data",
-   "label": "Flat Name",
+   "label": "Flat Title",
    "reqd": 1,
    "allow_on_submit": 1,
-   "description": "Name to use when creating the Flat."
+   "read_only_depends_on": "eval:!!doc.created_flat",
+   "description": "Title used to create and submit the Flat."
+  },
+  {
+   "fieldname": "created_flat",
+   "fieldtype": "Link",
+   "label": "Created Flat",
+   "options": "Flat",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-24 19:57:05.084545",
+ "modified": "2026-09-24 20:16:09.550175",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Add Flat to Contract",

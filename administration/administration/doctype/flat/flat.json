@@ -21,6 +21,7 @@
   "party",
   "owner_details_column",
   "rent_contract",
+  "flat_contract",
   "flat_contract_request",
   "add_flat_to_contract",
   "rent_contract_type",
@@ -231,6 +232,16 @@
   {
    "fieldname": "owner_details_column",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "flat_contract",
+   "fieldtype": "Link",
+   "label": "Flat Contract",
+   "options": "Flat Contract",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
@@ -246,7 +257,7 @@
    "link_fieldname": "flat"
   }
  ],
- "modified": "2026-09-24 19:51:41.923794",
+ "modified": "2026-09-24 20:16:09.554400",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat",
@@ -263,7 +274,8 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "write": 1
+   "write": 1,
+   "submit": 1
   }
  ],
  "row_format": "Dynamic",

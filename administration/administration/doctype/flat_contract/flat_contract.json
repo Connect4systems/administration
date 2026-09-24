@@ -30,6 +30,8 @@
   "city",
   "area",
   "address",
+  "flat_title",
+  "created_flat",
   "flat_no",
   "floor_no",
   "total_flat_area",
@@ -60,14 +62,14 @@
  ],
  "fields": [
   {
-     "fieldname": "flat_rent_request",
-     "fieldtype": "Link",
-     "in_list_view": 1,
-     "label": "Flat Rent Request",
-     "options": "Flat Rent Request",
-     "read_only": 1
-    },
-    {
+   "fieldname": "flat_rent_request",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Flat Rent Request",
+   "options": "Flat Rent Request",
+   "read_only": 1
+  },
+  {
    "fieldname": "flat_contract_request",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -91,15 +93,15 @@
    "reqd": 1
   },
   {
-    "fetch_from": "flat_contract_request.flat_owner",
-    "fieldname": "flat_owner",
-    "fieldtype": "Link",
-    "hidden": 1,
-    "label": "Flat Owner",
-    "options": "Supplier",
-    "read_only": 1
-    },
-    {
+   "fetch_from": "flat_contract_request.flat_owner",
+   "fieldname": "flat_owner",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Flat Owner",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
    "fieldname": "contract_start_date",
    "fieldtype": "Date",
    "label": "Contract Start Date",
@@ -133,7 +135,7 @@
    "label": "First Party Representative"
   },
   {
-    "fetch_from": "flat_contract_request.flat_owner_name",
+   "fetch_from": "flat_contract_request.flat_owner_name",
    "fieldname": "second_party_name",
    "fieldtype": "Data",
    "label": "Second Party Name (English)",
@@ -155,7 +157,7 @@
    "fieldtype": "Column Break"
   },
   {
-    "fetch_from": "flat_contract_request.attach_id",
+   "fetch_from": "flat_contract_request.attach_id",
    "fieldname": "attach_id",
    "fieldtype": "Attach",
    "label": "Owner ID Attachment"
@@ -289,7 +291,7 @@
   {
    "fieldname": "terms",
    "fieldtype": "Table",
-   "label": "Terms and Conditions / \u0627\u0644\u0634\u0631\u0648\u0637 \u0648\u0627\u0644\u0623\u062d\u0643\u0627\u0645",
+   "label": "Terms and Conditions / الشروط والأحكام",
    "options": "Flat Contract Term"
   },
   {
@@ -343,18 +345,36 @@
    "fieldtype": "Column Break"
   },
   {
-    "fetch_from": "flat_contract_request.legal_name",
+   "fetch_from": "flat_contract_request.legal_name",
    "fieldname": "second_party_name_arabic",
    "fieldtype": "Data",
    "label": "Second Party Name (Arabic)",
    "reqd": 1
+  },
+  {
+   "fieldname": "flat_title",
+   "fieldtype": "Data",
+   "label": "Flat Title",
+   "reqd": 1,
+   "allow_on_submit": 1,
+   "read_only_depends_on": "eval:!!doc.created_flat",
+   "description": "Title used to create and submit the Flat."
+  },
+  {
+   "fieldname": "created_flat",
+   "fieldtype": "Link",
+   "label": "Created Flat",
+   "options": "Flat",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "no_copy": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 19:10:14.514714",
+ "modified": "2026-09-24 20:16:09.550175",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract",
