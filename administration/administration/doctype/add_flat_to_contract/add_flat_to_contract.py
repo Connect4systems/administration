@@ -4,5 +4,5 @@
 from frappe.model.document import Document
 
 
-class AddFlatToContract(Document):
+class AddFlattoContract(Document):
 	pass
