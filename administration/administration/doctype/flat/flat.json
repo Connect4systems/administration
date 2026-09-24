@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "flat_information_section",
+  "rent_type",
   "rent_contract",
   "flat_contract_request",
   "add_flat_to_contract",
@@ -209,6 +210,16 @@
    "options": "Supplier",
    "read_only": 1,
    "no_copy": 1
+  },
+  {
+   "fieldname": "rent_type",
+   "fieldtype": "Select",
+   "label": "Rent Type",
+   "options": "\nDirect Rent\nContract",
+   "read_only": 1,
+   "no_copy": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
   }
  ],
  "grid_page_length": 50,

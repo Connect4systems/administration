@@ -12,6 +12,10 @@ class Flat(Document):
 		_set_source_values(self, source)
 
 	def validate(self):
+		if self.get("add_flat_to_contract"):
+			self.rent_type = "Contract"
+		elif self.get("flat_contract_request"):
+			self.rent_type = "Direct Rent"
 		previous = self.get_doc_before_save()
 		if previous:
 			for field in ("flat_contract_request", "add_flat_to_contract", "rent_contract", "rent_contract_type", "accommodation_contract"):
@@ -62,6 +66,7 @@ def _set_source_values(flat, source):
 	for row in source.get("flat_contents") or []:
 		flat.append("flat_contents", {field: row.get(field) for field in ("item_name", "description", "qty", "image")})
 	if source.doctype == "Add Flat to Contract":
+		flat.rent_type = "Contract"
 		if not source.get("accommodation_contract"):
 			frappe.throw(_("Select an Accommodation Contract on Add Flat to Contract first."))
 		contract = frappe.get_doc("Accommodation Contract", source.accommodation_contract)
@@ -73,6 +78,7 @@ def _set_source_values(flat, source):
 		flat.party = contract.party
 		flat.owner_name = source.flat_owner
 	else:
+		flat.rent_type = "Direct Rent"
 		flat.rent_contract_type = "Flat Contract Request"
 		flat.rent_contract = source.name
 		flat.accommodation_contract = None
