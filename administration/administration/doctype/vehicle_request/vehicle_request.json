@@ -7,9 +7,10 @@
  "engine": "InnoDB",
  "field_order": [
   "project",
-  "vehicle_type",
+  "request_type",
   "column_break_brtr",
   "date",
+  "vehicle_type",
   "section_break_qjiy",
   "employee",
   "section_break_46ab",
@@ -34,8 +35,10 @@
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_brtr",
@@ -50,8 +53,10 @@
   {
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Vehicle Type",
-   "options": "Vehicle Type"
+   "options": "Vehicle Type",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_qjiy",
@@ -69,13 +74,21 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "VR-.YY.-.###"
+  },
+  {
+   "fieldname": "request_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Request Type",
+   "options": "Private Vehicle\nTransportation",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-20 17:56:05.331578",
+ "modified": "2026-09-21 14:12:41.835381",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicle Request",

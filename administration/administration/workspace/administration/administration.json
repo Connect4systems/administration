@@ -1,0 +1,64 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"pdgEwRmVsn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Car Request\",\"col\":3}},{\"id\":\"HeZBVAqotn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Order\",\"col\":3}},{\"id\":\"qDbbOnKo8_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Organizational Chart\",\"col\":3}},{\"id\":\"QI2g9DsP7h\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Purchase Receipt\",\"col\":3}},{\"id\":\"PZ44DtrZA0\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "creation": "2024-09-26 11:54:54.698173",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "setting-gear",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Administration",
+ "links": [],
+ "modified": "2026-09-24 17:20:30.104284",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Administration",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Administration Manager"
+  }
+ ],
+ "sequence_id": 35.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "stats_filter": "[[\"Purchase Receipt\",\"project\",\"=\",\"HQ\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Car Request",
+   "link_to": "Car Use Request",
+   "stats_filter": "[[\"Car Use Request\",\"workflow_state\",\"=\",\"Administration Manager\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Organizational Chart",
+   "link_to": "organizational-chart",
+   "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Purchase Order",
+   "link_to": "Purchase Order",
+   "stats_filter": "[[\"Purchase Order\",\"project\",\"=\",\"HQ\",false],[\"Purchase Order\",\"custom_type\",\"=\",\"Petty Cash\",false]]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Administration"
+}

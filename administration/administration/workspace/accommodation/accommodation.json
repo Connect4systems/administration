@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Accommodation",
  "links": [],
- "modified": "2026-09-16 23:37:33.505206",
+ "modified": "2026-09-24 17:20:30.270202",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Accommodation",
@@ -30,7 +30,7 @@
    "role": "Administration Manager"
   }
  ],
- "sequence_id": 59.0,
+ "sequence_id": 36.0,
  "shortcuts": [
   {
    "color": "Green",
