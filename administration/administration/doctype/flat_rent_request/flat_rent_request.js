@@ -7,6 +7,47 @@ frappe.ui.form.on("Flat Rent Request", {
 			return;
 		}
 
+		frm.add_custom_button(__("Add Flat to Contract"), async () => {
+			const supplier = frm.doc.flat_owner
+				? (await frappe.db.get_value("Supplier", frm.doc.flat_owner, [
+					"supplier_name", "custom_legal_name",
+				])).message || {}
+				: {};
+
+			frappe.model.with_doctype("Add Flat to Contract", () => {
+				const target = frappe.model.get_new_doc("Add Flat to Contract");
+				const source_fields = new Map(frm.meta.fields.map((field) => [field.fieldname, field]));
+				const excluded_types = ["Column Break", "Section Break", "Tab Break", "HTML", "Button"];
+				frappe.get_meta("Add Flat to Contract").fields.forEach((field) => {
+					if (field.no_copy || field.fieldname === "naming_series" || excluded_types.includes(field.fieldtype)) {
+						return;
+					}
+					const source = source_fields.get(field.fieldname) || source_fields.get(`custom_${field.fieldname}`);
+					if (!source || frm.doc[source.fieldname] == null) {
+						return;
+					}
+					if (["Table", "Table MultiSelect"].includes(field.fieldtype)) {
+						if (source.options !== field.options) return;
+						(frm.doc[source.fieldname] || []).forEach((row) => {
+							const child = frappe.model.add_child(target, field.options, field.fieldname);
+							frappe.get_meta(field.options).fields.forEach((child_field) => {
+								if (!child_field.no_copy && !excluded_types.includes(child_field.fieldtype)) {
+									child[child_field.fieldname] = row[child_field.fieldname];
+								}
+							});
+						});
+					} else {
+						target[field.fieldname] = frm.doc[source.fieldname];
+					}
+				});
+				target.flat_rent_request = frm.doc.name;
+				target.flat_owner = supplier.supplier_name || target.flat_owner || "";
+				target.flat_owner_name = target.flat_owner;
+				target.legal_name = target.legal_name || supplier.custom_legal_name || "";
+				frappe.set_route("Form", target.doctype, target.name);
+			});
+		});
+
 		frm.add_custom_button(__("Create Flat Contract Request"), () => {
 			frappe.model.with_doctype("Flat Contract Request", () => {
 				const contract_meta = frappe.get_meta("Flat Contract Request");
