@@ -8,3 +8,4 @@ administration.patches.disable_party_ledger_prepared_report
 administration.patches.enforce_party_ledger_synchronous_report
 administration.patches.set_flat_rent_contract_type
 administration.patches.set_flat_rent_type
+administration.patches.move_flat_creation_to_contract
