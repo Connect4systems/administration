@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 administration.patches.disable_party_ledger_prepared_report
 administration.patches.enforce_party_ledger_synchronous_report
+administration.patches.set_flat_rent_contract_type

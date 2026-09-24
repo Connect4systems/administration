@@ -8,6 +8,11 @@
  "field_order": [
   "flat_information_section",
   "rent_contract",
+  "flat_contract_request",
+  "add_flat_to_contract",
+  "rent_contract_type",
+  "accommodation_contract",
+  "party",
   "flat_title",
   "governorate",
   "city",
@@ -124,12 +129,15 @@
   },
   {
    "fieldname": "rent_contract",
-   "fieldtype": "Link",
+   "fieldtype": "Dynamic Link",
    "in_list_view": 1,
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Rent Contract",
-   "options": "Flat Contract"
+   "options": "rent_contract_type",
+   "read_only": 1,
+   "no_copy": 1,
+   "depends_on": "eval:!doc.add_flat_to_contract && !!doc.rent_contract"
   },
   {
    "fieldname": "no_of_beds",
@@ -156,6 +164,51 @@
    "fieldtype": "Table",
    "label": "Flat Contents",
    "options": "Flat Contents"
+  },
+  {
+   "fieldname": "flat_contract_request",
+   "fieldtype": "Link",
+   "label": "Flat Contract Request",
+   "options": "Flat Contract Request",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "add_flat_to_contract",
+   "fieldtype": "Link",
+   "label": "Add Flat to Contract",
+   "options": "Add Flat to Contract",
+   "read_only": 1,
+   "no_copy": 1,
+   "depends_on": "eval:!!doc.add_flat_to_contract"
+  },
+  {
+   "fieldname": "rent_contract_type",
+   "fieldtype": "Link",
+   "label": "Rent Contract Type",
+   "options": "DocType",
+   "default": "Flat Contract",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "accommodation_contract",
+   "fieldtype": "Link",
+   "label": "Accommodation Contract",
+   "options": "Accommodation Contract",
+   "read_only": 1,
+   "no_copy": 1,
+   "depends_on": "eval:!!doc.add_flat_to_contract"
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Link",
+   "label": "Party",
+   "options": "Supplier",
+   "read_only": 1,
+   "no_copy": 1
   }
  ],
  "grid_page_length": 50,

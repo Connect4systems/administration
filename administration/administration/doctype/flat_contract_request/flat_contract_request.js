@@ -100,6 +100,20 @@ frappe.ui.form.on("Flat Contract Request", {
 			return;
 		}
 
+		frm.add_custom_button(__("Create Flat"), () => {
+			frappe.call({
+				method: "administration.administration.doctype.flat.flat.make_flat",
+				args: { source_doctype: frm.doc.doctype, source_name: frm.doc.name },
+				freeze: true,
+				callback(r) {
+					if (r.message) {
+						const flat = frappe.model.sync(r.message)[0];
+						frappe.set_route("Form", "Flat", flat.name);
+					}
+				},
+			});
+		});
+
 		frm.add_custom_button(__("Create Flat Contract"), async () => {
 			const supplier_name =
 				frm.doc.flat_owner_name ||
