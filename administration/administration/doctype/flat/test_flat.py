@@ -25,8 +25,9 @@ class TestFlat(TestCase):
 		self.frappe = self.patcher.start()
 		self.addCleanup(self.patcher.stop)
 		self.frappe.throw.side_effect = ValueError
+		self.frappe.db.get_value.return_value = None
 		self.source = DocumentValues(
-			doctype="Flat Contract Request", name="FCR-001", docstatus=1,
+			doctype="Flat Contract Request", name="FCR-001", docstatus=1, flat_name="Building A - Flat 12",
 			check_permission=Mock(), project="PROJ-1", flat_owner="SUP-1",
 			flat_owner_name="Owner Name", no_of_rooms=3.0, no_of_beds=0,
 			monthly_rent=1200, deposit=0, payment_cycle="Yearly",
@@ -53,6 +54,7 @@ class TestFlat(TestCase):
 	def test_request_maps_contract_party_and_contents(self):
 		flat = DocumentValues(flat_contract_request="FCR-001")
 		module.Flat.before_insert(flat)
+		self.assertEqual(flat.flat_title, "Building A - Flat 12")
 		self.assertEqual(flat.rent_contract, "FCR-001")
 		self.assertEqual(flat.rent_type, "Direct Rent")
 		self.assertEqual(flat.rent_contract_type, "Flat Contract Request")
@@ -75,6 +77,7 @@ class TestFlat(TestCase):
 		flat = DocumentValues(add_flat_to_contract="AFTC-001", rent_contract="forged")
 		module.Flat.before_insert(flat)
 		self.assertEqual(flat.accommodation_contract, "AC-001")
+		self.assertEqual(flat.flat_title, "Building A - Flat 12")
 		self.assertEqual(flat.rent_type, "Contract")
 		self.assertEqual(flat.party, "SUP-2")
 		self.assertEqual(flat.owner_name, "Free text owner")
@@ -115,3 +118,38 @@ class TestFlat(TestCase):
 		with self.assertRaises(PermissionError):
 			module.make_flat("Flat Contract Request", "FCR-001")
 		flat.check_permission.assert_called_once_with("create")
+
+	def test_second_flat_is_blocked_for_either_source_including_cancelled_flats(self):
+		for doctype, field in module.SOURCE_FIELDS.items():
+			with self.subTest(doctype=doctype):
+				self.source.doctype = doctype
+				self.frappe.db.get_value.return_value = "Existing Flat"
+				with self.assertRaises(ValueError):
+					module.Flat.before_insert(DocumentValues(**{field: self.source.name}))
+				self.frappe.get_doc.assert_called_with(doctype, self.source.name, for_update=True)
+				# No docstatus filter: a cancelled Flat still consumes this source.
+				self.frappe.db.get_value.assert_called_with(
+					"Flat", {field: self.source.name}, "name", for_update=True
+				)
+
+	def test_repeated_create_opens_existing_flat_with_read_permission(self):
+		for doctype in module.SOURCE_FIELDS:
+			with self.subTest(doctype=doctype):
+				self.source.doctype = doctype
+				flat = DocumentValues(check_permission=Mock())
+				existing = DocumentValues(name="Existing Flat", check_permission=Mock())
+				self.frappe.new_doc.return_value = flat
+				self.frappe.get_doc.side_effect = [self.source, existing]
+				self.frappe.db.get_value.return_value = existing.name
+				self.assertIs(module.make_flat(doctype, self.source.name), existing)
+				existing.check_permission.assert_called_once_with("read")
+				flat.check_permission.assert_not_called()
+
+	def test_flat_name_is_required_and_source_name_overrides_draft_title(self):
+		self.source.flat_name = "   "
+		with self.assertRaises(ValueError):
+			module._set_source_values(DocumentValues(), self.source)
+		self.source.flat_name = "  Chosen Flat Name  "
+		flat = DocumentValues(flat_title="Changed draft name")
+		module._set_source_values(flat, self.source)
+		self.assertEqual(flat.flat_title, "Chosen Flat Name")

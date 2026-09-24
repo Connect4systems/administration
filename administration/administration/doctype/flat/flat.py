@@ -8,7 +8,11 @@ from frappe.model.document import Document
 
 class Flat(Document):
 	def before_insert(self):
-		source = _get_source(self)
+		# Serialize creation for this source, including simultaneous browser/API saves.
+		source = _get_source(self, for_update=True)
+		existing = _existing_flat(source, for_update=True)
+		if existing:
+			frappe.throw(_("A Flat already exists for this source: {0}").format(existing))
 		_set_source_values(self, source)
 
 	def validate(self):
@@ -27,7 +31,10 @@ class Flat(Document):
 			self.party = frappe.db.get_value("Flat Contract Request", self.flat_contract_request, "flat_owner")
 
 
-def _get_source(flat):
+SOURCE_FIELDS = {"Flat Contract Request": "flat_contract_request", "Add Flat to Contract": "add_flat_to_contract"}
+
+
+def _get_source(flat, for_update=False):
 	sources = [
 		(doctype, flat.get(field))
 		for doctype, field in (
@@ -38,14 +45,23 @@ def _get_source(flat):
 	]
 	if len(sources) != 1:
 		frappe.throw(_("Create a Flat from a Flat Contract Request or Add Flat to Contract."))
-	source = frappe.get_doc(*sources[0])
+	source = frappe.get_doc(*sources[0], for_update=for_update)
 	source.check_permission("read")
 	if source.docstatus != 1:
 		frappe.throw(_("Submit the source document before creating a Flat."))
 	return source
 
 
+def _existing_flat(source, for_update=False):
+	return frappe.db.get_value(
+		"Flat", {SOURCE_FIELDS[source.doctype]: source.name}, "name", for_update=for_update
+	)
+
+
 def _set_source_values(flat, source):
+	flat_name = (source.get("flat_name") or "").strip()
+	if not flat_name:
+		frappe.throw(_("Set Flat Name on the source document and save it before creating a Flat."))
 	for target, origin in {
 		"project": "project",
 		"governorate": "governorate",
@@ -58,7 +74,7 @@ def _set_source_values(flat, source):
 		"security_deposit": "deposit",
 	}.items():
 		flat.set(target, source.get(origin))
-	flat.flat_title = flat.get("flat_title") or source.name
+	flat.flat_title = flat_name
 	rooms = source.get("no_of_rooms")
 	flat.no_of_room = str(int(rooms)) if rooms is not None and float(rooms).is_integer() else str(rooms or "")
 	flat.payment_schedule = "Annual" if source.payment_cycle == "Yearly" else source.payment_cycle
@@ -90,11 +106,16 @@ def _set_source_values(flat, source):
 
 @frappe.whitelist()
 def make_flat(source_doctype, source_name):
-	fields = {"Flat Contract Request": "flat_contract_request", "Add Flat to Contract": "add_flat_to_contract"}
-	if source_doctype not in fields:
+	if source_doctype not in SOURCE_FIELDS:
 		frappe.throw(_("Create a Flat from a Flat Contract Request or Add Flat to Contract."))
 	flat = frappe.new_doc("Flat")
+	flat.set(SOURCE_FIELDS[source_doctype], source_name)
+	source = _get_source(flat)
+	existing = _existing_flat(source)
+	if existing:
+		doc = frappe.get_doc("Flat", existing)
+		doc.check_permission("read")
+		return doc
 	flat.check_permission("create")
-	flat.set(fields[source_doctype], source_name)
-	_set_source_values(flat, _get_source(flat))
+	_set_source_values(flat, source)
 	return flat
