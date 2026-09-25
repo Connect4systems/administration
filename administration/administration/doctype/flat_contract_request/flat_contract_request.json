@@ -27,6 +27,7 @@
   "bank",
   "iban",
   "ownership_documentation",
+  "type",
   "section_break_pvie",
   "governorate",
   "city",
@@ -282,13 +283,19 @@
    "fieldname": "tax_deduction",
    "fieldtype": "Float",
    "label": "Tax Deduction"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 23:30:22.213329",
+ "modified": "2026-09-25 23:50:27.385793",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",
