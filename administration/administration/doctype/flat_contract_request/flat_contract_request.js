@@ -145,6 +145,7 @@ frappe.ui.form.on("Flat Contract Request", {
 				});
 
 				contract.flat_contract_request = frm.doc.name;
+				contract.flat_title = frm.doc.flat_title || "";
 				for (const key of ["type", "flat", "last_rent_contract"]) contract[key] = frm.doc[key];
 				contract.flat_request = frm.doc.flat_request || "";
 				contract.first_party_name = "CSCEC International Egypt for Construction Company Co., LTD s.s.c";

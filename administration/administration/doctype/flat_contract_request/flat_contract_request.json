@@ -8,6 +8,7 @@
  "field_order": [
   "type",
   "flat",
+  "flat_title",
   "last_rent_contract",
   "lifecycle_applied",
   "project",
@@ -319,6 +320,13 @@
    "hidden": 1,
    "no_copy": 1,
    "allow_on_submit": 1
+  },
+  {
+   "fieldname": "flat_title",
+   "fieldtype": "Data",
+   "label": "Flat Title",
+   "fetch_from": "flat.flat_title",
+   "fetch_if_empty": 1
   }
  ],
  "grid_page_length": 50,

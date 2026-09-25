@@ -112,6 +112,10 @@ and updates rental/owner information and contents. Renewal contracts cannot crea
 another Flat. Direct renewal requests stay reserved throughout the request and
 contract stages. Completed processes cannot be cancelled or deleted.
 
+Direct-rent renewal contracts fetch Flat Title from the linked Flat. Legal users
+can revise that title before approval; final approval updates the Flat Title while
+preserving the Flat document ID and all existing links.
+
 Rent Termination Request uses the legal approval chain and is created by Legal
 User. Flat Termination uses the Add Flat to Contract approval chain. Each includes
 a Flat snapshot, contract history, Legal Note and Document Approval. Final approval

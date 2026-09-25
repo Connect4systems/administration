@@ -171,7 +171,7 @@ def validate_document(doc, method=None):
 	flat.check_permission("read")
 	if doc.doctype not in ROOTS:
 		inherit_renewal(doc)
-	if not previous and doc.meta.has_field("flat_title"):
+	if not previous and doc.meta.has_field("flat_title") and not doc.get("flat_title"):
 		doc.flat_title = flat.flat_title
 	if flat.get("flat_status") == "Inactive":
 		frappe.throw(_("Inactive Flats cannot be renewed or terminated again."))
@@ -247,11 +247,12 @@ def apply_renewal(doc, method=None):
 	original_request = flat.get("flat_contract_request")
 	# Reuse value mapping, but retain the Flat's identity, origin and all history.
 	_set_source_values(flat, doc)
+	if doc.doctype != "Flat Contract":
+		flat.flat_title = original_title
 	new_row = flat.rent_contracts[0].as_dict()
 	flat.set("rent_contracts", old_rows)
 	flat.append("rent_contracts", {key: new_row.get(key) for key in (
 		"rent_contract_type", "rent_contract", "add_flat_to_contract", "rent_start_date", "rent_end_date")})
-	flat.flat_title = original_title
 	flat.flat_contract_request = original_request
 	flat.flat_status, flat.last_rent_end_date = coverage_status(approved_rows(flat), flat.get("flat_status"))
 	flat.pending_document_type = None
@@ -263,7 +264,7 @@ def apply_renewal(doc, method=None):
 	finally:
 		flat.flags.pop("lifecycle_update", None)
 		flat.flags.pop("ignore_validate_update_after_submit", None)
-	doc.db_set({"created_flat": flat.name, "flat_title": original_title, "lifecycle_applied": 1})
+	doc.db_set({"created_flat": flat.name, "flat_title": flat.flat_title, "lifecycle_applied": 1})
 	if doc.doctype == "Flat Contract":
 		for doctype, name in (("Flat Request", doc.flat_request), ("Flat Contract Request", doc.flat_contract_request)):
 			frappe.db.set_value(doctype, name, "lifecycle_applied", 1)

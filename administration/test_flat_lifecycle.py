@@ -147,7 +147,7 @@ class TestLifecycle(TestCase):
 	def test_renewal_preserves_identity_and_history_and_applies_once(self):
 		source = Doc(doctype="Flat Contract", name="FC-2", docstatus=1, workflow_state="Approved", type="Renew",
 			flat=self.flat.name, flat_request="FRQ-2", flat_contract_request="FCR-2", last_rent_contract="FC-1",
-			flat_title="Attempted rename", contract_start_date="2026-10-01", contract_end_date="2027-09-30",
+			flat_title="Renewed Flat Title", contract_start_date="2026-10-01", contract_end_date="2027-09-30",
 			project="New Project", no_of_rooms=4, no_of_beds=8, monthly_rent=2000, deposit=100,
 			payment_cycle="Monthly", flat_owner="SUP-2", second_party_name="New Owner", flat_contents=[])
 		with patch.object(lifecycle, "latest_for_action", return_value=self.flat.rent_contracts[0]), \
@@ -156,7 +156,7 @@ class TestLifecycle(TestCase):
 			lifecycle.apply_renewal(source)
 			lifecycle.apply_renewal(source)
 		self.assertTrue(self.flat.saved)
-		self.assertEqual(self.flat.flat_title, "Flat 1")
+		self.assertEqual(self.flat.flat_title, "Renewed Flat Title")
 		self.assertEqual(self.flat.flat_contract, "FC-1")
 		self.assertEqual(self.flat.flat_contract_request, "FCR-1")
 		self.assertEqual([r.get("rent_contract") for r in self.flat.rent_contracts], ["FC-1", "FC-2"])
