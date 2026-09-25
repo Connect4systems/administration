@@ -13,22 +13,23 @@
   "address",
   "column_break_itcu",
   "project",
+  "rent_type",
+  "rent",
   "no_of_room",
   "no_of_beds",
   "owner_details_section",
-  "rent_type",
-  "owner_name",
-  "party",
-  "owner_details_column",
   "flat_contract",
+  "owner_name",
   "flat_contract_request",
+  "owner_details_column",
   "add_flat_to_contract",
+  "party",
   "accommodation_contract",
   "section_break_sxmy",
   "payment_schedule",
-  "rent",
-  "security_deposit",
   "amended_from",
+  "column_break_bmrj",
+  "security_deposit",
   "flact_contents_tab",
   "flat_contents",
   "rent_contracts_tab",
@@ -132,7 +133,7 @@
   {
    "fieldname": "flact_contents_tab",
    "fieldtype": "Tab Break",
-   "label": "Flact Contents"
+   "label": "Flat Contents"
   },
   {
    "fieldname": "flat_contents",
@@ -143,47 +144,47 @@
   {
    "fieldname": "flat_contract_request",
    "fieldtype": "Link",
-   "label": "Flat Contract Request",
-   "options": "Flat Contract Request",
    "hidden": 1,
-   "read_only": 1,
-   "no_copy": 1
+   "label": "Flat Contract Request",
+   "no_copy": 1,
+   "options": "Flat Contract Request",
+   "read_only": 1
   },
   {
    "fieldname": "add_flat_to_contract",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Add Flat to Contract",
-   "options": "Add Flat to Contract",
-   "read_only": 1,
    "no_copy": 1,
-   "hidden": 1
+   "options": "Add Flat to Contract",
+   "read_only": 1
   },
   {
+   "depends_on": "eval:!!doc.add_flat_to_contract",
    "fieldname": "accommodation_contract",
    "fieldtype": "Link",
    "label": "Accommodation Contract",
-   "options": "Accommodation Contract",
-   "read_only": 1,
    "no_copy": 1,
-   "depends_on": "eval:!!doc.add_flat_to_contract"
+   "options": "Accommodation Contract",
+   "read_only": 1
   },
   {
    "fieldname": "party",
    "fieldtype": "Link",
    "label": "Party",
+   "no_copy": 1,
    "options": "Supplier",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
    "fieldname": "rent_type",
    "fieldtype": "Select",
-   "label": "Rent Type",
-   "options": "\nDirect Rent\nContract",
-   "read_only": 1,
-   "no_copy": 1,
    "in_list_view": 1,
-   "in_standard_filter": 1
+   "in_standard_filter": 1,
+   "label": "Rent Type",
+   "no_copy": 1,
+   "options": "\nDirect Rent\nContract",
+   "read_only": 1
   },
   {
    "fieldname": "owner_details_section",
@@ -197,11 +198,11 @@
   {
    "fieldname": "flat_contract",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Flat Contract",
+   "no_copy": 1,
    "options": "Flat Contract",
    "read_only": 1,
-   "hidden": 1,
-   "no_copy": 1,
    "search_index": 1
   },
   {
@@ -213,9 +214,13 @@
    "fieldname": "rent_contracts",
    "fieldtype": "Table",
    "label": "Rent Contracts",
+   "no_copy": 1,
    "options": "Flat Rent Contract",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_bmrj",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
@@ -231,7 +236,7 @@
    "link_fieldname": "flat"
   }
  ],
- "modified": "2026-09-24 20:16:09.554400",
+ "modified": "2026-09-25 22:29:01.885311",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat",
@@ -248,8 +253,8 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "write": 1,
-   "submit": 1
+   "submit": 1,
+   "write": 1
   }
  ],
  "row_format": "Dynamic",
