@@ -17,6 +17,7 @@
   "contract_start_date",
   "contract_end_date",
   "tax_deduction",
+  "type",
   "owner_details_section",
   "flat_owner",
   "flat_owner_name",
@@ -282,13 +283,19 @@
    "fieldname": "tax_deduction",
    "fieldtype": "Float",
    "label": "Tax Deduction"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew\nTerminate"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 16:24:03.908749",
+ "modified": "2026-09-25 22:48:16.598055",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",
