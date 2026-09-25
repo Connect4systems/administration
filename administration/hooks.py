@@ -88,8 +88,12 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 after_install = [
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_workflow.setup_workflow",
+    "administration.flat_request_layout.ensure_approval_layout",
 ]
-after_migrate = "administration.user_employee.setup_employee_details"
+after_migrate = [
+    "administration.user_employee.setup_employee_details",
+    "administration.flat_request_layout.ensure_approval_layout",
+]
 
 # Uninstallation
 # ------------

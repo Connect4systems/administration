@@ -30,6 +30,15 @@ script references. Existing request IDs and the `FRQ` naming series are retained
 The Desk route is now `/app/flat-request`; refresh the browser after deployment.
 Do not create a separate Flat Request DocType before migrating.
 
+### Restoring the Document Approval tab
+
+Deploy the complete app revision and run `bench --site admin.cscec.live migrate`,
+then `bench --site admin.cscec.live clear-cache` and `bench restart`.
+Hard-refresh the Flat Request form after deployment. The migration repairs the
+approval tab layout after saved customizations are synchronized, and keeps it
+visible before the first workflow action. Existing approval rows are retained.
+The table shows status, approving role, user, full name, date and note.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
