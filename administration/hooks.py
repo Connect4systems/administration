@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/administration/css/administration.css"
-# app_include_js = "/assets/administration/js/administration.js"
+app_include_js = "/assets/administration/js/document_approval.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/administration/css/administration.css"
@@ -88,11 +88,14 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 after_install = [
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_workflow.setup_workflow",
+    "administration.add_flat_to_contract_workflow.setup_workflow",
     "administration.flat_request_layout.ensure_approval_layout",
+    "administration.flat_request_layout.ensure_contract_approval_layout",
 ]
 after_migrate = [
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_layout.ensure_approval_layout",
+    "administration.flat_request_layout.ensure_contract_approval_layout",
 ]
 
 # Uninstallation

@@ -16,19 +16,23 @@ def approval_field_order(fields):
 	), *APPROVAL_FIELDS]
 
 
-def ensure_approval_layout():
+def ensure_approval_layout(doctype="Flat Request", schema="flat_request"):
 	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
 	# Force synchronization even if a site's DocType timestamp is newer than the
 	# shipped schema. Child first so the table's options are available on reload.
 	frappe.reload_doc("administration", "doctype", "flat_request_approval", force=True)
-	frappe.reload_doc("administration", "doctype", "flat_request", force=True)
-	meta = frappe.get_meta("Flat Request", cached=False)
+	frappe.reload_doc("administration", "doctype", schema, force=True)
+	meta = frappe.get_meta(doctype, cached=False)
 	order = approval_field_order([field.fieldname for field in meta.fields])
-	make_property_setter("Flat Request", None, "field_order", json.dumps(order), "Data", for_doctype=True)
+	make_property_setter(doctype, None, "field_order", json.dumps(order), "Data", for_doctype=True)
 	for field in ("request_details_tab", *APPROVAL_FIELDS):
 		for prop, value, kind in (("hidden", 0, "Check"), ("depends_on", "", "Data"), ("permlevel", 0, "Int")):
-			make_property_setter("Flat Request", field, prop, value, kind)
-	make_property_setter("Flat Request", "document_approval", "read_only", 1, "Check")
-	frappe.clear_cache(doctype="Flat Request")
+			make_property_setter(doctype, field, prop, value, kind)
+	make_property_setter(doctype, "document_approval", "read_only", 1, "Check")
+	frappe.clear_cache(doctype=doctype)
 	frappe.clear_cache(doctype="Flat Request Approval")
+
+
+def ensure_contract_approval_layout():
+	ensure_approval_layout("Add Flat to Contract", "add_flat_to_contract")

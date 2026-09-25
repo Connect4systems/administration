@@ -2,8 +2,11 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Add Flat to Contract", {
+	before_workflow_action: (frm) => administration.approval.before_workflow_action(frm),
+	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
-		if (frm.doc.docstatus !== 1) return;
+		administration.approval.refresh(frm);
+		if (frm.doc.docstatus !== 1 || frm.doc.workflow_state !== "Approved") return;
 
 		frm.add_custom_button(__(frm.doc.created_flat ? "View Flat" : "Create Flat"), () => {
 			if (frm.doc.created_flat) {

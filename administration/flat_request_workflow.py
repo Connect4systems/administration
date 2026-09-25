@@ -48,24 +48,24 @@ _APPROVAL_TOKEN = object()
 @frappe.whitelist()
 def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
-	if payload.get("doctype") != "Flat Request":
+	if payload.get("doctype") not in ("Flat Request", "Add Flat to Contract"):
 		return core_apply_workflow(doc, action)
 	note = payload.get("__approval_note") or ""
 	if not isinstance(note, str):
 		frappe.throw(_("Note must be text."))
-	current = frappe.get_doc("Flat Request", payload.get("name"), for_update=True)
+	current = frappe.get_doc(payload["doctype"], payload.get("name"), for_update=True)
 	current.check_permission("read")
-	workflow = get_workflow("Flat Request")
+	workflow = get_workflow(payload["doctype"])
 	state_field = workflow.workflow_state_field
 	if payload.get(state_field) != current.get(state_field) or str(payload.get("modified")) != str(current.modified):
 		frappe.throw(_("This request has changed. Reload it before taking a workflow action."))
 	transition = next((row for row in get_transitions(current, workflow) if row.action == action), None)
 	if not transition or not has_approval_access(frappe.session.user, current, transition):
 		frappe.throw(_("You are not allowed to take this workflow action."), frappe.PermissionError)
-	attachments = get_approval_attachments(payload.get("__approval_attachments"), current.name)
+	attachments = get_approval_attachments(payload.get("__approval_attachments"), current.name, payload["doctype"])
 	previous_context = frappe.flags.get("flat_request_approval")
 	frappe.flags.flat_request_approval = {
-		"token": _APPROVAL_TOKEN, "name": current.name,
+		"token": _APPROVAL_TOKEN, "name": current.name, "doctype": payload["doctype"],
 		"from_status": current.get(state_field), "status": transition.next_state,
 		"action": action, "approved_by_role": transition.allowed, "note": note.strip(),
 		"attachments": attachments,
@@ -77,7 +77,7 @@ def apply_workflow(doc, action):
 		frappe.flags.flat_request_approval = previous_context
 
 
-def get_approval_attachments(file_names, request_name):
+def get_approval_attachments(file_names, request_name, doctype="Flat Request"):
 	if file_names is None:
 		return ""
 	if not isinstance(file_names, list) or any(not isinstance(name, str) or not name for name in file_names):
@@ -86,8 +86,8 @@ def get_approval_attachments(file_names, request_name):
 	for name in dict.fromkeys(file_names):
 		file = frappe.get_doc("File", name)
 		file.check_permission("read")
-		if file.attached_to_doctype != "Flat Request" or file.attached_to_name != request_name:
-			frappe.throw(_("Approval attachments must belong to this Flat Request."))
+		if file.attached_to_doctype != doctype or file.attached_to_name != request_name:
+			frappe.throw(_("Approval attachments must belong to this document."))
 		attachments.append({"name": file.name, "file_name": file.file_name})
 	return json.dumps(attachments, ensure_ascii=False) if attachments else ""
 
@@ -108,6 +108,7 @@ def validate_approval_history(doc):
 	if (
 		context.get("token") is not _APPROVAL_TOKEN
 		or context.get("name") != doc.name
+		or context.get("doctype", "Flat Request") != (doc.get("doctype") or "Flat Request")
 		or context.get("from_status") != old_state
 		or context.get("status") != new_state
 	):
@@ -128,60 +129,61 @@ def require_workflow_submission(doc):
 	if (
 		context.get("token") is not _APPROVAL_TOKEN
 		or context.get("name") != doc.name
+		or context.get("doctype", "Flat Request") != (doc.get("doctype") or "Flat Request")
 		or context.get("status") != doc.get("workflow_state")
-		or doc.get("workflow_state") not in ("Approved", "Settled")
+		or doc.get("workflow_state") not in (("Approved",) if doc.get("doctype") == "Add Flat to Contract" else ("Approved", "Settled"))
 	):
 		frappe.throw(_("Submit this request through an approval workflow action."))
 
 
-def setup_workflow():
+def setup_workflow(doctype="Flat Request", states=STATES, transitions=TRANSITIONS, creator_role="Site Admin"):
 	from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
 	from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
 
-	roles = {role for _state, _status, role in STATES}
+	roles = {role for _state, _status, role in states} | {"System Manager"}
 	for role in sorted(roles):
 		if not frappe.db.exists("Role", role):
 			frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
-	for state, _status, _role in STATES:
+	for state, _status, _role in states:
 		if not frappe.db.exists("Workflow State", state):
 			frappe.get_doc({"doctype": "Workflow State", "workflow_state_name": state}).insert(ignore_permissions=True)
-	for action in sorted({row[1] for row in TRANSITIONS}):
+	for action in sorted({row[1] for row in transitions}):
 		if not frappe.db.exists("Workflow Action Master", action):
 			frappe.get_doc({"doctype": "Workflow Action Master", "workflow_action_name": action}).insert(ignore_permissions=True)
 	# An existing site may already have a workflow_state Custom Field. Reuse it.
-	if not frappe.get_meta("Flat Request").has_field("workflow_state"):
-		create_custom_fields({"Flat Request": [{
+	if not frappe.get_meta(doctype).has_field("workflow_state"):
+		create_custom_fields({doctype: [{
 			"fieldname": "workflow_state", "label": "Status", "fieldtype": "Link",
 			"options": "Workflow State", "read_only": 1, "no_copy": 1,
 			"allow_on_submit": 1, "in_list_view": 1, "insert_after": "request_details_tab",
 		}]})
 	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 	for prop, value, kind in (("hidden", 0, "Check"), ("read_only", 1, "Check"), ("label", "Status", "Data")):
-		make_property_setter("Flat Request", "workflow_state", prop, value, kind)
-	setup_custom_perms("Flat Request")
+		make_property_setter(doctype, "workflow_state", prop, value, kind)
+	setup_custom_perms(doctype)
 	for role in sorted(roles):
-		if not frappe.db.exists("Custom DocPerm", {"parent": "Flat Request", "role": role, "permlevel": 0, "if_owner": 0}):
-			add_permission("Flat Request", role)
+		if not frappe.db.exists("Custom DocPerm", {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0}):
+			add_permission(doctype, role)
 		for permission in ("read", "write"):
-			update_permission_property("Flat Request", role, 0, permission, 1)
-		if role in ("Site Admin", "System Manager"):
-			update_permission_property("Flat Request", role, 0, "create", 1)
+			update_permission_property(doctype, role, 0, permission, 1)
+		if role in (creator_role, "System Manager"):
+			update_permission_property(doctype, role, 0, "create", 1)
 		if role in (SUPERVISOR, "VP-General", "System Manager"):
-			update_permission_property("Flat Request", role, 0, "submit", 1)
+			update_permission_property(doctype, role, 0, "submit", 1)
 
-	valid_status = {state: status for state, status, _role in STATES}
-	for request in frappe.get_all("Flat Request", fields=["name", "workflow_state", "docstatus"]):
+	valid_status = {state: status for state, status, _role in states}
+	for request in frappe.get_all(doctype, fields=["name", "workflow_state", "docstatus"]):
 		if valid_status.get(request.workflow_state) != request.docstatus:
-			frappe.db.set_value("Flat Request", request.name, "workflow_state",
+			frappe.db.set_value(doctype, request.name, "workflow_state",
 				{0: "Draft", 1: "Approved", 2: "Cancelled"}[request.docstatus], update_modified=False)
-	name = "Flat Request Approval"
+	name = f"{doctype} Approval"
 	workflow = frappe.get_doc("Workflow", name) if frappe.db.exists("Workflow", name) else frappe.new_doc("Workflow")
 	workflow.update({
-		"workflow_name": name, "document_type": "Flat Request", "is_active": 1,
+		"workflow_name": name, "document_type": doctype, "is_active": 1,
 		"workflow_state_field": "workflow_state", "send_email_alert": 0,
-		"states": [{"state": state, "doc_status": str(status), "allow_edit": role} for state, status, role in STATES],
+		"states": [{"state": state, "doc_status": str(status), "allow_edit": role} for state, status, role in states],
 		"transitions": [{"state": state, "action": action, "next_state": next_state, "allowed": role,
-			"allow_self_approval": int(action == "Request")} for state, action, next_state, role in TRANSITIONS],
+			"allow_self_approval": int(action == "Request")} for state, action, next_state, role in transitions],
 	})
 	workflow.save(ignore_permissions=True)
-	frappe.clear_cache(doctype="Flat Request")
+	frappe.clear_cache(doctype=doctype)

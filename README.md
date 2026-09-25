@@ -43,6 +43,33 @@ or more files, then confirm. Attachment links are recorded on that action's
 approval row. Uploaded files remain attached to the request if the action is
 cancelled, but no approval row is created.
 
+### Add Flat to Contract approval workflow
+
+The active workflow is `Add Flat to Contract Approval`. The Accommodation
+supervisor requests approval from Draft, sending the document to Administration
+Manager, then General Director, then VP-General. VP-General approval submits the
+document. Administration Manager reviews return to Admin Team leader, where the
+Accommodation supervisor can approve it back to Administration Manager. Director
+and VP reviews return to Administration Manager; their rejection ends at Rejected.
+
+Both forms use the same optional-note and multiple-attachment dialog. Each action
+records its status, role, user, full name, date, note and attachments in Document
+Approval. Existing submitted documents retain their submitted status and are
+assigned Approved during installation of the workflow, without invented audit rows.
+
+Deploy all files, then run from the Bench directory:
+
+```bash
+bench --site admin.cscec.live backup
+bench build --app administration
+bench --site admin.cscec.live migrate
+bench --site admin.cscec.live clear-cache
+bench restart
+```
+
+Hard-refresh Desk to load the shared approval dialog. Migration installs the new
+workflow once and repairs both approval-tab layouts on subsequent migrations.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
