@@ -71,7 +71,13 @@ frappe.ui.form.on("Flat Request", {
 			grid.update_docfield_property("attachments", "formatter", format_approval_attachments);
 			frm.refresh_field("document_approval");
 		}
-		if (frm.doc.docstatus !== 1) {
+		frm.remove_custom_button(__("Add Flat to Contract"));
+		frm.remove_custom_button(__("Create Flat Contract Request"));
+		if (
+			frm.doc.docstatus !== 1 ||
+			frm.doc.workflow_state !== "Approved" ||
+			!frappe.user_roles.includes("Admin supervisor (Accommodation)")
+		) {
 			return;
 		}
 
