@@ -40,6 +40,7 @@ class TestFlat(TestCase):
 			check_permission=Mock(), db_set=Mock(), project="PROJ-1", flat_owner="SUP-1",
 			second_party_name="Owner Name", no_of_rooms=3.0, no_of_beds=0,
 			monthly_rent=1200, deposit=0, payment_cycle="Yearly",
+			contract_start_date="2026-10-01", contract_end_date="2027-09-30",
 			flat_contents=[{"item_name": "Bed", "qty": 0, "name": "old-row"}],
 		)
 		self.frappe.get_doc.return_value = self.source
@@ -65,9 +66,12 @@ class TestFlat(TestCase):
 		flat.flags.creation_action = module._CREATE_FLAT_TOKEN
 		module.Flat.before_insert(flat)
 		self.assertEqual(flat.flat_title, "Building A - Flat 12")
-		self.assertEqual(flat.rent_contract, "FC-001")
+		self.assertEqual(flat.rent_contracts[0]["rent_contract"], "FC-001")
 		self.assertEqual(flat.rent_type, "Direct Rent")
-		self.assertEqual(flat.rent_contract_type, "Flat Contract")
+		self.assertEqual(flat.rent_contracts[0]["rent_contract_type"], "Flat Contract")
+		self.assertEqual(flat.rent_contracts[0]["rent_start_date"], "2026-10-01")
+		self.assertEqual(flat.rent_contracts[0]["rent_end_date"], "2027-09-30")
+		self.assertIsNone(flat.get("rent_start_date"))
 		self.assertIsNone(flat.accommodation_contract)
 		self.assertEqual(flat.party, "SUP-1")
 		self.assertEqual(flat.owner_name, "Owner Name")
@@ -92,7 +96,8 @@ class TestFlat(TestCase):
 		self.assertEqual(flat.rent_type, "Contract")
 		self.assertEqual(flat.party, "SUP-2")
 		self.assertEqual(flat.owner_name, "Free text owner")
-		self.assertIsNone(flat.rent_contract)
+		self.assertIsNone(flat.rent_contracts[0]["rent_contract"])
+		self.assertEqual(flat.rent_contracts[0]["add_flat_to_contract"], self.source.name)
 		contract.check_permission.assert_called_once_with("read")
 
 	def test_accommodation_contract_required_and_not_cancelled(self):

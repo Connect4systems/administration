@@ -9,16 +9,17 @@ def execute():
 	)
 	frappe.clear_cache(doctype="Flat")
 	# Preserve existing Flats that already link to an actual Flat Contract.
-	for flat in frappe.get_all(
-		"Flat",
-		filters={"rent_contract_type": "Flat Contract", "rent_contract": ["is", "set"]},
-		fields=["name", "rent_contract"],
-	):
-		frappe.db.set_value(
-			"Flat", flat.name,
-			{"flat_contract": flat.rent_contract, "rent_type": "Direct Rent"},
-			update_modified=False,
-		)
+	if frappe.db.has_column("Flat", "rent_contract") and frappe.db.has_column("Flat", "rent_contract_type"):
+		for flat in frappe.get_all(
+			"Flat",
+			filters={"rent_contract_type": "Flat Contract", "rent_contract": ["is", "set"]},
+			fields=["name", "rent_contract"],
+		):
+			frappe.db.set_value(
+				"Flat", flat.name,
+				{"flat_contract": flat.rent_contract, "rent_type": "Direct Rent"},
+				update_modified=False,
+			)
 
 	for doctype, source_field in (
 		("Flat Contract", "flat_contract"),

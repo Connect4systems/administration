@@ -20,22 +20,19 @@
   "owner_name",
   "party",
   "owner_details_column",
-  "rent_contract",
   "flat_contract",
   "flat_contract_request",
   "add_flat_to_contract",
-  "rent_contract_type",
   "accommodation_contract",
   "section_break_sxmy",
   "payment_schedule",
   "rent",
   "security_deposit",
-  "column_break_auya",
-  "rent_start_date",
-  "rent_end_date",
   "amended_from",
   "flact_contents_tab",
-  "flat_contents"
+  "flat_contents",
+  "rent_contracts_tab",
+  "rent_contracts"
  ],
  "fields": [
   {
@@ -82,24 +79,10 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "rent_start_date",
-   "fieldtype": "Date",
-   "label": "Rent Start Date"
-  },
-  {
    "fieldname": "payment_schedule",
    "fieldtype": "Select",
    "label": "Payment schedule  ",
    "options": "Daily\nWeekly\nMonthly\nQuarterly\nSemi Annual\nAnnual"
-  },
-  {
-   "fieldname": "column_break_auya",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "rent_end_date",
-   "fieldtype": "Date",
-   "label": "Rent End Date"
   },
   {
    "fieldname": "rent",
@@ -130,18 +113,6 @@
    "label": "Project",
    "options": "Project",
    "reqd": 1
-  },
-  {
-   "fieldname": "rent_contract",
-   "fieldtype": "Dynamic Link",
-   "in_list_view": 1,
-   "in_preview": 1,
-   "in_standard_filter": 1,
-   "label": "Rent Contract",
-   "options": "rent_contract_type",
-   "read_only": 1,
-   "no_copy": 1,
-   "depends_on": "eval:!doc.add_flat_to_contract && !!doc.rent_contract"
   },
   {
    "fieldname": "no_of_beds",
@@ -185,17 +156,7 @@
    "options": "Add Flat to Contract",
    "read_only": 1,
    "no_copy": 1,
-   "depends_on": "eval:!!doc.add_flat_to_contract"
-  },
-  {
-   "fieldname": "rent_contract_type",
-   "fieldtype": "Link",
-   "label": "Rent Contract Type",
-   "options": "DocType",
-   "default": "Flat Contract",
-   "hidden": 1,
-   "read_only": 1,
-   "no_copy": 1
+   "hidden": 1
   },
   {
    "fieldname": "accommodation_contract",
@@ -242,6 +203,19 @@
    "hidden": 1,
    "no_copy": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "rent_contracts_tab",
+   "fieldtype": "Tab Break",
+   "label": "Rent Contracts"
+  },
+  {
+   "fieldname": "rent_contracts",
+   "fieldtype": "Table",
+   "label": "Rent Contracts",
+   "options": "Flat Rent Contract",
+   "read_only": 1,
+   "no_copy": 1
   }
  ],
  "grid_page_length": 50,

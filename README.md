@@ -84,6 +84,15 @@ attachment links. The existing Legal User/Legal Manager attachment restriction
 also applies to attachments in the workflow dialog. Deploy and run the build,
 migrate, cache-clear and restart commands above, then hard-refresh Desk.
 
+### Flat rent contract table
+
+Flat now ends with a Rent Contracts table. Direct Rent shows Rent Contract, Rent
+Start Date and Rent End Date; Contract shows Add Flat to Contract and the two dates.
+Create Flat fills this table from the source contract. Migration preserves legacy
+references and dates without duplicating rows. Source links used to enforce one
+Flat per source remain hidden internal fields; the duplicate visible fields are
+removed. Deploy all files and run migration before opening Flat forms.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:

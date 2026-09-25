@@ -29,9 +29,14 @@ class Flat(Document):
 			self.rent_type = "Direct Rent"
 		previous = self.get_doc_before_save()
 		if previous:
-			for field in ("flat_contract", "flat_contract_request", "add_flat_to_contract", "rent_contract", "rent_contract_type", "accommodation_contract"):
+			for field in ("flat_contract", "flat_contract_request", "add_flat_to_contract", "accommodation_contract"):
 				if (self.get(field) or "") != (previous.get(field) or ""):
 					frappe.throw(_("The Flat's source and contract cannot be changed."))
+			fields = ("rent_contract_type", "rent_contract", "add_flat_to_contract", "rent_start_date", "rent_end_date")
+			def contracts(doc):
+				return [tuple(str(row.get(field) or "") for field in fields) for row in doc.get("rent_contracts") or []]
+			if contracts(self) != contracts(previous):
+				frappe.throw(_("The Flat's rent contracts cannot be changed manually."))
 		if self.get("accommodation_contract"):
 			self.party = frappe.db.get_value("Accommodation Contract", self.accommodation_contract, "party")
 		elif self.get("flat_contract"):
@@ -71,13 +76,19 @@ def _set_source_values(flat, source):
 		"city": "city",
 		"address": "address",
 		"no_of_beds": "no_of_beds",
-		"rent_start_date": "contract_start_date",
-		"rent_end_date": "contract_end_date",
 		"rent": "monthly_rent",
 		"security_deposit": "deposit",
 	}.items():
 		flat.set(target, source.get(origin))
 	flat.flat_title = flat_name
+	flat.set("rent_contracts", [])
+	flat.append("rent_contracts", {
+		"rent_contract_type": "Flat Contract",
+		"rent_contract": source.name if source.doctype == "Flat Contract" else None,
+		"add_flat_to_contract": source.name if source.doctype == "Add Flat to Contract" else None,
+		"rent_start_date": source.get("contract_start_date"),
+		"rent_end_date": source.get("contract_end_date"),
+	})
 	rooms = source.get("no_of_rooms")
 	flat.no_of_room = str(int(rooms)) if rooms is not None and float(rooms).is_integer() else str(rooms or "")
 	flat.payment_schedule = "Annual" if source.payment_cycle == "Yearly" else source.payment_cycle
@@ -93,14 +104,11 @@ def _set_source_values(flat, source):
 		if contract.docstatus == 2:
 			frappe.throw(_("The Accommodation Contract is cancelled."))
 		flat.accommodation_contract = contract.name
-		flat.rent_contract = None
 		flat.flat_contract_request = None
 		flat.party = contract.party
 		flat.owner_name = source.flat_owner
 	else:
 		flat.rent_type = "Direct Rent"
-		flat.rent_contract_type = "Flat Contract"
-		flat.rent_contract = source.name
 		flat.flat_contract_request = source.get("flat_contract_request")
 		flat.accommodation_contract = None
 		flat.party = source.flat_owner
