@@ -39,4 +39,4 @@ class TestFlatRequestLayout(TestCase):
 			self.assertEqual(fields[-3:], list(layout.APPROVAL_FIELDS))
 		child = json.loads((root / "doctype/flat_request_approval/flat_request_approval.json").read_text())
 		visible = {row["fieldname"] for row in child["fields"] if row.get("in_list_view")}
-		self.assertEqual(visible, {"status", "approved_by_role", "approved_by_user", "user_name", "action_date", "note"})
+		self.assertEqual(visible, {"status", "approved_by_role", "approved_by_user", "user_name", "action_date", "note", "attachments"})

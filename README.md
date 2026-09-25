@@ -37,7 +37,11 @@ then `bench --site admin.cscec.live clear-cache` and `bench restart`.
 Hard-refresh the Flat Request form after deployment. The migration repairs the
 approval tab layout after saved customizations are synchronized, and keeps it
 visible before the first workflow action. Existing approval rows are retained.
-The table shows status, approving role, user, full name, date and note.
+The table shows status, approving role, user, full name, date, note and attachments.
+Workflow notes are optional. Use **Attach Files** in the action dialog, upload one
+or more files, then confirm. Attachment links are recorded on that action's
+approval row. Uploaded files remain attached to the request if the action is
+cancelled, but no approval row is created.
 
 ### Contributing
 

@@ -12,6 +12,7 @@
   "user_name",
   "action_date",
   "note",
+  "attachments",
   "action",
   "from_status"
  ],
@@ -22,7 +23,7 @@
    "fieldtype": "Data",
    "read_only": 1,
    "in_list_view": 1,
-   "columns": 2
+   "columns": 1
   },
   {
    "fieldname": "approved_by_role",
@@ -31,7 +32,7 @@
    "read_only": 1,
    "options": "Role",
    "in_list_view": 1,
-   "columns": 2
+   "columns": 1
   },
   {
    "fieldname": "approved_by_user",
@@ -77,6 +78,14 @@
    "label": "Previous Status",
    "fieldtype": "Data",
    "read_only": 1
+  },
+  {
+   "fieldname": "attachments",
+   "label": "Attachments",
+   "fieldtype": "Long Text",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 2
   }
  ],
  "permissions": [],

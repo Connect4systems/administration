@@ -1,5 +1,7 @@
 """Flat Request workflow configuration and server-owned approval history."""
 
+import json
+
 import frappe
 from frappe import _
 from frappe.model.workflow import apply_workflow as core_apply_workflow
@@ -38,7 +40,7 @@ STATES = (
 )
 HISTORY_FIELDS = (
 	"name", "status", "from_status", "action", "approved_by_role",
-	"approved_by_user", "user_name", "action_date", "note",
+	"approved_by_user", "user_name", "action_date", "note", "attachments",
 )
 _APPROVAL_TOKEN = object()
 
@@ -48,9 +50,9 @@ def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
 	if payload.get("doctype") != "Flat Request":
 		return core_apply_workflow(doc, action)
-	note = payload.get("__approval_note")
-	if not isinstance(note, str) or not note.strip():
-		frappe.throw(_("Enter a note using the workflow action on the Flat Request form."))
+	note = payload.get("__approval_note") or ""
+	if not isinstance(note, str):
+		frappe.throw(_("Note must be text."))
 	current = frappe.get_doc("Flat Request", payload.get("name"), for_update=True)
 	current.check_permission("read")
 	workflow = get_workflow("Flat Request")
@@ -60,17 +62,34 @@ def apply_workflow(doc, action):
 	transition = next((row for row in get_transitions(current, workflow) if row.action == action), None)
 	if not transition or not has_approval_access(frappe.session.user, current, transition):
 		frappe.throw(_("You are not allowed to take this workflow action."), frappe.PermissionError)
+	attachments = get_approval_attachments(payload.get("__approval_attachments"), current.name)
 	previous_context = frappe.flags.get("flat_request_approval")
 	frappe.flags.flat_request_approval = {
 		"token": _APPROVAL_TOKEN, "name": current.name,
 		"from_status": current.get(state_field), "status": transition.next_state,
 		"action": action, "approved_by_role": transition.allowed, "note": note.strip(),
+		"attachments": attachments,
 	}
 	try:
 		# Frappe still validates the workflow, permissions and submission lifecycle.
 		return core_apply_workflow(current.as_dict(), action)
 	finally:
 		frappe.flags.flat_request_approval = previous_context
+
+
+def get_approval_attachments(file_names, request_name):
+	if file_names is None:
+		return ""
+	if not isinstance(file_names, list) or any(not isinstance(name, str) or not name for name in file_names):
+		frappe.throw(_("Invalid approval attachments."))
+	attachments = []
+	for name in dict.fromkeys(file_names):
+		file = frappe.get_doc("File", name)
+		file.check_permission("read")
+		if file.attached_to_doctype != "Flat Request" or file.attached_to_name != request_name:
+			frappe.throw(_("Approval attachments must belong to this Flat Request."))
+		attachments.append({"name": file.name, "file_name": file.file_name})
+	return json.dumps(attachments, ensure_ascii=False) if attachments else ""
 
 
 def validate_approval_history(doc):
@@ -92,7 +111,7 @@ def validate_approval_history(doc):
 		or context.get("from_status") != old_state
 		or context.get("status") != new_state
 	):
-		frappe.throw(_("Use a workflow action and enter a note to change the request status."))
+		frappe.throw(_("Use a workflow action to change the request status."))
 	doc.append("document_approval", {
 		field: context[field]
 		for field in ("status", "from_status", "action", "approved_by_role", "note")
@@ -100,6 +119,7 @@ def validate_approval_history(doc):
 		"approved_by_user": frappe.session.user,
 		"user_name": frappe.db.get_value("User", frappe.session.user, "full_name") or frappe.session.user,
 		"action_date": now_datetime(),
+		"attachments": context.get("attachments", ""),
 	})
 
 
@@ -111,7 +131,7 @@ def require_workflow_submission(doc):
 		or context.get("status") != doc.get("workflow_state")
 		or doc.get("workflow_state") not in ("Approved", "Settled")
 	):
-		frappe.throw(_("Submit this request through an approval workflow action with a note."))
+		frappe.throw(_("Submit this request through an approval workflow action."))
 
 
 def setup_workflow():

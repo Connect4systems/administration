@@ -1,3 +1,4 @@
+import json
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
@@ -45,8 +46,8 @@ class TestFlatRequestWorkflow(TestCase):
 			self.assertEqual(workflow.apply_workflow({"doctype": "Purchase Order"}, "Approve"), "unchanged")
 			core.assert_called_once_with({"doctype": "Purchase Order"}, "Approve")
 
-	def test_note_is_required(self):
-		for note in (None, "", "   ", {}):
+	def test_non_text_note_is_rejected(self):
+		for note in (["invalid"], 123):
 			self.payload["__approval_note"] = note
 			with self.subTest(note=note), self.assertRaises(ValueError):
 				workflow.apply_workflow(self.payload, "Approve")
@@ -57,6 +58,40 @@ class TestFlatRequestWorkflow(TestCase):
 		with patch.object(workflow, "get_workflow", return_value=Record(workflow_state_field="workflow_state")):
 			with self.assertRaises(ValueError):
 				workflow.apply_workflow(self.payload, "Approve")
+
+	def test_blank_notes_are_allowed(self):
+		transition = Record(action="Approve", allowed="Project Manager", next_state="Admin Team leader")
+		with patch.object(workflow, "get_workflow", return_value=Record(workflow_state_field="workflow_state")), \
+			patch.object(workflow, "get_transitions", return_value=[transition]), \
+			patch.object(workflow, "has_approval_access", return_value=True), \
+			patch.object(workflow, "core_apply_workflow", side_effect=lambda *_: self.frappe.flags.flat_request_approval["note"]):
+			for note in (None, "", "   "):
+				self.payload["__approval_note"] = note
+				self.assertEqual(workflow.apply_workflow(self.payload, "Approve"), "")
+
+	def test_multiple_attachments_are_checked_and_deduplicated(self):
+		files = [Record(name=name, file_name=name + ".pdf", attached_to_doctype="Flat Request",
+			attached_to_name="FRQ-001", check_permission=Mock()) for name in ("file-1", "file-2")]
+		self.frappe.get_doc.side_effect = files
+		value = workflow.get_approval_attachments(["file-1", "file-2", "file-1"], "FRQ-001")
+		self.assertEqual(json.loads(value), [{"name": file.name, "file_name": file.file_name} for file in files])
+		for file in files:
+			file.check_permission.assert_called_once_with("read")
+		self.assertEqual(workflow.get_approval_attachments([], "FRQ-001"), "")
+
+	def test_unrelated_and_invalid_attachments_are_rejected(self):
+		self.frappe.get_doc.return_value = Record(attached_to_doctype="Flat Request",
+			attached_to_name="OTHER", check_permission=Mock())
+		for value in (["file-1"], "file-1", [{}]):
+			with self.subTest(value=value), self.assertRaises(ValueError):
+				workflow.get_approval_attachments(value, "FRQ-001")
+
+	def test_attachment_history_cannot_be_changed(self):
+		previous = Record(workflow_state="Draft", document_approval=[Record(attachments="original")])
+		doc = Record(workflow_state="Draft", document_approval=[Record(attachments="changed")])
+		doc.get_doc_before_save = lambda: previous
+		with self.assertRaises(ValueError):
+			workflow.validate_approval_history(doc)
 
 	def test_disallowed_role_and_self_approval_are_rejected(self):
 		transition = Record(action="Approve", allowed="Project Manager", next_state="Admin Team leader")
@@ -84,7 +119,7 @@ class TestFlatRequestWorkflow(TestCase):
 		self.assertEqual(doc.document_approval, [{
 			"status": "Admin Team leader", "from_status": "Pending Project Manger", "action": "Approve",
 			"approved_by_role": "Project Manager", "approved_by_user": "manager@example.com",
-			"user_name": "Test Manager", "action_date": "server time", "note": "Reviewed",
+			"user_name": "Test Manager", "action_date": "server time", "note": "Reviewed", "attachments": "",
 		}])
 		self.assertIsNone(self.frappe.flags.flat_request_approval)
 		self.frappe.get_doc.assert_called_once_with("Flat Request", "FRQ-001", for_update=True)
