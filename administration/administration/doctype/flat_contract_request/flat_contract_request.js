@@ -97,7 +97,7 @@ const build_default_terms = (doc) => [
 frappe.ui.form.on("Flat Contract Request", {
 	refresh(frm) {
 		frm.remove_custom_button(__("Create Flat Contract"));
-		if (frm.doc.docstatus !== 1 || !frappe.user_roles.includes("Legal User")) {
+		if (frm.doc.docstatus !== 1 || frm.doc.lifecycle_applied || !frappe.user_roles.includes("Legal User")) {
 			return;
 		}
 
@@ -145,6 +145,7 @@ frappe.ui.form.on("Flat Contract Request", {
 				});
 
 				contract.flat_contract_request = frm.doc.name;
+				for (const key of ["type", "flat", "last_rent_contract"]) contract[key] = frm.doc[key];
 				contract.flat_request = frm.doc.flat_request || "";
 				contract.first_party_name = "CSCEC International Egypt for Construction Company Co., LTD s.s.c";
 				contract.first_party_address = "3rd Floor, The NOX Mall, Third Sector, North 90th Street, Fifth Settlement, New Cairo, Cairo";

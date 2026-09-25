@@ -94,8 +94,10 @@ after_install = [
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",
     "administration.flat_request_layout.ensure_flat_contract_approval_layout",
+    "administration.flat_lifecycle_setup.install",
 ]
 after_migrate = [
+    "administration.flat_lifecycle_setup.ensure_layouts",
     "administration.flat_request_layout.ensure_flat_contract_approval_layout",
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_layout.ensure_approval_layout",
@@ -159,8 +161,35 @@ override_doctype_class = {
 
 doc_events = {
     "Flat Contract": {
-        "validate": "administration.flat_contract_attachments.validate_contract_attachments",
-        "before_update_after_submit": "administration.flat_contract_attachments.validate_contract_attachments",
+        "validate": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
+        "before_update_after_submit": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
+        "on_submit": "administration.flat_lifecycle.apply_renewal",
+        "on_update": "administration.flat_lifecycle.workflow_updated",
+        "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
+        "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
+    },
+    "Flat Request": {
+        "validate": "administration.flat_lifecycle.validate_document",
+        "before_update_after_submit": "administration.flat_lifecycle.validate_document",
+        "after_insert": "administration.flat_lifecycle.reserve_request",
+        "on_update": "administration.flat_lifecycle.workflow_updated",
+        "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
+        "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
+    },
+    "Flat Contract Request": {
+        "validate": "administration.flat_lifecycle.validate_document",
+        "before_update_after_submit": "administration.flat_lifecycle.validate_document",
+        "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
+        "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
+    },
+    "Add Flat to Contract": {
+        "validate": "administration.flat_lifecycle.validate_document",
+        "before_update_after_submit": "administration.flat_lifecycle.validate_document",
+        "after_insert": "administration.flat_lifecycle.reserve_request",
+        "on_submit": "administration.flat_lifecycle.apply_renewal",
+        "on_update": "administration.flat_lifecycle.workflow_updated",
+        "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
+        "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
     },
     "Employee": {
         "validate": "administration.employee.validate_accommodation_status",
@@ -182,6 +211,7 @@ doc_events = {
 
 # Scheduled Tasks
 # ---------------
+scheduler_events = {"daily": ["administration.flat_lifecycle.expire_flats"]}
 
 # scheduler_events = {
 # 	"all": [

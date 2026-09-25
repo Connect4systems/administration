@@ -8,6 +8,10 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
+  "type",
+  "flat",
+  "last_rent_contract",
+  "lifecycle_applied",
   "project",
   "no_of_employees",
   "governorate",
@@ -165,6 +169,39 @@
    "fieldname": "document_approval_help",
    "fieldtype": "HTML",
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  },
+  {
+   "fieldname": "type",
+   "label": "Type",
+   "fieldtype": "Select",
+   "options": "New Flat\nRenew",
+   "default": "New Flat",
+   "reqd": 1
+  },
+  {
+   "fieldname": "flat",
+   "label": "Flat",
+   "fieldtype": "Link",
+   "options": "Flat",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "last_rent_contract",
+   "label": "Last Rent Contract",
+   "fieldtype": "Link",
+   "options": "Flat Contract",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "lifecycle_applied",
+   "fieldtype": "Check",
+   "label": "Renewal Applied",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,

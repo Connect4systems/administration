@@ -93,6 +93,60 @@ references and dates without duplicating rows. Source links used to enforce one
 Flat per source remain hidden internal fields; the duplicate visible fields are
 removed. Deploy all files and run migration before opening Flat forms.
 
+### Flat renewals, termination and expiration
+
+Submitted Flats now offer **Renew** and **Terminate**, subject to the destination
+DocType's create permission. The action saves a draft immediately to reserve the
+Flat; fill any remaining mandatory fields before requesting approval.
+
+| Rent Type | Renew | Terminate |
+| --- | --- | --- |
+| Direct Rent | Flat Request → Flat Contract Request → Flat Contract | Rent Termination Request |
+| Contract | Add Flat to Contract | Flat Termination |
+
+Renewals carry Type = Renew, the existing Flat and the latest approved contract
+reference. The latest contract is chosen by rental start date, then end date and
+reference for ties, rather than grid position. Final renewal approval updates the
+existing Flat, preserves its name and original source, appends the new rent row,
+and updates rental/owner information and contents. Renewal contracts cannot create
+another Flat. Direct renewal requests stay reserved throughout the request and
+contract stages. Completed processes cannot be cancelled or deleted.
+
+Rent Termination Request uses the legal approval chain and is created by Legal
+User. Flat Termination uses the Add Flat to Contract approval chain. Each includes
+a Flat snapshot, contract history, Legal Note and Document Approval. Final approval
+sets the Flat Inactive and the targeted contract's separate Contract Status to
+Terminated, retaining the submitted document and its approval history. The Flat's
+rooms, beds and employee assignments are not deleted by termination.
+
+Only one pending renewal/termination is allowed per Flat. Server checks reserve
+the Flat under a database row lock and reject stale contract references. Rejected,
+settled, deleted or cancelled requests release their reservation; upstream
+requests with live successors must be closed from the downstream end first.
+
+The daily `administration.flat_lifecycle.expire_flats` job recomputes Flat Status
+and Last Rent End Date from approved, non-terminated rental rows. The final rent
+day is covered; expiration starts the following day. Future renewals do not cover
+gaps; an Expired Flat becomes Active when approved coverage begins. Inactive Flats
+stay Inactive and cannot start another action. Legacy rows without sufficient
+dates are retained without inventing an expiration date.
+
+Deploy the full revision and run:
+
+```bash
+bench --site admin.cscec.live backup
+bench build --app administration
+bench --site admin.cscec.live migrate
+bench --site admin.cscec.live clear-cache
+bench --site admin.cscec.live enable-scheduler
+bench restart
+```
+
+Hard-refresh Desk. Confirm that scheduler/workers are running. For an immediate
+coverage check, run `bench --site admin.cscec.live execute administration.flat_lifecycle.expire_flats`.
+The migration installs the two new workflows, grants participants read access to
+Flat, initializes blank lifecycle fields and performs an initial coverage check.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:

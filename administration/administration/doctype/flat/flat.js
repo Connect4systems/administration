@@ -13,5 +13,25 @@ frappe.ui.form.on("Flat", {
 			frm.disable_save();
 			frm.set_intro(__("Create a Flat using the Create Flat button on a submitted Flat Contract or Add Flat to Contract."));
 		}
+		frm.remove_custom_button(__("Renew"));
+		frm.remove_custom_button(__("Terminate"));
+		if (frm.doc.docstatus === 1 && frm.doc.flat_status !== "Inactive") {
+			for (const action of ["Renew", "Terminate"]) {
+				const direct = frm.doc.rent_type === "Direct Rent";
+				const target = action === "Renew" ? (direct ? "Flat Request" : "Add Flat to Contract") : (direct ? "Rent Termination Request" : "Flat Termination");
+				if (!frappe.model.can_create(target)) continue;
+				frm.add_custom_button(__(action), async () => {
+					if (frm.is_dirty()) {
+						frappe.msgprint(__("Save the Flat before starting an action."));
+						return;
+					}
+					const result = await frappe.call({
+						method: "administration.flat_lifecycle.start_action",
+						args: {flat_name: frm.doc.name, action}, freeze: true,
+					});
+					if (result.message) frappe.set_route("Form", result.message.doctype, result.message.name);
+				});
+			}
+		}
 	},
 });

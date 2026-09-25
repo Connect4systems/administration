@@ -23,6 +23,10 @@ class Flat(Document):
 		_set_source_values(self, source)
 
 	def validate(self):
+		from administration.flat_lifecycle import _FLAT_UPDATE, validate_flat_update
+		validate_flat_update(self)
+		if self.flags.get("lifecycle_update") is _FLAT_UPDATE:
+			return
 		if self.get("add_flat_to_contract"):
 			self.rent_type = "Contract"
 		elif self.get("flat_contract") or self.get("flat_contract_request"):
@@ -40,9 +44,22 @@ class Flat(Document):
 		if self.get("accommodation_contract"):
 			self.party = frappe.db.get_value("Accommodation Contract", self.accommodation_contract, "party")
 		elif self.get("flat_contract"):
-			self.party = frappe.db.get_value("Flat Contract", self.flat_contract, "flat_owner")
+			contract = self.flat_contract
+			if len(self.get("rent_contracts") or []) > 1:
+				from administration.flat_lifecycle import approved_rows, latest_row, row_reference
+				latest = latest_row(approved_rows(self))
+				if latest:
+					contract = row_reference(latest)[1]
+			self.party = frappe.db.get_value("Flat Contract", contract, "flat_owner")
 		elif self.get("flat_contract_request"):
 			self.party = frappe.db.get_value("Flat Contract Request", self.flat_contract_request, "flat_owner")
+
+	def before_update_after_submit(self):
+		self.validate()
+
+	def on_submit(self):
+		from administration.flat_lifecycle import update_flat_status
+		update_flat_status(self)
 
 
 def _get_source(flat, for_update=False):
@@ -55,6 +72,10 @@ def _get_source(flat, for_update=False):
 		frappe.throw(_("Create a Flat from a Flat Contract or Add Flat to Contract."))
 	source = frappe.get_doc(*sources[0], for_update=for_update)
 	source.check_permission("read")
+	if source.get("type") == "Renew":
+		frappe.throw(_("Renewal approval updates the existing Flat; it cannot create another Flat."))
+	if source.get("contract_status") == "Terminated":
+		frappe.throw(_("A terminated contract cannot create a Flat."))
 	if source.docstatus != 1:
 		frappe.throw(_("Submit the source document before creating a Flat."))
 	return source

@@ -6,6 +6,10 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "type",
+  "flat",
+  "last_rent_contract",
+  "lifecycle_applied",
   "project",
   "flat_request",
   "monthly_rent",
@@ -27,7 +31,6 @@
   "bank",
   "iban",
   "ownership_documentation",
-  "type",
   "section_break_pvie",
   "governorate",
   "city",
@@ -288,7 +291,34 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "New Flat\nRenew"
+   "options": "New Flat\nRenew",
+   "default": "New Flat",
+   "reqd": 1
+  },
+  {
+   "fieldname": "flat",
+   "label": "Flat",
+   "fieldtype": "Link",
+   "options": "Flat",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "last_rent_contract",
+   "label": "Last Rent Contract",
+   "fieldtype": "Link",
+   "options": "Flat Contract",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "lifecycle_applied",
+   "fieldtype": "Check",
+   "label": "Renewal Applied",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,

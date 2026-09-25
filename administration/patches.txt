@@ -17,3 +17,4 @@ administration.patches.setup_add_flat_to_contract_workflow
 administration.patches.setup_legal_attachment_roles
 administration.patches.setup_flat_contract_workflow
 administration.patches.move_flat_rent_details_to_table
+administration.patches.setup_flat_lifecycle

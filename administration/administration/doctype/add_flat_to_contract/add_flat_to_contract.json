@@ -7,6 +7,11 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
+  "type",
+  "flat",
+  "last_add_flat_to_contract",
+  "lifecycle_applied",
+  "contract_status",
   "project",
   "flat_title",
   "monthly_rent",
@@ -290,6 +295,49 @@
   {
    "fieldname": "column_break_umid",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type",
+   "label": "Type",
+   "fieldtype": "Select",
+   "options": "New Flat\nRenew",
+   "default": "New Flat",
+   "reqd": 1
+  },
+  {
+   "fieldname": "flat",
+   "label": "Flat",
+   "fieldtype": "Link",
+   "options": "Flat",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "last_add_flat_to_contract",
+   "label": "Last Add Flat to Contract",
+   "fieldtype": "Link",
+   "options": "Add Flat to Contract",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "lifecycle_applied",
+   "fieldtype": "Check",
+   "label": "Renewal Applied",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "contract_status",
+   "label": "Contract Status",
+   "fieldtype": "Select",
+   "options": "Active\nTerminated",
+   "default": "Active",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "in_list_view": 1
   }
  ],
  "grid_page_length": 50,

@@ -154,7 +154,7 @@
    "property": "field_order",
    "property_type": "Data",
    "row_name": null,
-   "value": "[\"request_details_tab\", \"workflow_state\", \"project\", \"no_of_employees\", \"governorate\", \"city\", \"area\", \"address\", \"column_break_cdrx\", \"date\", \"monthly_rent\", \"rent_period\", \"payment_cycle\", \"deposit\", \"commission\", \"custom_no_of_rooms\", \"custom_no_of_beds\", \"flat_owner\", \"section_break_epdd\", \"employee\", \"amended_from\", \"naming_series\", \"document_approval_tab\", \"document_approval_help\", \"document_approval\"]"
+   "value": "[\"request_details_tab\", \"type\", \"flat\", \"last_rent_contract\", \"lifecycle_applied\", \"workflow_state\", \"project\", \"no_of_employees\", \"governorate\", \"city\", \"area\", \"address\", \"column_break_cdrx\", \"date\", \"monthly_rent\", \"rent_period\", \"payment_cycle\", \"deposit\", \"commission\", \"custom_no_of_rooms\", \"custom_no_of_beds\", \"flat_owner\", \"section_break_epdd\", \"employee\", \"amended_from\", \"naming_series\", \"document_approval_tab\", \"document_approval_help\", \"document_approval\"]"
   }
  ],
  "sync_on_migrate": 1

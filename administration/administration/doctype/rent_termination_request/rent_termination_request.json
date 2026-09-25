@@ -1,0 +1,282 @@
+{
+ "doctype": "DocType",
+ "name": "Rent Termination Request",
+ "module": "Administration",
+ "autoname": "naming_series:naming_series",
+ "is_submittable": 1,
+ "field_order": [
+  "request_details_tab",
+  "flat",
+  "date",
+  "last_rent_contract",
+  "last_add_flat_to_contract",
+  "legal_note",
+  "lifecycle_applied",
+  "naming_series",
+  "flat_snapshot_section",
+  "flat_title",
+  "governorate",
+  "address",
+  "owner_name",
+  "no_of_room",
+  "payment_schedule",
+  "rent",
+  "security_deposit",
+  "project",
+  "no_of_beds",
+  "city",
+  "flat_contents",
+  "accommodation_contract",
+  "party",
+  "rent_type",
+  "rent_contracts",
+  "flat_status",
+  "last_rent_end_date",
+  "document_approval_tab",
+  "document_approval",
+  "document_approval_help"
+ ],
+ "fields": [
+  {
+   "fieldname": "request_details_tab",
+   "label": "Termination Details",
+   "fieldtype": "Tab Break"
+  },
+  {
+   "fieldname": "flat",
+   "label": "Flat",
+   "fieldtype": "Link",
+   "options": "Flat",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "date",
+   "label": "Date",
+   "fieldtype": "Date",
+   "default": "Today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "last_rent_contract",
+   "label": "Last Rent Contract",
+   "fieldtype": "Link",
+   "options": "Flat Contract",
+   "read_only": 1,
+   "hidden": 0
+  },
+  {
+   "fieldname": "last_add_flat_to_contract",
+   "label": "Last Add Flat to Contract",
+   "fieldtype": "Link",
+   "options": "Add Flat to Contract",
+   "read_only": 1,
+   "hidden": 1
+  },
+  {
+   "fieldname": "legal_note",
+   "label": "Legal Note",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "lifecycle_applied",
+   "fieldtype": "Check",
+   "label": "Termination Applied",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "RTR-.YY.-.#####",
+   "default": "RTR-.YY.-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "flat_snapshot_section",
+   "fieldtype": "Section Break",
+   "label": "Flat Information"
+  },
+  {
+   "fieldname": "flat_title",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Flat Title",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "governorate",
+   "fieldtype": "Link",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Governorate",
+   "options": "Governorate",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "owner_name",
+   "fieldtype": "Data",
+   "label": "Owner name",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "no_of_room",
+   "fieldtype": "Select",
+   "label": "No of Room",
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "payment_schedule",
+   "fieldtype": "Select",
+   "label": "Payment schedule  ",
+   "options": "Daily\nWeekly\nMonthly\nQuarterly\nSemi Annual\nAnnual",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "rent",
+   "fieldtype": "Currency",
+   "label": "Rent",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "security_deposit",
+   "fieldtype": "Currency",
+   "label": "Security Deposit",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "no_of_beds",
+   "fieldtype": "Float",
+   "label": "No Of Beds",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "flat_contents",
+   "fieldtype": "Table",
+   "label": "Flat Contents",
+   "options": "Flat Contents",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "accommodation_contract",
+   "fieldtype": "Link",
+   "label": "Accommodation Contract",
+   "no_copy": 1,
+   "options": "Accommodation Contract",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Link",
+   "label": "Party",
+   "no_copy": 1,
+   "options": "Supplier",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "rent_type",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Rent Type",
+   "no_copy": 1,
+   "options": "\nDirect Rent\nContract",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "rent_contracts",
+   "fieldtype": "Table",
+   "label": "Rent Contracts",
+   "no_copy": 1,
+   "options": "Flat Rent Contract",
+   "read_only": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "flat_status",
+   "label": "Flat Status",
+   "fieldtype": "Select",
+   "options": "Active\nInactive\nExpired",
+   "default": "Active",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "in_standard_filter": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "last_rent_end_date",
+   "label": "Last Rent End Date",
+   "fieldtype": "Date",
+   "read_only": 1,
+   "allow_on_submit": 1,
+   "reqd": 0
+  },
+  {
+   "fieldname": "document_approval_tab",
+   "fieldtype": "Tab Break",
+   "label": "Document Approval"
+  },
+  {
+   "fieldname": "document_approval",
+   "fieldtype": "Table",
+   "label": "Workflow Approval",
+   "options": "Flat Request Approval",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "document_approval_help",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  }
+ ],
+ "permissions": [
+  {
+   "role": "Legal User",
+   "read": 1,
+   "write": 1,
+   "create": 1
+  }
+ ]
+}

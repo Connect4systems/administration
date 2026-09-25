@@ -11,12 +11,13 @@ frappe.ui.form.on("Flat Request", {
 		if (
 			frm.doc.docstatus !== 1 ||
 			frm.doc.workflow_state !== "Approved" ||
+			frm.doc.lifecycle_applied ||
 			!frappe.user_roles.includes("Admin supervisor (Accommodation)")
 		) {
 			return;
 		}
 
-		frm.add_custom_button(__("Add Flat to Contract"), async () => {
+		if (frm.doc.type !== "Renew") frm.add_custom_button(__("Add Flat to Contract"), async () => {
 			const supplier = frm.doc.flat_owner
 				? (await frappe.db.get_value("Supplier", frm.doc.flat_owner, [
 					"supplier_name", "custom_legal_name",
@@ -65,6 +66,7 @@ frappe.ui.form.on("Flat Request", {
 				);
 				const contract_values = {};
 				contract_values.flat_request = frm.doc.name;
+				for (const key of ["type", "flat", "last_rent_contract"]) contract_values[key] = frm.doc[key];
 
 				frm.meta.fields.forEach((field) => {
 					const target_field = contract_fields.has(field.fieldname)
