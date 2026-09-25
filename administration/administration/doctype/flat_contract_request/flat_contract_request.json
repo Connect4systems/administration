@@ -7,7 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "project",
-  "flat_rent_request",
+  "flat_request",
   "monthly_rent",
   "deposit",
   "insurance",
@@ -49,10 +49,10 @@
  ],
  "fields": [
   {
-   "fieldname": "flat_rent_request",
+   "fieldname": "flat_request",
    "fieldtype": "Link",
-   "label": "Flat Rent Request",
-   "options": "Flat Rent Request",
+   "label": "Flat Request",
+   "options": "Flat Request",
    "read_only": 1
   },
   {
@@ -288,7 +288,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-24 20:16:09.550175",
+ "modified": "2026-09-25 16:24:03.908749",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract Request",

@@ -144,7 +144,7 @@ frappe.ui.form.on("Flat Contract Request", {
 				});
 
 				contract.flat_contract_request = frm.doc.name;
-				contract.flat_rent_request = frm.doc.flat_rent_request || "";
+				contract.flat_request = frm.doc.flat_request || "";
 				contract.first_party_name = "CSCEC International Egypt for Construction Company Co., LTD s.s.c";
 				contract.first_party_address = "3rd Floor, The NOX Mall, Third Sector, North 90th Street, Fifth Settlement, New Cairo, Cairo";
 				contract.first_party_representative = "Authorized Manager";

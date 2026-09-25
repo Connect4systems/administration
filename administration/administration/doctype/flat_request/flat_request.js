@@ -1,7 +1,7 @@
 // Copyright (c) 2025, Connect 4 Systems and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Flat Rent Request", {
+frappe.ui.form.on("Flat Request", {
 	refresh(frm) {
 		if (frm.doc.docstatus !== 1) {
 			return;
@@ -40,7 +40,7 @@ frappe.ui.form.on("Flat Rent Request", {
 						target[field.fieldname] = frm.doc[source.fieldname];
 					}
 				});
-				target.flat_rent_request = frm.doc.name;
+				target.flat_request = frm.doc.name;
 				target.flat_owner = supplier.supplier_name || target.flat_owner || "";
 				target.flat_owner_name = target.flat_owner;
 				target.legal_name = target.legal_name || supplier.custom_legal_name || "";
@@ -55,14 +55,19 @@ frappe.ui.form.on("Flat Rent Request", {
 					contract_meta.fields.map((field) => field.fieldname)
 				);
 				const contract_values = {};
-				contract_values.flat_rent_request = frm.doc.name;
+				contract_values.flat_request = frm.doc.name;
 
 				frm.meta.fields.forEach((field) => {
+					const target_field = contract_fields.has(field.fieldname)
+						? field.fieldname
+						: field.fieldname.replace(/^custom_/, "");
 					if (
-						contract_fields.has(field.fieldname) &&
-						!["Column Break", "Section Break", "Table"].includes(field.fieldtype)
+						contract_fields.has(target_field) &&
+						!field.no_copy &&
+						!["naming_series", "amended_from"].includes(target_field) &&
+						!["Column Break", "Section Break", "Tab Break", "Table", "Table MultiSelect", "HTML", "Button"].includes(field.fieldtype)
 					) {
-						contract_values[field.fieldname] = frm.doc[field.fieldname];
+						contract_values[target_field] = frm.doc[field.fieldname];
 					}
 				});
 

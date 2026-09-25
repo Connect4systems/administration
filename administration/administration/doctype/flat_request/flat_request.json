@@ -97,13 +97,13 @@
    "fieldtype": "Currency",
    "label": "Commission"
   },
-    {
-     "fieldname": "flat_owner",
-     "fieldtype": "Link",
-     "label": "Flat Owner",
-     "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
-     "options": "Supplier"
-    },
+  {
+   "fieldname": "flat_owner",
+   "fieldtype": "Link",
+   "label": "Flat Owner",
+   "link_filters": "[[\"Supplier\",\"supplier_group\",\"=\",\"Flat Owner\"]]",
+   "options": "Supplier"
+  },
   {
    "fieldname": "section_break_epdd",
    "fieldtype": "Section Break"
@@ -127,7 +127,7 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Flat Rent Request",
+   "options": "Flat Request",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
@@ -143,10 +143,10 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-16 13:58:24.833578",
+ "modified": "2026-09-25 16:24:03.911709",
  "modified_by": "Administrator",
  "module": "Administration",
- "name": "Flat Rent Request",
+ "name": "Flat Request",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

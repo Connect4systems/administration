@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class FlatRentRequest(Document):
+class FlatRequest(Document):
 	pass

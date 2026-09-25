@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Rent Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"1lvo9sn23L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"AHlpsqc5NG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":4}},{\"id\":\"4hVFsJa0va\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":4}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PCCpKNDpz8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}}]",
+ "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"1lvo9sn23L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"AHlpsqc5NG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":4}},{\"id\":\"4hVFsJa0va\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":4}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"PCCpKNDpz8\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}}]",
  "creation": "2025-10-08 14:55:15.430530",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Accommodation",
  "links": [],
- "modified": "2026-09-24 17:20:30.270202",
+ "modified": "2026-09-25 16:24:03.918733",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Accommodation",
@@ -75,8 +75,8 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Flat Rent Request",
-   "link_to": "Flat Rent Request",
+   "label": "Flat Request",
+   "link_to": "Flat Request",
    "stats_filter": "[]",
    "type": "DocType"
   },
