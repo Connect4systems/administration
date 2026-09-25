@@ -2,6 +2,38 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Flat Request", {
+	before_workflow_action(frm) {
+		frappe.dom.unfreeze();
+		return new Promise((resolve, reject) => {
+			let confirmed = false;
+			const dialog = new frappe.ui.Dialog({
+				title: __("{0}: Add Note", [frm.selected_workflow_action]),
+				fields: [{fieldname: "note", fieldtype: "Small Text", label: __("Note"), reqd: 1}],
+				primary_action_label: __("Confirm"),
+				primary_action(values) {
+					if (!values.note?.trim()) return;
+					confirmed = true;
+					frm.doc.__approval_note = values.note.trim();
+					dialog.hide();
+					frappe.dom.freeze();
+					resolve();
+				},
+				onhide() {
+					if (!confirmed) {
+						delete frm.doc.__approval_note;
+						frm.selected_workflow_action = null;
+						frappe.dom.unfreeze();
+						reject(new Error("Workflow action cancelled"));
+					}
+				},
+			});
+			dialog.show();
+		});
+	},
+	after_workflow_action(frm) {
+		delete frm.doc.__approval_note;
+		frm.refresh_field("document_approval");
+	},
 	refresh(frm) {
 		if (frm.doc.docstatus !== 1) {
 			return;

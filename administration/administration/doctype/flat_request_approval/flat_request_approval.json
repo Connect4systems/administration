@@ -1,0 +1,86 @@
+{
+ "doctype": "DocType",
+ "name": "Flat Request Approval",
+ "module": "Administration",
+ "istable": 1,
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "status",
+  "approved_by_role",
+  "approved_by_user",
+  "user_name",
+  "action_date",
+  "note",
+  "action",
+  "from_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "status",
+   "label": "Status",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "approved_by_role",
+   "label": "Approved by Role",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "Role",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "approved_by_user",
+   "label": "Approved by User",
+   "fieldtype": "Link",
+   "read_only": 1,
+   "options": "User",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "user_name",
+   "label": "User Name",
+   "fieldtype": "Data",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "action_date",
+   "label": "Date",
+   "fieldtype": "Datetime",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "note",
+   "label": "Note",
+   "fieldtype": "Small Text",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "action",
+   "label": "Action",
+   "fieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "fieldname": "from_status",
+   "label": "Previous Status",
+   "fieldtype": "Data",
+   "read_only": 1
+  }
+ ],
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "modified": "2026-09-25 17:18:29.787297"
+}

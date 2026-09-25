@@ -7,6 +7,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "request_details_tab",
   "project",
   "no_of_employees",
   "governorate",
@@ -24,7 +25,9 @@
   "section_break_epdd",
   "employee",
   "amended_from",
-  "naming_series"
+  "naming_series",
+  "document_approval_tab",
+  "document_approval"
  ],
  "fields": [
   {
@@ -137,13 +140,32 @@
    "fieldtype": "Select",
    "label": "Naming Series ",
    "options": "FRQ-.YY.-.###"
+  },
+  {
+   "fieldname": "request_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Request Details"
+  },
+  {
+   "fieldname": "document_approval_tab",
+   "fieldtype": "Tab Break",
+   "label": "Document Approval"
+  },
+  {
+   "fieldname": "document_approval",
+   "fieldtype": "Table",
+   "label": "Workflow Approval",
+   "options": "Flat Request Approval",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 16:24:03.911709",
+ "modified": "2026-09-25 17:18:29.787297",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Request",

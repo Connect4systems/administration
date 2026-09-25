@@ -85,7 +85,10 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 
 # before_install = "administration.install.before_install"
 # after_install = "administration.install.after_install"
-after_install = "administration.user_employee.setup_employee_details"
+after_install = [
+    "administration.user_employee.setup_employee_details",
+    "administration.flat_request_workflow.setup_workflow",
+]
 after_migrate = "administration.user_employee.setup_employee_details"
 
 # Uninstallation
@@ -188,6 +191,10 @@ doc_events = {
 # Overriding Methods
 # ------------------------------
 #
+override_whitelisted_methods = {
+    "frappe.model.workflow.apply_workflow": "administration.flat_request_workflow.apply_workflow",
+}
+
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "administration.event.get_events"
 # }

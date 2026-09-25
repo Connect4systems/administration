@@ -11,3 +11,5 @@ administration.patches.set_flat_rent_contract_type
 administration.patches.set_flat_rent_type
 administration.patches.move_flat_creation_to_contract
 administration.patches.update_flat_request_references
+administration.patches.setup_flat_request_workflow
+administration.patches.correct_flat_request_review_transition
