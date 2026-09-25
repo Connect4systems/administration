@@ -2,6 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Flat Contract", {
+	before_workflow_action(frm) {
+		if (frm.selected_workflow_action === "Request" && !frm.doc.attach_contract) {
+			frappe.dom.unfreeze();
+			frappe.throw(__("Attach Contract is required before requesting approval."));
+		}
+		return administration.approval.before_workflow_action(frm);
+	},
+	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	setup(frm) {
 		$(frm.wrapper).on("attachments_change.legal_roles", () => {
 			if (!can_manage_contract_attachments()) {
@@ -10,6 +18,7 @@ frappe.ui.form.on("Flat Contract", {
 		});
 	},
 	refresh(frm) {
+		administration.approval.refresh(frm);
 		const allowed = can_manage_contract_attachments();
 		for (const field of frm.meta.fields) {
 			if (["Attach", "Attach Image"].includes(field.fieldtype)) {
@@ -27,7 +36,7 @@ frappe.ui.form.on("Flat Contract", {
 			attachments.legal_role_guard = true;
 			attachments.refresh();
 		}
-		if (frm.doc.docstatus !== 1) return;
+		if (frm.doc.docstatus !== 1 || frm.doc.workflow_state !== "Approved") return;
 
 		frm.add_custom_button(__(frm.doc.created_flat ? "View Flat" : "Create Flat"), () => {
 			if (frm.doc.created_flat) {

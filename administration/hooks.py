@@ -90,10 +90,13 @@ after_install = [
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_workflow.setup_workflow",
     "administration.add_flat_to_contract_workflow.setup_workflow",
+    "administration.flat_contract_workflow.setup_workflow",
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",
+    "administration.flat_request_layout.ensure_flat_contract_approval_layout",
 ]
 after_migrate = [
+    "administration.flat_request_layout.ensure_flat_contract_approval_layout",
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",

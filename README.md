@@ -70,6 +70,20 @@ bench restart
 Hard-refresh Desk to load the shared approval dialog. Migration installs the new
 workflow once and repairs both approval-tab layouts on subsequent migrations.
 
+### Flat Contract legal approval
+
+Only Legal User can create Flat Contracts. Drafts can be saved without a contract
+file, but **Request** requires **Attach Contract**. The workflow is Draft → Legal
+Manager → Admin Team leader → Administration Manager → General Director →
+VP-General → Approved. Legal Manager can Review back to Legal User, who can Request
+again. From Admin Team leader onward, review/rejection routing matches Add Flat to
+Contract. Only final approval submits the document.
+
+Document Approval records every action with role, user, date, optional note and
+attachment links. The existing Legal User/Legal Manager attachment restriction
+also applies to attachments in the workflow dialog. Deploy and run the build,
+migrate, cache-clear and restart commands above, then hard-refresh Desk.
+
 ### Contributing
 
 This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:

@@ -13,7 +13,8 @@ administration.approval = {
 				title: __("{0}: Note and Attachments", [frm.selected_workflow_action]),
 				fields: [
 					{fieldname: "note", fieldtype: "Small Text", label: __("Note")},
-					{fieldname: "attach_files", fieldtype: "Button", label: __("Attach Files"), click() {
+					{fieldname: "attach_files", fieldtype: "Button", label: __("Attach Files"),
+						hidden: frm.doctype === "Flat Contract" && !["Legal User", "Legal Manager"].some((role) => frappe.user_roles.includes(role)), click() {
 						if (uploader) return;
 						uploader = new frappe.ui.FileUploader({
 							wrapper: dialog.fields_dict.upload_area.$wrapper,

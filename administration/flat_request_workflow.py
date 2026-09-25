@@ -48,7 +48,7 @@ _APPROVAL_TOKEN = object()
 @frappe.whitelist()
 def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
-	if payload.get("doctype") not in ("Flat Request", "Add Flat to Contract"):
+	if payload.get("doctype") not in ("Flat Request", "Add Flat to Contract", "Flat Contract"):
 		return core_apply_workflow(doc, action)
 	note = payload.get("__approval_note") or ""
 	if not isinstance(note, str):
@@ -62,6 +62,9 @@ def apply_workflow(doc, action):
 	transition = next((row for row in get_transitions(current, workflow) if row.action == action), None)
 	if not transition or not has_approval_access(frappe.session.user, current, transition):
 		frappe.throw(_("You are not allowed to take this workflow action."), frappe.PermissionError)
+	if payload["doctype"] == "Flat Contract":
+		from administration.flat_contract_workflow import validate_request
+		validate_request(current, action)
 	attachments = get_approval_attachments(payload.get("__approval_attachments"), current.name, payload["doctype"])
 	previous_context = frappe.flags.get("flat_request_approval")
 	frappe.flags.flat_request_approval = {
@@ -82,6 +85,9 @@ def get_approval_attachments(file_names, request_name, doctype="Flat Request"):
 		return ""
 	if not isinstance(file_names, list) or any(not isinstance(name, str) or not name for name in file_names):
 		frappe.throw(_("Invalid approval attachments."))
+	if file_names and doctype == "Flat Contract":
+		from administration.flat_contract_attachments import require_legal_role
+		require_legal_role()
 	attachments = []
 	for name in dict.fromkeys(file_names):
 		file = frappe.get_doc("File", name)
@@ -131,7 +137,7 @@ def require_workflow_submission(doc):
 		or context.get("name") != doc.name
 		or context.get("doctype", "Flat Request") != (doc.get("doctype") or "Flat Request")
 		or context.get("status") != doc.get("workflow_state")
-		or doc.get("workflow_state") not in (("Approved",) if doc.get("doctype") == "Add Flat to Contract" else ("Approved", "Settled"))
+		or doc.get("workflow_state") not in (("Approved", "Settled") if doc.get("doctype") in (None, "Flat Request") else ("Approved",))
 	):
 		frappe.throw(_("Submit this request through an approval workflow action."))
 

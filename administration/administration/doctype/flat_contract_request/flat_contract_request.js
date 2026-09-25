@@ -96,7 +96,8 @@ const build_default_terms = (doc) => [
 
 frappe.ui.form.on("Flat Contract Request", {
 	refresh(frm) {
-		if (frm.doc.docstatus !== 1) {
+		frm.remove_custom_button(__("Create Flat Contract"));
+		if (frm.doc.docstatus !== 1 || !frappe.user_roles.includes("Legal User")) {
 			return;
 		}
 

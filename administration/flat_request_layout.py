@@ -36,3 +36,7 @@ def ensure_approval_layout(doctype="Flat Request", schema="flat_request"):
 
 def ensure_contract_approval_layout():
 	ensure_approval_layout("Add Flat to Contract", "add_flat_to_contract")
+
+
+def ensure_flat_contract_approval_layout():
+	ensure_approval_layout("Flat Contract", "flat_contract")
