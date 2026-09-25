@@ -2,7 +2,31 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Flat Contract", {
+	setup(frm) {
+		$(frm.wrapper).on("attachments_change.legal_roles", () => {
+			if (!can_manage_contract_attachments()) {
+				frm.attachments?.parent.find(".add-attachment-btn, .attachment-row .btn-remove").hide();
+			}
+		});
+	},
 	refresh(frm) {
+		const allowed = can_manage_contract_attachments();
+		for (const field of frm.meta.fields) {
+			if (["Attach", "Attach Image"].includes(field.fieldtype)) {
+				frm.set_df_property(field.fieldname, "read_only", allowed ? field.read_only : 1);
+			}
+		}
+		if (frm.attachments && !frm.attachments.legal_role_guard) {
+			const attachments = frm.attachments;
+			const can_delete = attachments.can_delete_attachment.bind(attachments);
+			attachments.can_delete_attachment = () => can_manage_contract_attachments() && can_delete();
+			const new_attachment = attachments.new_attachment.bind(attachments);
+			attachments.new_attachment = (...args) => {
+				if (can_manage_contract_attachments()) return new_attachment(...args);
+			};
+			attachments.legal_role_guard = true;
+			attachments.refresh();
+		}
 		if (frm.doc.docstatus !== 1) return;
 
 		frm.add_custom_button(__(frm.doc.created_flat ? "View Flat" : "Create Flat"), () => {
@@ -29,3 +53,7 @@ frappe.ui.form.on("Flat Contract", {
 		});
 	},
 });
+
+function can_manage_contract_attachments() {
+	return ["Legal User", "Legal Manager"].some((role) => frappe.user_roles.includes(role));
+}

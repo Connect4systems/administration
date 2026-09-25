@@ -14,3 +14,4 @@ administration.patches.update_flat_request_references
 administration.patches.setup_flat_request_workflow
 administration.patches.correct_flat_request_review_transition
 administration.patches.setup_add_flat_to_contract_workflow
+administration.patches.setup_legal_attachment_roles

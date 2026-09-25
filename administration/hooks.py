@@ -86,6 +86,7 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 # before_install = "administration.install.before_install"
 # after_install = "administration.install.after_install"
 after_install = [
+    "administration.flat_contract_attachments.setup_legal_roles",
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_workflow.setup_workflow",
     "administration.add_flat_to_contract_workflow.setup_workflow",
@@ -145,12 +146,19 @@ after_migrate = [
 # override_doctype_class = {
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
+override_doctype_class = {
+    "File": "administration.legal_attachment_file.LegalAttachmentFile",
+}
 
 # Document Events
 # ---------------
 # Hook on document methods and events
 
 doc_events = {
+    "Flat Contract": {
+        "validate": "administration.flat_contract_attachments.validate_contract_attachments",
+        "before_update_after_submit": "administration.flat_contract_attachments.validate_contract_attachments",
+    },
     "Employee": {
         "validate": "administration.employee.validate_accommodation_status",
         "on_update": "administration.user_employee.sync_employee_to_user",

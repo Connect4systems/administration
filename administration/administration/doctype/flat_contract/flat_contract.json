@@ -161,7 +161,8 @@
    "fetch_from": "flat_contract_request.attach_id",
    "fieldname": "attach_id",
    "fieldtype": "Attach",
-   "label": "Owner ID Attachment"
+   "label": "Owner ID Attachment",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "section_break_property",
@@ -271,7 +272,8 @@
   {
    "fieldname": "ownership_documentation",
    "fieldtype": "Attach",
-   "label": "Ownership Documentation"
+   "label": "Ownership Documentation",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "section_break_contents",
@@ -309,7 +311,8 @@
   {
    "fieldname": "first_party_signature",
    "fieldtype": "Attach",
-   "label": "First Party Signature"
+   "label": "First Party Signature",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "second_party_title",
@@ -319,7 +322,8 @@
   {
    "fieldname": "second_party_signature",
    "fieldtype": "Attach",
-   "label": "Second Party Signature"
+   "label": "Second Party Signature",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "notes",
@@ -374,7 +378,8 @@
   {
    "fieldname": "attach_contract",
    "fieldtype": "Attach",
-   "label": "Attach Contract"
+   "label": "Attach Contract",
+   "allow_on_submit": 1
   }
  ],
  "grid_page_length": 50,
