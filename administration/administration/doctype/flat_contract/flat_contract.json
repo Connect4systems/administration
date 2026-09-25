@@ -19,6 +19,7 @@
   "first_party_name",
   "first_party_address",
   "first_party_representative",
+  "attach_contract",
   "column_break_party",
   "second_party_name",
   "second_party_name_arabic",
@@ -286,12 +287,13 @@
   {
    "fieldname": "section_break_terms",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Editable Agreement Terms"
   },
   {
    "fieldname": "terms",
    "fieldtype": "Table",
-   "label": "Terms and Conditions / الشروط والأحكام",
+   "label": "Terms and Conditions / \u0627\u0644\u0634\u0631\u0648\u0637 \u0648\u0627\u0644\u0623\u062d\u0643\u0627\u0645",
    "options": "Flat Contract Term"
   },
   {
@@ -352,29 +354,34 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
+   "description": "Title used to create and submit the Flat.",
    "fieldname": "flat_title",
    "fieldtype": "Data",
    "label": "Flat Title",
-   "reqd": 1,
-   "allow_on_submit": 1,
    "read_only_depends_on": "eval:!!doc.created_flat",
-   "description": "Title used to create and submit the Flat."
+   "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "created_flat",
    "fieldtype": "Link",
    "label": "Created Flat",
+   "no_copy": 1,
    "options": "Flat",
-   "read_only": 1,
-   "allow_on_submit": 1,
-   "no_copy": 1
+   "read_only": 1
+  },
+  {
+   "fieldname": "attach_contract",
+   "fieldtype": "Attach",
+   "label": "Attach Contract"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 16:24:03.906744",
+ "modified": "2026-09-25 20:49:56.729604",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract",
