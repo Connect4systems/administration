@@ -2,13 +2,13 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:naming_series",
- "creation": "2026-09-24 18:00:00.000000",
+ "creation": "2026-09-24 18:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
   "project",
-  "flat_request",
+  "flat_title",
   "monthly_rent",
   "deposit",
   "insurance",
@@ -17,24 +17,19 @@
   "payment_cycle",
   "contract_start_date",
   "contract_end_date",
-  "tax_deduction",
+  "type",
   "owner_details_section",
   "flat_owner",
-  "flat_owner_name",
   "legal_name",
-  "attach_id",
   "column_break_kdzl",
   "accommodation_contract",
-  "ownership_documentation",
   "section_break_pvie",
   "governorate",
   "city",
   "area",
   "address",
-  "flat_title",
-  "created_flat",
-  "flat_no",
   "floor_no",
+  "flat_no",
   "column_break_kcth",
   "total_flat_area",
   "no_of_rooms",
@@ -47,6 +42,9 @@
   "section_break_mrhf",
   "amended_from",
   "naming_series",
+  "column_break_umid",
+  "flat_request",
+  "created_flat",
   "document_approval_tab",
   "document_approval_help",
   "document_approval"
@@ -79,13 +77,6 @@
    "label": "Flat Owner"
   },
   {
-   "fieldname": "flat_owner_name",
-   "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Flat Owner Name",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_vimy",
    "fieldtype": "Column Break"
   },
@@ -106,11 +97,6 @@
    "label": "Project",
    "options": "Project",
    "reqd": 1
-  },
-  {
-   "fieldname": "attach_id",
-   "fieldtype": "Attach",
-   "label": "Attach ID"
   },
   {
    "fieldname": "contract_start_date",
@@ -225,11 +211,6 @@
    "options": "Flat Contents"
   },
   {
-   "fieldname": "ownership_documentation",
-   "fieldtype": "Attach",
-   "label": "Ownership Documentation "
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
@@ -261,33 +242,27 @@
    "label": "Legal Name"
   },
   {
-   "fieldname": "tax_deduction",
-   "fieldtype": "Float",
-   "label": "Tax Deduction"
-  },
-  {
    "fieldname": "accommodation_contract",
    "fieldtype": "Link",
    "label": "Accommodation Contract",
    "options": "Accommodation Contract"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "flat_title",
    "fieldtype": "Data",
    "label": "Flat Title",
-   "reqd": 1,
-   "allow_on_submit": 1,
    "read_only_depends_on": "eval:!!doc.created_flat",
-   "description": "Title used to create and submit the Flat."
+   "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "created_flat",
    "fieldtype": "Link",
    "label": "Created Flat",
+   "no_copy": 1,
    "options": "Flat",
-   "read_only": 1,
-   "allow_on_submit": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
    "fieldname": "request_details_tab",
@@ -300,25 +275,35 @@
    "label": "Document Approval"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "document_approval",
    "fieldtype": "Table",
    "label": "Workflow Approval",
-   "options": "Flat Request Approval",
-   "read_only": 1,
    "no_copy": 1,
-   "allow_on_submit": 1
+   "options": "Flat Request Approval",
+   "read_only": 1
   },
   {
    "fieldname": "document_approval_help",
    "fieldtype": "HTML",
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  },
+  {
+   "fieldname": "column_break_umid",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew\nTerminate"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 16:24:03.886841",
+ "modified": "2026-09-25 22:44:03.382121",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Add Flat to Contract",
