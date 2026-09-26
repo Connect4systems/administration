@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"vF_ukVWDPa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Car Use Request\",\"col\":3}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"YmOkI10OAn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Log\",\"col\":3}},{\"id\":\"oMSNYY_Jj-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver\",\"col\":3}}]",
+ "content": "[{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"kCoqcQjYwz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"Sxew2FTpIC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract Request\",\"col\":3}},{\"id\":\"rSEz3tyCPy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"B-tR7xhiZS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"YmOkI10OAn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Log\",\"col\":3}},{\"id\":\"oMSNYY_Jj-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver\",\"col\":3}}]",
  "creation": "2025-08-17 09:25:52.948056",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,13 +13,13 @@
  "is_hidden": 0,
  "label": "Fleet Management",
  "links": [],
- "modified": "2026-09-26 13:28:38.309470",
+ "modified": "2026-09-26 20:45:49.828356",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Fleet Management",
  "number_cards": [],
  "owner": "Administrator",
- "parent_page": "",
+ "parent_page": "Administration",
  "public": 1,
  "quick_lists": [],
  "roles": [
@@ -27,7 +27,7 @@
    "role": "Fleet Manager"
   }
  ],
- "sequence_id": 50.0,
+ "sequence_id": 3.0,
  "shortcuts": [
   {
    "color": "Grey",
@@ -40,9 +40,9 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Car Use Request",
-   "link_to": "Car Use Request",
-   "stats_filter": "[[\"Car Use Request\",\"workflow_state\",\"=\",\"Pending Admin\",false]]",
+   "label": "Vehicle Request",
+   "link_to": "Vehicle Request",
+   "stats_filter": "[]",
    "type": "DocType"
   },
   {
@@ -56,8 +56,24 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Private Vehicle Contract Request",
+   "link_to": "Private Vehicle Contract Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Driver",
    "link_to": "Driver",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle Type",
+   "link_to": "Vehicle Type",
    "stats_filter": "[]",
    "type": "DocType"
   }
