@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Fleet Management",
  "links": [],
- "modified": "2026-09-24 17:21:07.133031",
+ "modified": "2026-09-26 13:28:38.309470",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Fleet Management",
@@ -27,7 +27,7 @@
    "role": "Fleet Manager"
   }
  ],
- "sequence_id": 48.0,
+ "sequence_id": 50.0,
  "shortcuts": [
   {
    "color": "Grey",

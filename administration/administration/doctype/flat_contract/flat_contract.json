@@ -167,11 +167,11 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "flat_contract_request.attach_id",
    "fieldname": "attach_id",
    "fieldtype": "Attach",
-   "label": "Owner ID Attachment",
-   "allow_on_submit": 1
+   "label": "Owner ID Attachment"
   },
   {
    "fieldname": "section_break_property",
@@ -279,10 +279,10 @@
    "label": "IBAN"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "ownership_documentation",
    "fieldtype": "Attach",
-   "label": "Ownership Documentation",
-   "allow_on_submit": 1
+   "label": "Ownership Documentation"
   },
   {
    "fieldname": "section_break_contents",
@@ -310,6 +310,7 @@
   {
    "fieldname": "section_break_signatures",
    "fieldtype": "Section Break",
+   "hidden": 1,
    "label": "Signatures"
   },
   {
@@ -318,10 +319,10 @@
    "label": "First Party Title"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "first_party_signature",
    "fieldtype": "Attach",
-   "label": "First Party Signature",
-   "allow_on_submit": 1
+   "label": "First Party Signature"
   },
   {
    "fieldname": "second_party_title",
@@ -329,10 +330,10 @@
    "label": "Second Party Title"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "second_party_signature",
    "fieldtype": "Attach",
-   "label": "Second Party Signature",
-   "allow_on_submit": 1
+   "label": "Second Party Signature"
   },
   {
    "fieldname": "notes",
@@ -369,13 +370,13 @@
   {
    "allow_on_submit": 1,
    "description": "Title used to create and submit the Flat.",
+   "fetch_from": "flat.flat_title",
+   "fetch_if_empty": 1,
    "fieldname": "flat_title",
    "fieldtype": "Data",
    "label": "Flat Title",
    "read_only_depends_on": "eval:!!doc.created_flat",
-   "reqd": 1,
-   "fetch_from": "flat.flat_title",
-   "fetch_if_empty": 1
+   "reqd": 1
   },
   {
    "allow_on_submit": 1,
@@ -387,10 +388,10 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "attach_contract",
    "fieldtype": "Attach",
-   "label": "Attach Contract",
-   "allow_on_submit": 1
+   "label": "Attach Contract"
   },
   {
    "fieldname": "request_details_tab",
@@ -403,13 +404,13 @@
    "label": "Document Approval"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "document_approval",
    "fieldtype": "Table",
    "label": "Workflow Approval",
-   "options": "Flat Request Approval",
-   "read_only": 1,
    "no_copy": 1,
-   "allow_on_submit": 1
+   "options": "Flat Request Approval",
+   "read_only": 1
   },
   {
    "fieldname": "document_approval_help",
@@ -417,54 +418,55 @@
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
   },
   {
-   "fieldname": "type",
-   "label": "Type",
-   "fieldtype": "Select",
-   "options": "New Flat\nRenew",
    "default": "New Flat",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew",
    "reqd": 1
   },
   {
    "fieldname": "flat",
-   "label": "Flat",
    "fieldtype": "Link",
+   "label": "Flat",
+   "no_copy": 1,
    "options": "Flat",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
    "fieldname": "last_rent_contract",
-   "label": "Last Rent Contract",
    "fieldtype": "Link",
+   "label": "Last Rent Contract",
+   "no_copy": 1,
    "options": "Flat Contract",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
+   "allow_on_submit": 1,
+   "default": "0",
    "fieldname": "lifecycle_applied",
    "fieldtype": "Check",
-   "label": "Renewal Applied",
-   "read_only": 1,
    "hidden": 1,
+   "label": "Renewal Applied",
    "no_copy": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
-   "fieldname": "contract_status",
-   "label": "Contract Status",
-   "fieldtype": "Select",
-   "options": "Active\nTerminated",
-   "default": "Active",
-   "read_only": 1,
    "allow_on_submit": 1,
-   "in_list_view": 1
+   "default": "Active",
+   "fieldname": "contract_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Contract Status",
+   "options": "Active\nTerminated",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 20:49:56.729604",
+ "modified": "2026-09-26 20:27:10.114327",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Contract",
@@ -472,7 +474,6 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "create": 0,
    "delete": 1,
    "email": 1,
    "export": 1,
@@ -485,10 +486,10 @@
    "write": 1
   },
   {
-   "role": "Legal User",
+   "create": 1,
    "read": 1,
-   "write": 1,
-   "create": 1
+   "role": "Legal User",
+   "write": 1
   }
  ],
  "row_format": "Dynamic",
