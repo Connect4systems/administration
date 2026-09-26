@@ -8,6 +8,7 @@
  "field_order": [
   "attach",
   "renew_date",
+  "next_renew_date",
   "expire_date"
  ],
  "fields": [
@@ -34,13 +35,18 @@
    "in_preview": 1,
    "label": "Expire Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "next_renew_date",
+   "fieldtype": "Date",
+   "label": "Next Renew Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-09-27 00:22:17.249830",
+ "modified": "2026-09-27 00:26:16.605382",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Legal Document Table",
