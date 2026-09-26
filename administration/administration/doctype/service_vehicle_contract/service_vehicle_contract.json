@@ -1,0 +1,306 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-26 22:30:20.597604",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "request_details_tab",
+  "service_vehicle_contract_request",
+  "attach_contract",
+  "section_break_skxn",
+  "company_provider_column",
+  "provider_company",
+  "tax_id",
+  "bank",
+  "iban",
+  "address",
+  "company_representative_id",
+  "column_break_vgqu",
+  "date",
+  "transportation",
+  "site_service",
+  "contract_start_date",
+  "contract_end_date",
+  "section_break_mcpb",
+  "contract_details",
+  "amended_from",
+  "document_approval_tab",
+  "document_approval_help",
+  "document_approval"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_skxn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Service Vehicle Contract",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_mcpb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "contract_details",
+   "fieldtype": "Table",
+   "label": "Contract Terms",
+   "options": "Vehicle Route Table"
+  },
+  {
+   "fieldname": "provider_company",
+   "fieldtype": "Link",
+   "label": "Provider Company",
+   "options": "Supplier"
+  },
+  {
+   "fetch_from": "provider_company.tax_id",
+   "fieldname": "tax_id",
+   "fieldtype": "Data",
+   "label": "TAX ID"
+  },
+  {
+   "fieldname": "column_break_vgqu",
+   "fieldtype": "Column Break",
+   "label": "Contract Details"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fetch_from": "provider_company.custom_bank",
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank"
+  },
+  {
+   "fieldname": "company_representative_id",
+   "fieldtype": "Attach",
+   "label": "company representative ID"
+  },
+  {
+   "fetch_from": "provider_company.custom_iban",
+   "fieldname": "iban",
+   "fieldtype": "Data",
+   "label": "IBAN"
+  },
+  {
+   "fieldname": "company_provider_column",
+   "fieldtype": "Column Break",
+   "label": "Company Provider"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "label": "Address"
+  },
+  {
+   "default": "0",
+   "fieldname": "transportation",
+   "fieldtype": "Check",
+   "label": "Transportation"
+  },
+  {
+   "default": "0",
+   "fieldname": "site_service",
+   "fieldtype": "Check",
+   "label": "Site Service"
+  },
+  {
+   "fieldname": "contract_start_date",
+   "fieldtype": "Date",
+   "label": "Contract Start Date"
+  },
+  {
+   "fieldname": "contract_end_date",
+   "fieldtype": "Date",
+   "label": "Contract End Date"
+  },
+  {
+   "fieldname": "request_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Request Details"
+  },
+  {
+   "fieldname": "document_approval_tab",
+   "fieldtype": "Tab Break",
+   "label": "Document Approval"
+  },
+  {
+   "fieldname": "document_approval_help",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  },
+  {
+   "fieldname": "document_approval",
+   "fieldtype": "Table",
+   "label": "Workflow Approval",
+   "options": "Flat Request Approval",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "service_vehicle_contract_request",
+   "fieldtype": "Link",
+   "label": "Service Vehicle Contract Request",
+   "options": "Service Vehicle Contract Request"
+  },
+  {
+   "fieldname": "attach_contract",
+   "fieldtype": "Attach",
+   "label": "Attach Contract",
+   "permlevel": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-26 22:45:16.483198",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Service Vehicle Contract",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Fleet Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administration Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Legal User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Legal Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "General Director",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "VP-General",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Fleet Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Administration Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Legal User",
+   "permlevel": 1,
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "Legal Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "General Director",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "VP-General",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

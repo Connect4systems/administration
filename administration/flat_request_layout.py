@@ -48,3 +48,7 @@ def ensure_private_vehicle_contract_approval_layout():
 
 def ensure_private_vehicle_contract_layout():
 	ensure_approval_layout("Private Vehicle Contract", "private_vehicle_contract")
+
+
+def ensure_service_vehicle_contract_layout():
+	ensure_approval_layout("Service Vehicle Contract", "service_vehicle_contract")
