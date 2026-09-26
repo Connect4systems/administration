@@ -249,7 +249,7 @@ class TestLifecycle(TestCase):
 			lifecycle.reserve_request(Doc(doctype="Rent Termination Request", name="RTR-1", flat="Flat 1"))
 
 	def test_action_routes_all_four_paths_and_records_latest_reference(self):
-		cases = (("Direct Rent", "Renew", "Flat Request"),
+		cases = (("Direct Rent", "Renew", "Flat Contract Request"),
 			("Direct Rent", "Terminate", "Rent Termination Request"),
 			("Contract", "Renew", "Add Flat to Contract"),
 			("Contract", "Terminate", "Flat Termination"))
@@ -284,3 +284,49 @@ class TestLifecycle(TestCase):
 		self.assertNotIn("lifecycle_update", self.flat.flags)
 		self.assertNotIn("ignore_validate_update_after_submit", self.flat.flags)
 		self.assertFalse(source.lifecycle_applied)
+
+
+class TestTerminationSnapshot(TestCase):
+	def test_note_save_accepts_browser_dates_numbers_and_empty_values(self):
+		fields = [Record(fieldname="rent_start_date", fieldtype="Date"),
+			Record(fieldname="qty", fieldtype="Float"), Record(fieldname="description", fieldtype="Text")]
+		previous = Doc(rent_contracts=[Record(rent_start_date=date(2026, 9, 1), qty=1.0, description=None)],
+			last_rent_end_date=date(2026, 9, 30), legal_note="")
+		doc = Doc(rent_contracts=[Record(rent_start_date="2026-09-01", qty="1", description="")],
+			last_rent_end_date="2026-09-30", legal_note="New legal note")
+		doc.previous = previous
+		doc.meta.fields = [Record(fieldname="rent_contracts", fieldtype="Table", read_only=1, options="Snapshot"),
+			Record(fieldname="last_rent_end_date", fieldtype="Date", read_only=1),
+			Record(fieldname="legal_note", fieldtype="Text Editor", read_only=0)]
+		with patch.object(lifecycle, "frappe") as frappe, patch.object(lifecycle, "validate_document"), \
+			patch("administration.flat_request_workflow.validate_approval_history"):
+			frappe.get_meta.return_value = Record(fields=fields)
+			frappe.throw.side_effect = ValueError
+			lifecycle.TerminationDocument.validate(doc)
+			doc.rent_contracts[0].rent_start_date = "2026-09-02"
+			with self.assertRaises(ValueError):
+				lifecycle.TerminationDocument.validate(doc)
+
+
+class TestDirectRenewalRoot(TestCase):
+	setUp = TestLifecycle.setUp
+	def test_contract_request_can_start_renewal_and_reserve_flat(self):
+		self.flat.pending_document = None
+		doc = Doc(doctype="Flat Contract Request", name="FCR-NEW", type="Renew", flat="Flat 1", last_rent_contract="FC-1")
+		with patch.object(lifecycle, "latest_for_action", return_value=rent_row()):
+			lifecycle.validate_document(doc)
+		lifecycle.reserve_request(doc)
+		self.assertEqual((self.flat.pending_document_type, self.flat.pending_document), ("Flat Contract Request", "FCR-NEW"))
+		parent = Doc(**doc.as_dict(), docstatus=1)
+		self.frappe.get_doc.return_value = parent
+		self.frappe.db.get_value.return_value = None
+		contract = Doc(doctype="Flat Contract", name="FC-NEW", flat_contract_request="FCR-NEW")
+		lifecycle.inherit_renewal(contract)
+		self.assertEqual(contract.type, "Renew")
+		self.assertEqual(lifecycle.root_reference(contract), ("Flat Contract Request", "FCR-NEW"))
+
+	def test_delete_draft_termination_releases_flat(self):
+		self.flat.pending_document_type, self.flat.pending_document = "Rent Termination Request", "RTR-1"
+		doc = Doc(doctype="Rent Termination Request", name="RTR-1", flat="Flat 1", docstatus=0)
+		lifecycle.TerminationDocument.on_trash(doc)
+		self.assertIsNone(self.flat.pending_document)

@@ -177,6 +177,7 @@ doc_events = {
         "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
     },
     "Flat Contract Request": {
+        "after_insert": "administration.flat_lifecycle.reserve_request",
         "validate": "administration.flat_lifecycle.validate_document",
         "before_update_after_submit": "administration.flat_lifecycle.validate_document",
         "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",

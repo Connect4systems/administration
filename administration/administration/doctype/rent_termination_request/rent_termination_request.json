@@ -276,7 +276,14 @@
    "role": "Legal User",
    "read": 1,
    "write": 1,
-   "create": 1
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Legal Manager",
+   "read": 1,
+   "write": 1,
+   "delete": 1
   }
  ]
 }

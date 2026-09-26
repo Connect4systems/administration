@@ -18,7 +18,7 @@ frappe.ui.form.on("Flat", {
 		if (frm.doc.docstatus === 1 && frm.doc.flat_status !== "Inactive") {
 			for (const action of ["Renew", "Terminate"]) {
 				const direct = frm.doc.rent_type === "Direct Rent";
-				const target = action === "Renew" ? (direct ? "Flat Request" : "Add Flat to Contract") : (direct ? "Rent Termination Request" : "Flat Termination");
+				const target = action === "Renew" ? (direct ? "Flat Contract Request" : "Add Flat to Contract") : (direct ? "Rent Termination Request" : "Flat Termination");
 				if (!frappe.model.can_create(target)) continue;
 				frm.add_custom_button(__(action), async () => {
 					if (frm.is_dirty()) {

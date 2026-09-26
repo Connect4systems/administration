@@ -1,5 +1,7 @@
 """Transactional renewal, termination and rental coverage for an existing Flat."""
 
+from decimal import Decimal
+
 import frappe
 from frappe import _
 from frappe.model.document import Document
@@ -88,8 +90,14 @@ def root_reference(doc):
 	if doc.doctype in ROOTS:
 		return doc.doctype, doc.name
 	if doc.doctype in ("Flat Contract Request", "Flat Contract"):
-		return "Flat Request", doc.get("flat_request")
+		if doc.get("flat_request"):
+			return "Flat Request", doc.flat_request
+		return "Flat Contract Request", doc.name if doc.doctype == "Flat Contract Request" else doc.get("flat_contract_request")
 	return None, None
+
+
+def is_root_document(doc):
+	return root_reference(doc) == (doc.doctype, doc.name)
 
 
 def is_lifecycle(doc):
@@ -123,8 +131,8 @@ def inherit_renewal(doc):
 	elif doc.doctype == "Flat Contract" and doc.get("flat_contract_request"):
 		parent_type, parent_name = "Flat Contract Request", doc.flat_contract_request
 	if not parent_name:
-		if doc.get("type") == "Renew" and doc.doctype in ("Flat Contract Request", "Flat Contract"):
-			frappe.throw(_("Renewals must follow Flat Request, Flat Contract Request, then Flat Contract."))
+		if doc.get("type") == "Renew" and doc.doctype == "Flat Contract":
+			frappe.throw(_("Renewal contracts must originate from a Flat Contract Request."))
 		return
 	parent = frappe.get_doc(parent_type, parent_name)
 	parent.check_permission("read")
@@ -169,7 +177,7 @@ def validate_document(doc, method=None):
 		return
 	flat = lock_flat(doc.flat)
 	flat.check_permission("read")
-	if doc.doctype not in ROOTS:
+	if not is_root_document(doc):
 		inherit_renewal(doc)
 	if not previous and doc.meta.has_field("flat_title") and not doc.get("flat_title"):
 		doc.flat_title = flat.flat_title
@@ -179,10 +187,10 @@ def validate_document(doc, method=None):
 	if flat.rent_type != expected:
 		frappe.throw(_("This document does not match the Flat's Rent Type."))
 	root = root_reference(doc)
-	ensure_pending(flat, root, allow_empty=not previous and doc.doctype in ROOTS)
+	ensure_pending(flat, root, allow_empty=not previous and is_root_document(doc))
 	latest = validate_latest(doc, flat)
-	if doc.doctype in ("Flat Contract Request", "Flat Contract") and not doc.get("flat_request"):
-		frappe.throw(_("Renewals must follow Flat Request, Flat Contract Request, then Flat Contract."))
+	if doc.doctype == "Flat Contract" and not doc.get("flat_contract_request"):
+		frappe.throw(_("Renewal contracts must originate from a Flat Contract Request."))
 	if doc.doctype in CONTRACTS.values():
 		validate_dates(doc)
 		if latest.get("rent_start_date") and getdate(doc.contract_start_date) <= getdate(latest.get("rent_start_date")):
@@ -197,7 +205,7 @@ def validate_dates(doc):
 
 
 def reserve_request(doc, method=None):
-	if is_lifecycle(doc) and doc.doctype in ROOTS:
+	if is_lifecycle(doc) and is_root_document(doc):
 		flat = lock_flat(doc.flat)
 		ensure_pending(flat, root_reference(doc), allow_empty=True)
 		flat.db_set({"pending_document_type": doc.doctype, "pending_document": doc.name}, update_modified=False)
@@ -267,7 +275,8 @@ def apply_renewal(doc, method=None):
 	doc.db_set({"created_flat": flat.name, "flat_title": flat.flat_title, "lifecycle_applied": 1})
 	if doc.doctype == "Flat Contract":
 		for doctype, name in (("Flat Request", doc.flat_request), ("Flat Contract Request", doc.flat_contract_request)):
-			frappe.db.set_value(doctype, name, "lifecycle_applied", 1)
+			if name:
+				frappe.db.set_value(doctype, name, "lifecycle_applied", 1)
 
 
 def apply_termination(doc, method=None):
@@ -330,7 +339,7 @@ def start_action(flat_name, action):
 	ensure_pending(flat, (None, None), allow_empty=True)
 	row = latest_for_action(flat)
 	direct = flat.rent_type == "Direct Rent"
-	doctype = ("Flat Request" if direct else "Add Flat to Contract") if action == "Renew" else (
+	doctype = ("Flat Contract Request" if direct else "Add Flat to Contract") if action == "Renew" else (
 		"Rent Termination Request" if direct else "Flat Termination")
 	doc = frappe.new_doc(doctype)
 	doc.check_permission("create")
@@ -343,19 +352,27 @@ def start_action(flat_name, action):
 	doc.set(reference_field(doc), source.name)
 	if action == "Renew":
 		doc.type = "Renew"
-		if doctype == "Flat Request":
-			doc.no_of_employees = source.get("no_of_employees") or flat.no_of_beds or 1
-			for field in ("custom_no_of_rooms", "custom_no_of_beds"):
-				if doc.meta.has_field(field):
-					doc.set(field, flat.no_of_room if field.endswith("rooms") else flat.no_of_beds)
-		else:
-			doc.contract_start_date = add_days(row.get("rent_end_date") or today(), 1)
-			duration = (getdate(row.get("rent_end_date")) - getdate(row.get("rent_start_date"))).days if row.get("rent_start_date") and row.get("rent_end_date") else 364
-			doc.contract_end_date = add_days(doc.contract_start_date, max(duration, 0))
+		if direct:
+			# The previous contract's initial request is not this renewal's parent.
+			doc.flat_request = None
+		doc.contract_start_date = add_days(row.get("rent_end_date") or today(), 1)
+		duration = (getdate(row.get("rent_end_date")) - getdate(row.get("rent_start_date"))).days if row.get("rent_start_date") and row.get("rent_end_date") else 364
+		doc.contract_end_date = add_days(doc.contract_start_date, max(duration, 0))
 	# Save a draft immediately to reserve the Flat even before missing business
 	# fields are filled. Subsequent saves and workflow submission enforce them.
 	doc.insert(ignore_mandatory=True)
 	return {"doctype": doc.doctype, "name": doc.name}
+
+
+def snapshot_value(field, value):
+	"""Compare persisted values with their equivalent browser JSON representation."""
+	if field.fieldtype in ("Check", "Int", "Float", "Currency", "Percent", "Rating"):
+		return Decimal(str(value or 0))
+	if value is None or value == "":
+		return ""
+	if field.fieldtype == "Date":
+		return getdate(value)
+	return value
 
 
 class TerminationDocument(Document):
@@ -383,13 +400,14 @@ class TerminationDocument(Document):
 				if field.fieldname in ("workflow_state", "document_approval"):
 					continue
 				if field.read_only and field.fieldtype == "Table":
-					keys = [f.fieldname for f in frappe.get_meta(field.options).fields]
+					fields = [f for f in frappe.get_meta(field.options).fields
+						if f.fieldtype not in ("Section Break", "Column Break", "Tab Break", "HTML", "Button")]
 					def values(doc):
-						return [tuple(row.get(key) for key in keys) for row in doc.get(field.fieldname) or []]
+						return [tuple(snapshot_value(f, row.get(f.fieldname)) for f in fields) for row in doc.get(field.fieldname) or []]
 					if values(self) != values(previous):
 						frappe.throw(_("Termination snapshot tables cannot be changed manually."))
 				if field.read_only and field.fieldtype not in ("Table", "Section Break", "Tab Break", "HTML", "Column Break"):
-					if (self.get(field.fieldname) or "") != (previous.get(field.fieldname) or ""):
+					if snapshot_value(field, self.get(field.fieldname)) != snapshot_value(field, previous.get(field.fieldname)):
 						frappe.throw(_("Termination reference information cannot be changed manually."))
 
 	def before_update_after_submit(self):

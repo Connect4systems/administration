@@ -117,7 +117,9 @@ can revise that title before approval; final approval updates the Flat Title whi
 preserving the Flat document ID and all existing links.
 
 Rent Termination Request uses the legal approval chain and is created by Legal
-User. Flat Termination uses the Add Flat to Contract approval chain. Each includes
+User. Legal User and Legal Manager can delete an unsubmitted termination request;
+this releases the Flat for another action. Saving Legal Note preserves the
+read-only snapshot, including dates returned by the browser. Flat Termination uses the Add Flat to Contract approval chain. Each includes
 a Flat snapshot, contract history, Legal Note and Document Approval. Final approval
 sets the Flat Inactive and the targeted contract's separate Contract Status to
 Terminated, retaining the submitted document and its approval history. The Flat's

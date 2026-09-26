@@ -35,6 +35,19 @@ def install():
 	for doctype in ("Flat Contract", "Add Flat to Contract"):
 		frappe.db.set_value(doctype, {"contract_status": ["is", "not set"]}, "contract_status", "Active", update_modified=False)
 	frappe.db.set_value("Flat", {"flat_status": ["is", "not set"]}, "flat_status", "Active", update_modified=False)
+	repair_termination_permissions()
 	ensure_layouts()
 	from administration.flat_lifecycle import expire_flats
 	expire_flats()
+
+
+def repair_termination_permissions():
+	"""Grant legal staff draft deletion without replacing the site's workflow."""
+	from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
+	doctype = "Rent Termination Request"
+	setup_custom_perms(doctype)
+	for role in ("Legal User", "Legal Manager"):
+		if not frappe.db.exists("Custom DocPerm", {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0}):
+			add_permission(doctype, role)
+		update_permission_property(doctype, role, 0, "delete", 1)
+	frappe.clear_cache(doctype=doctype)
