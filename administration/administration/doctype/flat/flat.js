@@ -3,6 +3,10 @@
 
 frappe.ui.form.on("Flat", {
 	refresh(frm) {
+		if (frm.doc.docstatus === 1 && !frm.is_dirty() && frm.doc.flat_status) {
+			const colors = {Active: "green", Inactive: "gray", Expired: "orange"};
+			frm.page.set_indicator(__(frm.doc.flat_status), colors[frm.doc.flat_status] || "gray");
+		}
 		const grid = frm.fields_dict.rent_contracts?.grid;
 		if (grid) {
 			grid.update_docfield_property("rent_contract", "hidden", frm.doc.rent_type === "Contract" ? 1 : 0);
