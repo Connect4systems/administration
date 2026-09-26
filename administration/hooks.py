@@ -100,6 +100,7 @@ after_install = [
     "administration.flat_lifecycle_setup.install",
 ]
 after_migrate = [
+    "administration.legal_document_status.update_statuses",
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_approval_layout",
@@ -218,7 +219,10 @@ doc_events = {
 
 # Scheduled Tasks
 # ---------------
-scheduler_events = {"daily": ["administration.flat_lifecycle.expire_flats"]}
+scheduler_events = {"daily": [
+    "administration.flat_lifecycle.expire_flats",
+    "administration.legal_document_status.update_statuses",
+]}
 
 # scheduler_events = {
 # 	"all": [

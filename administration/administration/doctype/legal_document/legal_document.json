@@ -7,12 +7,23 @@
  "engine": "InnoDB",
  "field_order": [
   "title",
+  "status",
   "column_break_klcg",
   "note",
   "section_break_dzzc",
   "legal_document"
  ],
  "fields": [
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nActive\nRenew Now\nExpire",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
   {
    "fieldname": "title",
    "fieldtype": "Data",

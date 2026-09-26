@@ -12,6 +12,19 @@ bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app administration
 ```
 
+### Legal document status
+
+Legal documents use the last row of the legal Document table to calculate Status.
+Before Next Renew Date the status is Active (blue); from Next Renew Date through
+Expire Date it is Renew Now (green); after Expire Date it is Expire (red).
+Without Next Renew Date, the document stays Active through Expire Date. An empty
+table or a last row without Expire Date has no status.
+
+Status is calculated on save, refreshed daily using the site date, and backfilled
+on migration. Deploy the app, run `bench --site admin.cscec.live migrate`,
+`bench --site admin.cscec.live clear-cache`, and `bench restart`, then refresh Desk.
+The site scheduler must be enabled for automatic daily updates.
+
 ### Accommodation Report
 
 Open **Accommodation Report** from Desk search. It includes submitted Flats with
