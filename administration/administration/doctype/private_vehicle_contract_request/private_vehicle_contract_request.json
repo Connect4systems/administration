@@ -186,16 +186,19 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.type == 'With Driver'",
    "fieldname": "daily_start_time",
    "fieldtype": "Time",
    "label": "Daily Start Time"
   },
   {
+   "depends_on": "eval:doc.type == 'With Driver'",
    "fieldname": "daily_end_time",
    "fieldtype": "Time",
    "label": "Daily End Time"
   },
   {
+   "depends_on": "eval:doc.type == 'With Driver'",
    "fieldname": "extra_hour_fees",
    "fieldtype": "Float",
    "label": "Extra Hour Fees"
