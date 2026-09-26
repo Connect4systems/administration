@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"kCoqcQjYwz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"Sxew2FTpIC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract Request\",\"col\":3}},{\"id\":\"rSEz3tyCPy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"B-tR7xhiZS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"YmOkI10OAn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Log\",\"col\":3}},{\"id\":\"oMSNYY_Jj-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver\",\"col\":3}}]",
+ "content": "[{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"kCoqcQjYwz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"Sxew2FTpIC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":3}},{\"id\":\"rSEz3tyCPy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"B-tR7xhiZS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"YmOkI10OAn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Log\",\"col\":3}},{\"id\":\"oMSNYY_Jj-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver\",\"col\":3}}]",
  "creation": "2025-08-17 09:25:52.948056",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Fleet Management",
  "links": [],
- "modified": "2026-09-26 20:45:49.828356",
+ "modified": "2026-09-26 21:32:24.689874",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Fleet Management",
@@ -29,6 +29,14 @@
  ],
  "sequence_id": 3.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Private Vehicle Contract",
+   "link_to": "Private Vehicle Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Grey",
    "doc_view": "List",
@@ -50,14 +58,6 @@
    "doc_view": "List",
    "label": "Vehicle Log",
    "link_to": "Vehicle Log",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Private Vehicle Contract Request",
-   "link_to": "Private Vehicle Contract Request",
    "stats_filter": "[]",
    "type": "DocType"
   },
