@@ -23,10 +23,11 @@
   {
    "default": "Today",
    "fieldname": "renew_date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Renew Date"
+   "label": "Renew Date",
+   "reqd": 1
   },
   {
    "fieldname": "expire_date",
@@ -39,14 +40,17 @@
   {
    "fieldname": "next_renew_date",
    "fieldtype": "Date",
-   "label": "Next Renew Date"
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Next Renew Date",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-09-27 00:26:16.605382",
+ "modified": "2026-09-27 00:48:22.818856",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Legal Document Table",
