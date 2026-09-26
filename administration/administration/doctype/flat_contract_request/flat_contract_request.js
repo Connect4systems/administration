@@ -95,7 +95,10 @@ const build_default_terms = (doc) => [
 ];
 
 frappe.ui.form.on("Flat Contract Request", {
+	before_workflow_action: (frm) => administration.approval.before_workflow_action(frm),
+	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
+		administration.approval.refresh(frm);
 		frm.remove_custom_button(__("Create Flat Contract"));
 		if (frm.doc.docstatus !== 1 || frm.doc.lifecycle_applied || !frappe.user_roles.includes("Legal User")) {
 			return;

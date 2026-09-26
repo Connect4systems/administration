@@ -97,6 +97,7 @@ after_install = [
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",
     "administration.flat_request_layout.ensure_flat_contract_approval_layout",
+    "administration.flat_request_layout.ensure_flat_contract_request_approval_layout",
     "administration.flat_lifecycle_setup.install",
 ]
 after_migrate = [
@@ -106,6 +107,7 @@ after_migrate = [
     "administration.flat_request_layout.ensure_private_vehicle_contract_approval_layout",
     "administration.flat_lifecycle_setup.ensure_layouts",
     "administration.flat_request_layout.ensure_flat_contract_approval_layout",
+    "administration.flat_request_layout.ensure_flat_contract_request_approval_layout",
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",

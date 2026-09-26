@@ -135,7 +135,12 @@ class TestFlatRequestWorkflow(TestCase):
 		self.assertIsNone(self.frappe.flags.flat_request_approval)
 
 	def test_private_vehicle_approval_records_history_and_allows_workflow_submission(self):
-		doctype = "Private Vehicle Contract Request"
+		self.check_approval_submission("Private Vehicle Contract Request")
+
+	def test_flat_contract_request_approval_records_history_and_requires_workflow_submission(self):
+		self.check_approval_submission("Flat Contract Request")
+
+	def check_approval_submission(self, doctype):
 		self.current.doctype = doctype
 		self.payload["doctype"] = doctype
 		transition = Record(action="Approve", allowed="Administration Manager", next_state="Approved")

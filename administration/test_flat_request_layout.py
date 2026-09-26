@@ -40,3 +40,8 @@ class TestFlatRequestLayout(TestCase):
 		child = json.loads((root / "doctype/flat_request_approval/flat_request_approval.json").read_text())
 		visible = {row["fieldname"] for row in child["fields"] if row.get("in_list_view")}
 		self.assertEqual(visible, {"status", "approved_by_role", "approved_by_user", "user_name", "action_date", "note", "attachments"})
+
+	def test_flat_contract_request_layout_uses_shared_migration(self):
+		with patch.object(layout, "ensure_approval_layout") as ensure:
+			layout.ensure_flat_contract_request_approval_layout()
+		ensure.assert_called_once_with("Flat Contract Request", "flat_contract_request")
