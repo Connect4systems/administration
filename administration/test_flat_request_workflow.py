@@ -134,6 +134,31 @@ class TestFlatRequestWorkflow(TestCase):
 				workflow.apply_workflow(self.payload, "Approve")
 		self.assertIsNone(self.frappe.flags.flat_request_approval)
 
+	def test_private_vehicle_approval_records_history_and_allows_workflow_submission(self):
+		doctype = "Private Vehicle Contract Request"
+		self.current.doctype = doctype
+		self.payload["doctype"] = doctype
+		transition = Record(action="Approve", allowed="Administration Manager", next_state="Approved")
+		doc = Record(doctype=doctype, name=self.current.name, workflow_state="Approved", document_approval=[])
+		doc.get_doc_before_save = lambda: self.current
+		doc.append = lambda field, row: doc[field].append(row)
+
+		def apply(*args):
+			workflow.validate_approval_history(doc)
+			workflow.require_workflow_submission(doc)
+
+		with patch.object(workflow, "get_workflow", return_value=Record(workflow_state_field="workflow_state")), \
+			patch.object(workflow, "get_transitions", return_value=[transition]), \
+			patch.object(workflow, "has_approval_access", return_value=True), \
+			patch.object(workflow, "core_apply_workflow", side_effect=apply):
+			workflow.apply_workflow(self.payload, "Approve")
+		self.assertEqual(len(doc.document_approval), 1)
+		self.assertEqual(doc.document_approval[0]["approved_by_role"], "Administration Manager")
+		self.assertEqual(doc.document_approval[0]["note"], "Reviewed")
+		self.assertIsNone(self.frappe.flags.flat_request_approval)
+		with self.assertRaises(ValueError):
+			workflow.require_workflow_submission(doc)
+
 	def test_manual_history_changes_and_status_changes_are_rejected(self):
 		previous = Record(workflow_state="Draft", document_approval=[Record(name="row-1", note="Original")])
 		for rows, state in (([], "Draft"), ([Record(name="row-1", note="Forged")], "Draft"),
