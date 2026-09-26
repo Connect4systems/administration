@@ -12,8 +12,13 @@
   "from_time",
   "to_time",
   "type",
+  "rent_cycle",
   "daily_rent",
-  "passengers"
+  "passengers",
+  "overtime",
+  "extra_km",
+  "allowance",
+  "allowance_time"
  ],
  "fields": [
   {
@@ -82,7 +87,7 @@
    "fieldtype": "Currency",
    "in_list_view": 1,
    "in_preview": 1,
-   "label": "Daily Rent",
+   "label": "Rent",
    "precision": "0",
    "reqd": 1
   },
@@ -94,13 +99,49 @@
    "label": "Passengers",
    "precision": "0",
    "reqd": 1
+  },
+  {
+   "fieldname": "overtime",
+   "fieldtype": "Currency",
+   "label": "Overtime"
+  },
+  {
+   "default": "0",
+   "fieldname": "allowance",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "allowance"
+  },
+  {
+   "fieldname": "allowance_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Allowance Time"
+  },
+  {
+   "fieldname": "rent_cycle",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Rent Cycle",
+   "options": "Daily\nMonthly",
+   "reqd": 1
+  },
+  {
+   "fieldname": "extra_km",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "Extra KM"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-09-26 23:02:42.276930",
+ "modified": "2026-09-26 23:26:33.432680",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicle Route Table",
