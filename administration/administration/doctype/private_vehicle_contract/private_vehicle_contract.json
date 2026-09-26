@@ -1,0 +1,353 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:naming_series",
+ "creation": "2026-09-21 14:13:46.478423",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "request_details_tab",
+  "private_vehicle_contract_request",
+  "contract_attachment",
+  "project",
+  "vehicle_request",
+  "vehicle_owner",
+  "bank",
+  "iban",
+  "tax_id",
+  "ownership_documents",
+  "column_break_egmx",
+  "date",
+  "rent_start_date",
+  "rent_end_date",
+  "rent_amount",
+  "type",
+  "section_break_sksy",
+  "monthly_kilometers",
+  "extra_kelometer_fees",
+  "column_break_unqq",
+  "daily_start_time",
+  "daily_end_time",
+  "extra_hour_fees",
+  "vehical_details_section",
+  "brand",
+  "model",
+  "column_break_xpcv",
+  "motor_number",
+  "chassis_number",
+  "plat_number",
+  "section_break_8tp8",
+  "amended_from",
+  "naming_series",
+  "document_approval_tab",
+  "document_approval_help",
+  "document_approval"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_8tp8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Private Vehicle Contract",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "vehicle_owner",
+   "fieldtype": "Link",
+   "label": "Vehicle Owner",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_egmx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "vehicle_request",
+   "fieldtype": "Link",
+   "label": "Vehicle Request",
+   "options": "Vehicle Request"
+  },
+  {
+   "fieldname": "rent_start_date",
+   "fieldtype": "Date",
+   "label": "Rent Start Date"
+  },
+  {
+   "fieldname": "rent_end_date",
+   "fieldtype": "Date",
+   "label": "Rent End Date"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "PVC-.YY.-.###"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_bank",
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank"
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_iban",
+   "fieldname": "iban",
+   "fieldtype": "Data",
+   "label": "Iban"
+  },
+  {
+   "fieldname": "ownership_documents",
+   "fieldtype": "Attach",
+   "label": "Ownership Documents"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "With Driver\nWithout Driver"
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_id",
+   "fieldtype": "Check",
+   "label": "Tax ID"
+  },
+  {
+   "fieldname": "rent_amount",
+   "fieldtype": "Float",
+   "label": "Rent amount",
+   "precision": "0"
+  },
+  {
+   "fieldname": "vehical_details_section",
+   "fieldtype": "Section Break",
+   "label": "Vehical Details"
+  },
+  {
+   "fieldname": "brand",
+   "fieldtype": "Data",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Float",
+   "label": "Model",
+   "precision": "0"
+  },
+  {
+   "fieldname": "column_break_xpcv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "motor_number",
+   "fieldtype": "Data",
+   "label": "Motor number"
+  },
+  {
+   "fieldname": "chassis_number",
+   "fieldtype": "Data",
+   "label": "Chassis number"
+  },
+  {
+   "fieldname": "plat_number",
+   "fieldtype": "Data",
+   "label": "Plat number"
+  },
+  {
+   "fieldname": "section_break_sksy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "monthly_kilometers",
+   "fieldtype": "Float",
+   "label": "Monthly Kilometers",
+   "precision": "0"
+  },
+  {
+   "fieldname": "extra_kelometer_fees",
+   "fieldtype": "Currency",
+   "label": "Extra Kelometer fees"
+  },
+  {
+   "fieldname": "column_break_unqq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.type == 'With Driver'",
+   "fieldname": "daily_start_time",
+   "fieldtype": "Time",
+   "label": "Daily Start Time"
+  },
+  {
+   "depends_on": "eval:doc.type == 'With Driver'",
+   "fieldname": "daily_end_time",
+   "fieldtype": "Time",
+   "label": "Daily End Time"
+  },
+  {
+   "depends_on": "eval:doc.type == 'With Driver'",
+   "fieldname": "extra_hour_fees",
+   "fieldtype": "Float",
+   "label": "Extra Hour Fees"
+  },
+  {
+   "fieldname": "request_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Request Details"
+  },
+  {
+   "fieldname": "document_approval_tab",
+   "fieldtype": "Tab Break",
+   "label": "Document Approval"
+  },
+  {
+   "fieldname": "document_approval_help",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  },
+  {
+   "fieldname": "document_approval",
+   "fieldtype": "Table",
+   "label": "Workflow Approval",
+   "options": "Flat Request Approval",
+   "read_only": 1,
+   "no_copy": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "private_vehicle_contract_request",
+   "fieldtype": "Link",
+   "label": "Private Vehicle Contract Request",
+   "options": "Private Vehicle Contract Request"
+  },
+  {
+   "fieldname": "contract_attachment",
+   "fieldtype": "Attach",
+   "label": "Contract Attachment",
+   "permlevel": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-09-26 21:11:52.299813",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "Private Vehicle Contract",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Fleet Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Administration Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Legal User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Legal Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "System Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Fleet Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Administration Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 0
+  },
+  {
+   "role": "Legal User",
+   "permlevel": 1,
+   "read": 1,
+   "write": 1
+  },
+  {
+   "role": "Legal Manager",
+   "permlevel": 1,
+   "read": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

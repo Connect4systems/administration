@@ -44,3 +44,7 @@ def ensure_flat_contract_approval_layout():
 
 def ensure_private_vehicle_contract_approval_layout():
 	ensure_approval_layout("Private Vehicle Contract Request", "private_vehicle_contract_request")
+
+
+def ensure_private_vehicle_contract_layout():
+	ensure_approval_layout("Private Vehicle Contract", "private_vehicle_contract")
