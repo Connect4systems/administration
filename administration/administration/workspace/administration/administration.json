@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Administration",
  "links": [],
- "modified": "2026-09-26 20:34:10.265290",
+ "modified": "2026-09-27 01:28:25.922551",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Administration",
@@ -27,6 +27,15 @@
   },
   {
    "role": "Admin supervisor (Accommodation)"
+  },
+  {
+   "role": "Legal Manager"
+  },
+  {
+   "role": "Legal User"
+  },
+  {
+   "role": "Fleet Manager"
   }
  ],
  "sequence_id": 1.0,
