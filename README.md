@@ -12,6 +12,19 @@ bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app administration
 ```
 
+### Accommodation Report
+
+Open **Accommodation Report** from Desk search. It includes submitted Flats with
+Flat Status Active or Expired, with filters for Project, Governorate, Bed Status,
+Employee and Rent Type. Each bed appears on its own row with its Flat, Room and
+assigned employee. Empty rooms/flats appear when no Bed Status or Employee filter
+is selected; beds without a Room appear under their Flat with a blank Room.
+The report uses the current user's document permissions and is initially available
+to System Manager, matching the Flat, Room and Bed DocTypes.
+
+After deploying, run `bench --site admin.cscec.live migrate` and
+`bench --site admin.cscec.live clear-cache`, then refresh Desk.
+
 ### Updating Flat Rent Request to Flat Request
 
 Deploy the complete app revision, including the new `flat_request` package and both
