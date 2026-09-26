@@ -21,11 +21,11 @@ class TestAccommodationReport(TestCase):
 	def test_beds_keep_room_flat_and_employee_relationships(self):
 		rows = report.build_rows(
 			self.flats, self.rooms, self.beds,
-			[{"name": "E1", "employee_name": "Employee One"}], {},
+			[{"name": "E1", "designation": "Engineer"}], {},
 		)
 		self.assertEqual(len(rows), 4)
-		self.assertEqual((rows[0]["flat"], rows[0]["room"], rows[0]["employee_name"]),
-			("F1", "R1", "Employee One"))
+		self.assertEqual((rows[0]["flat"], rows[0]["room"], rows[0]["designation"]),
+			("F1", "R1", "Engineer"))
 		self.assertEqual(rows[1]["bed"], "B2")
 		self.assertEqual(rows[2]["room"], "R2")
 		self.assertNotIn("bed", rows[2])

@@ -31,8 +31,22 @@ frappe.ui.form.on("Bed", {
 	flat(frm) {
 		frm.set_value("room", null);
 	},
-	employee(frm) {
+	async employee(frm) {
 		frm.set_value("status", frm.doc.employee ? "Booked" : "Open");
+		const employee = frm.doc.employee;
+		if (!employee) return;
+		const result = await frappe.call({
+			method: "administration.administration.doctype.bed.bed.check_employee_assignment",
+			args: {employee, bed_name: frm.is_new() ? null : frm.doc.name},
+		});
+		if (frm.doc.employee === employee && result.message) {
+			frappe.msgprint({
+				title: __("Employee Already Assigned"),
+				indicator: "orange",
+				message: result.message,
+			});
+			await frm.set_value("employee", null);
+		}
 	},
 	employee_left(frm) {
 		if (!frm.doc.employee) {
