@@ -21,9 +21,12 @@ class TestAccommodationReport(TestCase):
 	def test_beds_keep_room_flat_and_employee_relationships(self):
 		rows = report.build_rows(
 			self.flats, self.rooms, self.beds,
-			[{"name": "E1", "designation": "Engineer"}], {},
+			[{"name": "E1", "employee_name": "Ahmed Ali", "designation": "Engineer"}], {},
 		)
 		self.assertEqual(len(rows), 4)
+		self.assertEqual(rows[0]["employee"], "E1")
+		self.assertEqual(rows[0]["employee_name"], "Ahmed Ali")
+		self.assertEqual(rows[1]["employee_name"], "")
 		self.assertEqual((rows[0]["flat"], rows[0]["room"], rows[0]["designation"]),
 			("F1", "R1", "Engineer"))
 		self.assertEqual(rows[1]["bed"], "B2")

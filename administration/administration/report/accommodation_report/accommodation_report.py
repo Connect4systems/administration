@@ -33,7 +33,7 @@ def execute(filters=None):
 	)
 	employee_ids = sorted({bed.employee for bed in beds if bed.employee})
 	employees = frappe.get_list(
-		"Employee", filters={"name": ["in", employee_ids]}, fields=["name", "designation"],
+		"Employee", filters={"name": ["in", employee_ids]}, fields=["name", "employee_name", "designation"],
 		limit_page_length=0,
 	) if employee_ids and frappe.has_permission("Employee", "read") else []
 	return get_columns(), build_rows(flats, rooms, beds, employees, filters)
@@ -43,6 +43,7 @@ def build_rows(flats, rooms, beds, employees, filters):
 	rooms_by_flat = defaultdict(list)
 	beds_by_room = defaultdict(list)
 	designations = {employee["name"]: employee["designation"] for employee in employees}
+	employee_names = {employee["name"]: employee.get("employee_name") or "" for employee in employees}
 	for room in rooms:
 		rooms_by_flat[room["flat"]].append(room["name"])
 	for bed in beds:
@@ -63,6 +64,7 @@ def build_rows(flats, rooms, beds, employees, filters):
 				rows.append({
 					**base, "room": room, "bed": bed["name"], "bed_status": bed["status"],
 					"employee": bed.get("employee"),
+					"employee_name": employee_names.get(bed.get("employee"), ""),
 					"designation": designations.get(bed.get("employee"), ""),
 				})
 	return rows
@@ -82,7 +84,7 @@ def get_columns():
 			("room", "Room", "Room", 160),
 			("bed", "Bed", "Bed", 160),
 			("bed_status", "Bed Status", None, 100),
-			("employee", "Employee ID", "Employee", 130),
+			("employee", "Employee ID", "Employee", 260),
 			("designation", "Designation", "Designation", 180),
 		)
 	]
