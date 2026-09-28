@@ -127,6 +127,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "depends_on": "eval:doc.request_type == 'Private'",
    "fieldname": "employee",
    "fieldtype": "Link",
    "label": "Employee",
@@ -134,10 +135,12 @@
   },
   {
    "default": "1",
+   "depends_on": "eval:doc.request_type == 'Share'",
    "fieldname": "no_of_employees",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "No of Employees"
+   "label": "No of Employees",
+   "mandatory_depends_on": "eval:doc.request_type == 'Share'"
   },
   {
    "fieldname": "amended_from",
@@ -221,6 +224,7 @@
    "reqd": 1
   },
   {
+   "depends_on": "eval:doc.request_type == 'Share'",
    "fieldname": "employee_table",
    "fieldtype": "Table",
    "label": "Employees",

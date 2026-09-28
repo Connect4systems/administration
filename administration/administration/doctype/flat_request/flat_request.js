@@ -2,6 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Flat Request", {
+	setup(frm) {
+		frm.set_query("employee", () => ({
+			filters: { status: "Active", custom_accommidation: "Private" },
+		}));
+		frm.set_query("code", "employee_table", () => ({
+			filters: { status: "Active", custom_accommidation: "Share" },
+		}));
+	},
 	before_workflow_action: (frm) => administration.approval.before_workflow_action(frm),
 	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
