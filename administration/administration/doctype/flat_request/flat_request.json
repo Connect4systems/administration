@@ -17,12 +17,13 @@
   "date",
   "type",
   "request_type",
+  "flat_proposal",
   "flat_details_section",
   "flat",
   "governorate",
   "city",
-  "address",
   "area",
+  "address",
   "column_break_lxtu",
   "flat_owner",
   "rent_period",
@@ -30,6 +31,8 @@
   "monthly_rent",
   "commission",
   "deposit",
+  "no_of_rooms",
+  "no_of_beds",
   "section_break_epdd",
   "employee_table",
   "section_break_iudq",
@@ -256,13 +259,30 @@
   {
    "fieldname": "column_break_lxtu",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "flat_proposal",
+   "fieldtype": "Check",
+   "label": "Flat Proposal"
+  },
+  {
+   "fieldname": "no_of_rooms",
+   "fieldtype": "Float",
+   "label": "No of Rooms",
+   "precision": "0"
+  },
+  {
+   "fieldname": "no_of_beds",
+   "fieldtype": "Float",
+   "label": "No of Beds"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-28 16:40:02.102854",
+ "modified": "2026-09-28 17:10:22.044605",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Request",
