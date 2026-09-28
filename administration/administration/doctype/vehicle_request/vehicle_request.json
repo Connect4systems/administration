@@ -8,11 +8,13 @@
  "field_order": [
   "project",
   "request_type",
+  "employee",
+  "no_of_employee",
   "column_break_brtr",
   "date",
   "vehicle_type",
   "section_break_qjiy",
-  "employee",
+  "employees",
   "section_break_46ab",
   "amended_from",
   "naming_series"
@@ -64,9 +66,9 @@
   },
   {
    "fieldname": "employee",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Employee",
-   "options": "Rent Emp"
+   "options": "Employee"
   },
   {
    "default": "VR-.YY.-.###",
@@ -82,13 +84,24 @@
    "label": "Request Type",
    "options": "Private Vehicle\nTransportation\nSite Service",
    "reqd": 1
+  },
+  {
+   "fieldname": "no_of_employee",
+   "fieldtype": "Float",
+   "label": "No of Employee"
+  },
+  {
+   "fieldname": "employees",
+   "fieldtype": "Table",
+   "label": "Employees",
+   "options": "Rent Emp"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-26 20:51:23.181292",
+ "modified": "2026-09-28 17:19:08.279435",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicle Request",
