@@ -7,22 +7,29 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
+  "request_referance_section",
   "project",
   "vehicle_request",
+  "column_break_egmx",
+  "date",
+  "type",
+  "section_break_pzrv",
   "vehicle_owner",
+  "ownership_documents",
   "bank",
   "iban",
   "tax_id",
-  "ownership_documents",
-  "column_break_egmx",
-  "date",
+  "column_break_wuvn",
+  "rent_period",
+  "payment_cycle",
+  "rent_amount",
   "rent_start_date",
   "rent_end_date",
-  "rent_amount",
-  "type",
   "section_break_sksy",
   "monthly_kilometers",
   "extra_kelometer_fees",
+  "allowance_time",
+  "midnight_allowance",
   "column_break_unqq",
   "daily_start_time",
   "daily_end_time",
@@ -172,7 +179,8 @@
   },
   {
    "fieldname": "section_break_sksy",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Conditions"
   },
   {
    "fieldname": "monthly_kilometers",
@@ -223,20 +231,58 @@
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "document_approval",
    "fieldtype": "Table",
    "label": "Workflow Approval",
-   "options": "Flat Request Approval",
-   "read_only": 1,
    "no_copy": 1,
-   "allow_on_submit": 1
+   "options": "Flat Request Approval",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_referance_section",
+   "fieldtype": "Section Break",
+   "label": "Request Referance"
+  },
+  {
+   "fieldname": "section_break_pzrv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wuvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rent_period",
+   "fieldtype": "Select",
+   "label": "Rent Period",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+  },
+  {
+   "fieldname": "payment_cycle",
+   "fieldtype": "Select",
+   "label": "Payment Cycle",
+   "options": "Daily\nMonthly"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.type == 'With Driver'",
+   "fieldname": "midnight_allowance",
+   "fieldtype": "Check",
+   "label": "Midnight Allowance"
+  },
+  {
+   "depends_on": "eval:doc.type == 'With Driver'",
+   "fieldname": "allowance_time",
+   "fieldtype": "Time",
+   "label": "Allowance Time"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-26 21:11:52.299813",
+ "modified": "2026-09-28 20:32:46.025501",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Private Vehicle Contract Request",
