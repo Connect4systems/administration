@@ -61,7 +61,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "City",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.flat_proposal == 1"
   },
   {
    "fieldname": "area",
@@ -252,6 +252,7 @@
    "label": "Note"
   },
   {
+   "depends_on": "eval:doc.flat_proposal == 1",
    "fieldname": "flat_details_section",
    "fieldtype": "Section Break",
    "label": "Flat Details"
