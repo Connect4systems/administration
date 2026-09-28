@@ -65,6 +65,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "depends_on": "eval:doc.request_type == 'Private Vehicle'",
    "fieldname": "employee",
    "fieldtype": "Link",
    "label": "Employee",
@@ -91,6 +92,7 @@
    "label": "No of Employee"
   },
   {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "employees",
    "fieldtype": "Table",
    "label": "Employees",
