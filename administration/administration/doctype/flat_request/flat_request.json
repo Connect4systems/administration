@@ -8,11 +8,9 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
-  "type",
   "flat",
-  "last_rent_contract",
-  "lifecycle_applied",
   "project",
+  "employee",
   "no_of_employees",
   "governorate",
   "city",
@@ -20,6 +18,8 @@
   "address",
   "column_break_cdrx",
   "date",
+  "type",
+  "request_type",
   "monthly_rent",
   "rent_period",
   "payment_cycle",
@@ -27,9 +27,13 @@
   "commission",
   "flat_owner",
   "section_break_epdd",
-  "employee",
-  "amended_from",
+  "employee_table",
+  "section_break_iudq",
+  "last_rent_contract",
+  "lifecycle_applied",
+  "column_break_wvpl",
   "naming_series",
+  "amended_from",
   "document_approval_tab",
   "document_approval_help",
   "document_approval"
@@ -84,12 +88,14 @@
    "label": "Monthly Rent"
   },
   {
+   "default": "Yearly",
    "fieldname": "rent_period",
    "fieldtype": "Select",
    "label": "Rent Period",
    "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
   },
   {
+   "default": "Monthly",
    "fieldname": "payment_cycle",
    "fieldtype": "Select",
    "label": "Payment Cycle",
@@ -118,9 +124,9 @@
   },
   {
    "fieldname": "employee",
-   "fieldtype": "Table",
+   "fieldtype": "Link",
    "label": "Employee",
-   "options": "Rent Emp"
+   "options": "Employee"
   },
   {
    "default": "1",
@@ -157,13 +163,13 @@
    "label": "Document Approval"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "document_approval",
    "fieldtype": "Table",
    "label": "Workflow Approval",
-   "options": "Flat Request Approval",
-   "read_only": 1,
    "no_copy": 1,
-   "allow_on_submit": 1
+   "options": "Flat Request Approval",
+   "read_only": 1
   },
   {
    "fieldname": "document_approval_help",
@@ -171,44 +177,66 @@
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
   },
   {
-   "fieldname": "type",
-   "label": "Type",
-   "fieldtype": "Select",
-   "options": "New Flat\nRenew",
    "default": "New Flat",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew",
    "reqd": 1
   },
   {
    "fieldname": "flat",
-   "label": "Flat",
    "fieldtype": "Link",
+   "label": "Flat",
+   "no_copy": 1,
    "options": "Flat",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
    "fieldname": "last_rent_contract",
-   "label": "Last Rent Contract",
    "fieldtype": "Link",
+   "label": "Last Rent Contract",
+   "no_copy": 1,
    "options": "Flat Contract",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
+   "allow_on_submit": 1,
+   "default": "0",
    "fieldname": "lifecycle_applied",
    "fieldtype": "Check",
-   "label": "Renewal Applied",
-   "read_only": 1,
    "hidden": 1,
+   "label": "Renewal Applied",
    "no_copy": 1,
-   "allow_on_submit": 1
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_type",
+   "fieldtype": "Select",
+   "label": "Request Type",
+   "options": "Share\nPrivate",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee_table",
+   "fieldtype": "Table",
+   "label": "Employees",
+   "options": "Rent Emp"
+  },
+  {
+   "fieldname": "section_break_iudq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wvpl",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 17:18:29.787297",
+ "modified": "2026-09-28 16:34:50.237629",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Flat Request",
