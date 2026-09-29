@@ -7,21 +7,37 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
+  "request_referance_section",
   "project",
+  "vehicle_type",
+  "column_break_egmx",
+  "date",
+  "drive_type",
+  "vehicle_request",
+  "private_vehicle_contract_request",
   "contract_attachment",
+  "section_break_pzrv",
   "vehicle_owner",
+  "ownership_documents",
   "bank",
   "iban",
   "tax_id",
-  "ownership_documents",
-  "column_break_egmx",
-  "date",
-  "vehicle_type",
-  "rent_start_date",
-  "rent_end_date",
+  "column_break_wuvn",
+  "rent_period",
   "payment_cycle",
   "rent_amount",
-  "drive_type",
+  "rent_start_date",
+  "rent_end_date",
+  "section_break_sksy",
+  "monthly_kilometers",
+  "extra_kelometer_fees",
+  "half_day_allowance",
+  "allowance_time",
+  "midnight_allowance",
+  "column_break_unqq",
+  "check_in",
+  "check_out",
+  "extra_hour_fees",
   "vehical_details_section",
   "brand",
   "model",
@@ -29,23 +45,9 @@
   "motor_number",
   "chassis_number",
   "plat_number",
-  "section_break_sksy",
-  "kilometers_limit",
-  "allowed_kilometers",
-  "extra_kelometer_fees",
-  "allowance_time",
-  "midnight_allowance",
-  "column_break_unqq",
-  "attendace",
-  "check_in",
-  "check_out",
-  "extra_hour_fees",
   "section_break_8tp8",
   "amended_from",
   "naming_series",
-  "column_break_gcit",
-  "private_vehicle_contract_request",
-  "vehicle_request",
   "document_approval_tab",
   "document_approval_help",
   "document_approval"
@@ -68,7 +70,7 @@
   {
    "fieldname": "vehicle_owner",
    "fieldtype": "Link",
-   "label": "Vehicle Owner",
+   "label": "Vehicle Supplier",
    "options": "Supplier"
   },
   {
@@ -150,7 +152,7 @@
   },
   {
    "fieldname": "model",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "Model",
    "precision": "0"
   },
@@ -179,18 +181,25 @@
    "label": "Conditions"
   },
   {
+   "fieldname": "monthly_kilometers",
+   "fieldtype": "Data",
+   "label": "Monthly Kilometers",
+   "precision": "0"
+  },
+  {
    "fieldname": "extra_kelometer_fees",
    "fieldtype": "Currency",
-   "label": "Extra Kelometer fees"
+   "label": "Extra Kelometer fees",
+   "precision": "0"
   },
   {
    "fieldname": "column_break_unqq",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "extra_hour_fees",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "label": "Extra Hour Fees"
   },
   {
@@ -218,6 +227,74 @@
    "read_only": 1
   },
   {
+   "fieldname": "request_referance_section",
+   "fieldtype": "Section Break",
+   "label": "Request Referance"
+  },
+  {
+   "fieldname": "section_break_pzrv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wuvn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rent_period",
+   "fieldtype": "Select",
+   "label": "Rent Period",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+  },
+  {
+   "fieldname": "payment_cycle",
+   "fieldtype": "Select",
+   "label": "Payment Cycle",
+   "options": "Daily\nMonthly"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
+   "fieldname": "midnight_allowance",
+   "fieldtype": "Check",
+   "label": "Midnight Allowance"
+  },
+  {
+   "depends_on": "eval:doc.half_day_allowance == 1",
+   "fieldname": "allowance_time",
+   "fieldtype": "Time",
+   "label": "Allowance Time"
+  },
+  {
+   "fieldname": "drive_type",
+   "fieldtype": "Select",
+   "label": "Drive Type",
+   "options": "With Driver\nWithout Driver"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Vehicle Type"
+  },
+  {
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
+   "fieldname": "check_in",
+   "fieldtype": "Time",
+   "label": "Check in"
+  },
+  {
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
+   "fieldname": "check_out",
+   "fieldtype": "Time",
+   "label": "Check out"
+  },
+  {
+   "default": "0",
+   "fieldname": "half_day_allowance",
+   "fieldtype": "Check",
+   "label": "Half Day Allowance"
+  },
+  {
    "fieldname": "private_vehicle_contract_request",
    "fieldtype": "Link",
    "label": "Private Vehicle Contract Request",
@@ -228,76 +305,13 @@
    "fieldtype": "Attach",
    "label": "Contract Attachment",
    "permlevel": 1
-  },
-  {
-   "fieldname": "allowance_time",
-   "fieldtype": "Time",
-   "label": "Allowance Time"
-  },
-  {
-   "default": "0",
-   "fieldname": "midnight_allowance",
-   "fieldtype": "Check",
-   "label": "Midnight Allowance"
-  },
-  {
-   "fieldname": "drive_type",
-   "fieldtype": "Select",
-   "label": "Drive Type",
-   "options": "With Driver\nWithout Driver"
-  },
-  {
-   "fieldname": "allowed_kilometers",
-   "fieldtype": "Float",
-   "label": "Allowed Kilometers",
-   "precision": "0"
-  },
-  {
-   "depends_on": "eval:doc.type == 'With Driver'",
-   "fieldname": "check_in",
-   "fieldtype": "Time",
-   "label": "Check in"
-  },
-  {
-   "depends_on": "eval:doc.type == 'With Driver'",
-   "fieldname": "check_out",
-   "fieldtype": "Time",
-   "label": "Check out"
-  },
-  {
-   "fieldname": "column_break_gcit",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "vehicle_type",
-   "fieldtype": "Link",
-   "label": "Vehicle Type",
-   "options": "Vehicle Type"
-  },
-  {
-   "fieldname": "payment_cycle",
-   "fieldtype": "Select",
-   "label": "Payment Cycle",
-   "options": "Daily\nMonthly"
-  },
-  {
-   "default": "0",
-   "fieldname": "kilometers_limit",
-   "fieldtype": "Check",
-   "label": "kilometers Limit"
-  },
-  {
-   "default": "0",
-   "fieldname": "attendace",
-   "fieldtype": "Check",
-   "label": "Attendace"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 01:16:30.390454",
+ "modified": "2026-09-29 21:44:26.997342",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Private Vehicle Contract",
