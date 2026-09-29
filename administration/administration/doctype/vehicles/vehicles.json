@@ -29,6 +29,11 @@
   "plat_number",
   "section_break_sksy",
   "vehicle_owner",
+  "bank",
+  "iban",
+  "ownership_documents",
+  "tax_id",
+  "contract_attachment",
   "kilometers",
   "monthly_kilometers",
   "extra_kelometer_fees",
@@ -44,8 +49,13 @@
   "amended_from",
   "column_break_ltxa",
   "private_vehicle_contract_request",
+  "private_vehicle_contract",
   "naming_series",
   "employee_passanger",
+  "request_type",
+  "employee",
+  "no_of_employee",
+  "employees",
   "vehicle_route_table",
   "document_approval_tab",
   "document_approval_help",
@@ -58,7 +68,8 @@
    "in_list_view": 1,
    "label": "Vehical Type",
    "options": "Private Vehicle\nTransportation\nSite Service",
-   "reqd": 1
+   "reqd": 1,
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -74,7 +85,8 @@
    "fieldname": "vehicle_owner",
    "fieldtype": "Link",
    "label": "Vehicle Owner",
-   "options": "Supplier"
+   "options": "Supplier",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_egmx",
@@ -84,23 +96,27 @@
    "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "Date",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_request",
    "fieldtype": "Link",
    "label": "Vehicle Request",
-   "options": "Vehicle Request"
+   "options": "Vehicle Request",
+   "read_only": 1
   },
   {
    "fieldname": "rent_start_date",
    "fieldtype": "Date",
-   "label": "Rent Start Date"
+   "label": "Rent Start Date",
+   "read_only": 1
   },
   {
    "fieldname": "rent_end_date",
    "fieldtype": "Date",
-   "label": "Rent End Date"
+   "label": "Rent End Date",
+   "read_only": 1
   },
   {
    "fieldname": "naming_series",
@@ -115,13 +131,16 @@
    "fieldtype": "Link",
    "label": "Project",
    "options": "Project",
-   "reqd": 1
+   "reqd": 1,
+   "read_only": 0,
+   "allow_on_submit": 1
   },
   {
    "fieldname": "rent_amount",
    "fieldtype": "Float",
    "label": "Rent amount",
-   "precision": "0"
+   "precision": "0",
+   "read_only": 1
   },
   {
    "fieldname": "vehical_details_section",
@@ -131,13 +150,15 @@
   {
    "fieldname": "brand",
    "fieldtype": "Data",
-   "label": "Brand"
+   "label": "Brand",
+   "read_only": 1
   },
   {
    "fieldname": "model",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "Model",
-   "precision": "0"
+   "precision": "0",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_xpcv",
@@ -146,17 +167,20 @@
   {
    "fieldname": "motor_number",
    "fieldtype": "Data",
-   "label": "Motor number"
+   "label": "Motor number",
+   "read_only": 1
   },
   {
    "fieldname": "chassis_number",
    "fieldtype": "Data",
-   "label": "Chassis number"
+   "label": "Chassis number",
+   "read_only": 1
   },
   {
    "fieldname": "plat_number",
    "fieldtype": "Data",
-   "label": "Plat number"
+   "label": "Plat number",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_sksy",
@@ -166,7 +190,8 @@
   {
    "fieldname": "extra_kelometer_fees",
    "fieldtype": "Currency",
-   "label": "Extra Kelometer fees"
+   "label": "Extra Kelometer fees",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_unqq",
@@ -175,8 +200,9 @@
   {
    "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "extra_hour_fees",
-   "fieldtype": "Float",
-   "label": "Extra Hour Fees"
+   "fieldtype": "Currency",
+   "label": "Extra Hour Fees",
+   "read_only": 1
   },
   {
    "fieldname": "request_details_tab",
@@ -194,7 +220,6 @@
    "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
   },
   {
-   "allow_on_submit": 1,
    "fieldname": "document_approval",
    "fieldtype": "Table",
    "label": "Workflow Approval",
@@ -206,13 +231,15 @@
    "fieldname": "private_vehicle_contract_request",
    "fieldtype": "Link",
    "label": "Private Vehicle Contract Request",
-   "options": "Private Vehicle Contract Request"
+   "options": "Private Vehicle Contract Request",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_route_table",
    "fieldtype": "Table",
    "label": "Vehicle Route Table",
-   "options": "Rent Emp"
+   "options": "Rent Emp",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_ioet",
@@ -227,92 +254,179 @@
    "fieldname": "payment_cycle",
    "fieldtype": "Select",
    "label": "Payment Cycle",
-   "options": "Daily\nMonthly"
+   "options": "Daily\nMonthly",
+   "read_only": 1
   },
   {
    "fieldname": "kilometers",
    "fieldtype": "Float",
    "label": "Monthly Kilometers",
-   "precision": "0"
+   "precision": "0",
+   "read_only": 1
   },
   {
    "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "check_in",
    "fieldtype": "Time",
-   "label": "Check in"
+   "label": "Check in",
+   "read_only": 1
   },
   {
    "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "check_out",
    "fieldtype": "Time",
-   "label": "Check out"
+   "label": "Check out",
+   "read_only": 1
   },
   {
    "fieldname": "drive_type",
    "fieldtype": "Select",
    "label": "Drive Type",
-   "options": "With Driver\nWithout Driver"
+   "options": "With Driver\nWithout Driver",
+   "read_only": 1
   },
   {
    "depends_on": "eval:doc.half_day_allowance == 1",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
-   "label": "Allowance Time"
+   "label": "Allowance Time",
+   "read_only": 1
   },
   {
    "default": "0",
    "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "midnight_allowance",
    "fieldtype": "Check",
-   "label": "Midnight Allowance"
+   "label": "Midnight Allowance",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_route",
    "fieldtype": "Link",
    "label": "Vehicle Route",
-   "options": "Vehicle Route"
+   "options": "Vehicle Route",
+   "read_only": 1
   },
   {
    "fieldname": "location",
    "fieldtype": "Link",
    "label": "Location",
-   "options": "Location"
+   "options": "Location",
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "label": "Vehicle Type",
-   "options": "Vehicle Type"
+   "options": "Vehicle Type",
+   "read_only": 1
   },
   {
    "fieldname": "rent_period",
    "fieldtype": "Select",
    "label": "Rent Period",
-   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly",
+   "read_only": 1
   },
   {
    "fieldname": "monthly_kilometers",
    "fieldtype": "Data",
    "label": "Monthly Kilometers",
-   "precision": "0"
+   "precision": "0",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "half_day_allowance",
    "fieldtype": "Check",
-   "label": "Half Day Allowance"
+   "label": "Half Day Allowance",
+   "read_only": 1
   },
   {
    "fieldname": "employee_passanger",
    "fieldtype": "Tab Break",
    "label": "Employee Passengers "
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_bank",
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_iban",
+   "fieldname": "iban",
+   "fieldtype": "Data",
+   "label": "Iban",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ownership_documents",
+   "fieldtype": "Attach",
+   "label": "Ownership Documents",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_id",
+   "fieldtype": "Check",
+   "label": "Tax ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "contract_attachment",
+   "fieldtype": "Attach",
+   "label": "Contract Attachment",
+   "permlevel": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Request Type",
+   "options": "Private Vehicle\nTransportation\nSite Service",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.request_type == 'Private Vehicle'",
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
+   "fieldname": "no_of_employee",
+   "fieldtype": "Float",
+   "label": "No of Employee",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
+   "fieldname": "employees",
+   "fieldtype": "Table",
+   "label": "Employees",
+   "options": "Rent Emp",
+   "read_only": 1
+  },
+  {
+   "fieldname": "private_vehicle_contract",
+   "fieldtype": "Link",
+   "label": "Private Vehicle Contract",
+   "options": "Private Vehicle Contract",
+   "no_copy": 1,
+   "search_index": 1,
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 23:24:38.721036",
+ "modified": "2026-09-30 00:52:39.672678",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
