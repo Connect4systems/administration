@@ -9,10 +9,11 @@
   "request_details_tab",
   "request_referance_section",
   "project",
-  "vehicle_request",
+  "vehicle_type",
   "column_break_egmx",
   "date",
-  "type",
+  "drive_type",
+  "vehicle_request",
   "section_break_pzrv",
   "vehicle_owner",
   "ownership_documents",
@@ -28,11 +29,12 @@
   "section_break_sksy",
   "monthly_kilometers",
   "extra_kelometer_fees",
+  "half_day_allowance",
   "allowance_time",
   "midnight_allowance",
   "column_break_unqq",
-  "daily_start_time",
-  "daily_end_time",
+  "check_in",
+  "check_out",
   "extra_hour_fees",
   "vehical_details_section",
   "brand",
@@ -66,7 +68,7 @@
   {
    "fieldname": "vehicle_owner",
    "fieldtype": "Link",
-   "label": "Vehicle Owner",
+   "label": "Vehicle Supplier",
    "options": "Supplier"
   },
   {
@@ -125,12 +127,6 @@
    "label": "Ownership Documents"
   },
   {
-   "fieldname": "type",
-   "fieldtype": "Select",
-   "label": "Type",
-   "options": "With Driver\nWithout Driver"
-  },
-  {
    "default": "0",
    "fieldname": "tax_id",
    "fieldtype": "Check",
@@ -154,7 +150,7 @@
   },
   {
    "fieldname": "model",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "Model",
    "precision": "0"
   },
@@ -184,35 +180,24 @@
   },
   {
    "fieldname": "monthly_kilometers",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "Monthly Kilometers",
    "precision": "0"
   },
   {
    "fieldname": "extra_kelometer_fees",
    "fieldtype": "Currency",
-   "label": "Extra Kelometer fees"
+   "label": "Extra Kelometer fees",
+   "precision": "0"
   },
   {
    "fieldname": "column_break_unqq",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
-   "fieldname": "daily_start_time",
-   "fieldtype": "Time",
-   "label": "Daily Start Time"
-  },
-  {
-   "depends_on": "eval:doc.type == 'With Driver'",
-   "fieldname": "daily_end_time",
-   "fieldtype": "Time",
-   "label": "Daily End Time"
-  },
-  {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "extra_hour_fees",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "label": "Extra Hour Fees"
   },
   {
@@ -266,23 +251,53 @@
   },
   {
    "default": "0",
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "midnight_allowance",
    "fieldtype": "Check",
    "label": "Midnight Allowance"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
    "label": "Allowance Time"
+  },
+  {
+   "fieldname": "drive_type",
+   "fieldtype": "Select",
+   "label": "Drive Type",
+   "options": "With Driver\nWithout Driver"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Vehicle Type"
+  },
+  {
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
+   "fieldname": "check_in",
+   "fieldtype": "Time",
+   "label": "Check in"
+  },
+  {
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
+   "fieldname": "check_out",
+   "fieldtype": "Time",
+   "label": "Check out"
+  },
+  {
+   "default": "0",
+   "fieldname": "half_day_allowance",
+   "fieldtype": "Check",
+   "label": "Half Day Allowance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-28 20:32:46.025501",
+ "modified": "2026-09-29 20:36:19.601018",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Private Vehicle Contract Request",
@@ -311,6 +326,7 @@
    "report": 1,
    "role": "Fleet Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
