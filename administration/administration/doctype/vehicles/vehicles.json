@@ -9,7 +9,9 @@
   "request_details_tab",
   "project",
   "vehical_type",
+  "vehicle_type",
   "drive_type",
+  "rent_period",
   "payment_cycle",
   "vehicle_route",
   "column_break_egmx",
@@ -27,7 +29,9 @@
   "plat_number",
   "section_break_sksy",
   "kilometers",
+  "monthly_kilometers",
   "extra_kelometer_fees",
+  "half_day_allowance",
   "allowance_time",
   "midnight_allowance",
   "column_break_unqq",
@@ -36,10 +40,15 @@
   "extra_hour_fees",
   "section_break_ioet",
   "vehicle_owner",
+  "ownership_documents",
+  "bank",
+  "iban",
+  "tax_id",
   "vehicle_request",
   "amended_from",
   "column_break_ltxa",
   "private_vehicle_contract_request",
+  "contract_attachment",
   "naming_series",
   "document_approval_tab",
   "document_approval_help",
@@ -169,7 +178,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "extra_hour_fees",
    "fieldtype": "Float",
    "label": "Extra Hour Fees"
@@ -237,13 +246,13 @@
    "precision": "0"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "check_in",
    "fieldtype": "Time",
    "label": "Check in"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "check_out",
    "fieldtype": "Time",
    "label": "Check out"
@@ -257,13 +266,15 @@
   {
    "fieldname": "allowance_time",
    "fieldtype": "Time",
-   "label": "Allowance Time"
+   "label": "Allowance Time",
+   "depends_on": "eval:doc.half_day_allowance == 1"
   },
   {
    "default": "0",
    "fieldname": "midnight_allowance",
    "fieldtype": "Check",
-   "label": "Midnight Allowance"
+   "label": "Midnight Allowance",
+   "depends_on": "eval:doc.drive_type == 'With Driver'"
   },
   {
    "fieldname": "vehicle_route",
@@ -276,13 +287,66 @@
    "fieldtype": "Link",
    "label": "Location",
    "options": "Location"
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Link",
+   "label": "Vehicle Type",
+   "options": "Vehicle Type"
+  },
+  {
+   "fieldname": "rent_period",
+   "fieldtype": "Select",
+   "label": "Rent Period",
+   "options": "Daily\nMonthly\nQuarterly\nSemi Annual\nYearly"
+  },
+  {
+   "fieldname": "monthly_kilometers",
+   "fieldtype": "Data",
+   "label": "Monthly Kilometers",
+   "precision": "0"
+  },
+  {
+   "default": "0",
+   "fieldname": "half_day_allowance",
+   "fieldtype": "Check",
+   "label": "Half Day Allowance"
+  },
+  {
+   "fieldname": "ownership_documents",
+   "fieldtype": "Attach",
+   "label": "Ownership Documents"
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_bank",
+   "fieldname": "bank",
+   "fieldtype": "Data",
+   "label": "Bank"
+  },
+  {
+   "fetch_from": "vehicle_owner.custom_iban",
+   "fieldname": "iban",
+   "fieldtype": "Data",
+   "label": "Iban"
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_id",
+   "fieldtype": "Check",
+   "label": "Tax ID"
+  },
+  {
+   "fieldname": "contract_attachment",
+   "fieldtype": "Attach",
+   "label": "Contract Attachment",
+   "permlevel": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 01:26:28.037464",
+ "modified": "2026-09-29 21:59:10.183242",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
