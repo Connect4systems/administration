@@ -10,14 +10,11 @@
   "request_referance_section",
   "project",
   "vehicle_type",
+  "request_type",
   "column_break_egmx",
   "date",
   "drive_type",
-  "vehicle_request",
-  "request_type",
-  "employee",
   "no_of_employee",
-  "employees",
   "section_break_pzrv",
   "vehicle_owner",
   "ownership_documents",
@@ -50,6 +47,10 @@
   "section_break_8tp8",
   "amended_from",
   "naming_series",
+  "column_break_ljic",
+  "vehicle_request",
+  "employee_passengers_tab",
+  "employees",
   "document_approval_tab",
   "document_approval_help",
   "document_approval"
@@ -304,13 +305,6 @@
    "options": "Private Vehicle\nTransportation\nSite Service"
   },
   {
-   "depends_on": "eval:doc.request_type == 'Private Vehicle'",
-   "fieldname": "employee",
-   "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee"
-  },
-  {
    "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "no_of_employee",
    "fieldtype": "Float",
@@ -322,13 +316,22 @@
    "fieldtype": "Table",
    "label": "Employees",
    "options": "Rent Emp"
+  },
+  {
+   "fieldname": "employee_passengers_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employee Passengers "
+  },
+  {
+   "fieldname": "column_break_ljic",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 23:28:24.617842",
+ "modified": "2026-09-29 23:43:35.444990",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Private Vehicle Contract Request",
