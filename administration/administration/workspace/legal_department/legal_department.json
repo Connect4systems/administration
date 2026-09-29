@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"U-yrfGIbHb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Legal Department</span>\",\"col\":12}},{\"id\":\"VTFFpptg_Z\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"eZ6dfcAdGp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":4}},{\"id\":\"F5QQWthKEE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract\",\"col\":4}},{\"id\":\"2B2jxkLE0F\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"sFt01Je6Gk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Document\",\"col\":4}}]",
+ "content": "[{\"id\":\"U-yrfGIbHb\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Legal Department</span>\",\"col\":12}},{\"id\":\"VTFFpptg_Z\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"eZ6dfcAdGp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":4}},{\"id\":\"F5QQWthKEE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract\",\"col\":4}},{\"id\":\"2B2jxkLE0F\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"sFt01Je6Gk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Legal Document\",\"col\":4}}]",
  "creation": "2026-09-26 12:07:07.652398",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Legal Department",
  "links": [],
- "modified": "2026-09-27 01:17:36.970624",
+ "modified": "2026-09-29 11:21:39.800485",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Legal Department",
@@ -32,16 +32,16 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Private Vehicle Contract",
-   "link_to": "Private Vehicle Contract",
+   "label": "Flat Contract",
+   "link_to": "Flat Contract",
    "stats_filter": "[]",
    "type": "DocType"
   },
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Flat Contract Request",
-   "link_to": "Flat Contract Request",
+   "label": "Private Vehicle Contract",
+   "link_to": "Private Vehicle Contract",
    "stats_filter": "[]",
    "type": "DocType"
   },

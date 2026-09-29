@@ -11,7 +11,7 @@ VEHICLE_PREFIXES = {
 }
 
 
-class Vehicals(Document):
+class Vehicles(Document):
 	def autoname(self):
 		prefix = VEHICLE_PREFIXES.get(self.vehical_type)
 		if not prefix:
