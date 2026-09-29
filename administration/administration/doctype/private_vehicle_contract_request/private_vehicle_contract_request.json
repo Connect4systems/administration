@@ -28,6 +28,7 @@
   "section_break_sksy",
   "monthly_kilometers",
   "extra_kelometer_fees",
+  "half_day_allowance",
   "allowance_time",
   "midnight_allowance",
   "column_break_unqq",
@@ -272,7 +273,13 @@
    "label": "Midnight Allowance"
   },
   {
-   "depends_on": "eval:doc.type == 'With Driver'",
+   "default": "0",
+   "fieldname": "half_day_allowance",
+   "fieldtype": "Check",
+   "label": "Half Day Allowance"
+  },
+  {
+   "depends_on": "eval:doc.half_day_allowance == 1",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
    "label": "Allowance Time"
