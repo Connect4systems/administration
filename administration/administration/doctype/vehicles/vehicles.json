@@ -13,13 +13,13 @@
   "drive_type",
   "rent_period",
   "payment_cycle",
-  "vehicle_route",
   "column_break_egmx",
   "date",
   "rent_start_date",
   "rent_end_date",
   "rent_amount",
   "location",
+  "vehicle_route",
   "vehical_details_section",
   "brand",
   "model",
@@ -28,6 +28,7 @@
   "chassis_number",
   "plat_number",
   "section_break_sksy",
+  "vehicle_owner",
   "kilometers",
   "monthly_kilometers",
   "extra_kelometer_fees",
@@ -39,22 +40,16 @@
   "check_out",
   "extra_hour_fees",
   "section_break_ioet",
-  "vehicle_owner",
-  "ownership_documents",
-  "bank",
-  "iban",
-  "tax_id",
   "vehicle_request",
   "amended_from",
   "column_break_ltxa",
   "private_vehicle_contract_request",
-  "contract_attachment",
   "naming_series",
+  "employee_passanger",
+  "vehicle_route_table",
   "document_approval_tab",
   "document_approval_help",
-  "document_approval",
-  "vehicle_routes_tab",
-  "vehicle_route_table"
+  "document_approval"
  ],
  "fields": [
   {
@@ -214,15 +209,10 @@
    "options": "Private Vehicle Contract Request"
   },
   {
-   "fieldname": "vehicle_routes_tab",
-   "fieldtype": "Tab Break",
-   "label": "Vehicle Routes"
-  },
-  {
    "fieldname": "vehicle_route_table",
    "fieldtype": "Table",
    "label": "Vehicle Route Table",
-   "options": "Vehicle Route Table"
+   "options": "Rent Emp"
   },
   {
    "fieldname": "section_break_ioet",
@@ -264,17 +254,17 @@
    "options": "With Driver\nWithout Driver"
   },
   {
+   "depends_on": "eval:doc.half_day_allowance == 1",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
-   "label": "Allowance Time",
-   "depends_on": "eval:doc.half_day_allowance == 1"
+   "label": "Allowance Time"
   },
   {
    "default": "0",
+   "depends_on": "eval:doc.drive_type == 'With Driver'",
    "fieldname": "midnight_allowance",
    "fieldtype": "Check",
-   "label": "Midnight Allowance",
-   "depends_on": "eval:doc.drive_type == 'With Driver'"
+   "label": "Midnight Allowance"
   },
   {
    "fieldname": "vehicle_route",
@@ -313,40 +303,16 @@
    "label": "Half Day Allowance"
   },
   {
-   "fieldname": "ownership_documents",
-   "fieldtype": "Attach",
-   "label": "Ownership Documents"
-  },
-  {
-   "fetch_from": "vehicle_owner.custom_bank",
-   "fieldname": "bank",
-   "fieldtype": "Data",
-   "label": "Bank"
-  },
-  {
-   "fetch_from": "vehicle_owner.custom_iban",
-   "fieldname": "iban",
-   "fieldtype": "Data",
-   "label": "Iban"
-  },
-  {
-   "default": "0",
-   "fieldname": "tax_id",
-   "fieldtype": "Check",
-   "label": "Tax ID"
-  },
-  {
-   "fieldname": "contract_attachment",
-   "fieldtype": "Attach",
-   "label": "Contract Attachment",
-   "permlevel": 1
+   "fieldname": "employee_passanger",
+   "fieldtype": "Tab Break",
+   "label": "Employee Passengers "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-29 21:59:10.183242",
+ "modified": "2026-09-29 23:24:38.721036",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
