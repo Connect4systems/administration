@@ -8,18 +8,17 @@
  "field_order": [
   "request_details_tab",
   "project",
+  "request_type",
   "vehical_type",
   "vehicle_type",
   "drive_type",
   "rent_period",
-  "payment_cycle",
   "column_break_egmx",
   "date",
   "rent_start_date",
   "rent_end_date",
   "rent_amount",
-  "location",
-  "vehicle_route",
+  "payment_cycle",
   "vehical_details_section",
   "brand",
   "model",
@@ -33,11 +32,11 @@
   "extra_kelometer_fees",
   "half_day_allowance",
   "allowance_time",
-  "midnight_allowance",
   "column_break_unqq",
   "check_in",
   "check_out",
   "extra_hour_fees",
+  "midnight_allowance",
   "section_break_ioet",
   "vehicle_request",
   "amended_from",
@@ -46,11 +45,15 @@
   "private_vehicle_contract",
   "naming_series",
   "employee_passanger",
-  "request_type",
   "employee",
+  "section_break_fkra",
   "no_of_employee",
+  "column_break_hmzq",
+  "location",
+  "column_break_rdfi",
+  "vehicle_route",
+  "section_break_xrse",
   "employees",
-  "vehicle_route_table",
   "document_approval_tab",
   "document_approval_help",
   "document_approval"
@@ -228,13 +231,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "vehicle_route_table",
-   "fieldtype": "Table",
-   "label": "Vehicle Route Table",
-   "options": "Rent Emp",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_ioet",
    "fieldtype": "Section Break",
    "label": "Referance"
@@ -375,13 +371,29 @@
    "options": "Private Vehicle Contract",
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "section_break_xrse",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_fkra",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hmzq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_rdfi",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-01 12:05:08.523199",
+ "modified": "2026-10-01 12:13:11.460857",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
