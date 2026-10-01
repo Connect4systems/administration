@@ -12,6 +12,21 @@ VEHICLE_PREFIXES = {
 
 
 class Vehicles(Document):
+	def validate(self):
+		self.validate_employee()
+
+	def before_update_after_submit(self):
+		self.validate_employee()
+		if self.has_value_changed("employee") and "Fleet Manager" not in frappe.get_roles():
+			frappe.throw(
+				_("Only Fleet Manager can change Employee after submission."),
+				frappe.PermissionError,
+			)
+
+	def validate_employee(self):
+		if self.request_type == "Private Vehicle" and not self.employee:
+			frappe.throw(_("Employee is required for a Private Vehicle."))
+
 	def autoname(self):
 		prefix = VEHICLE_PREFIXES.get(self.vehical_type)
 		if not prefix:

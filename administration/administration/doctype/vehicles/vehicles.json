@@ -287,14 +287,16 @@
    "fieldtype": "Link",
    "label": "Vehicle Route",
    "options": "Vehicle Route",
-   "read_only": 1
+   "read_only": 1,
+   "depends_on": "eval:doc.request_type == 'Transportation'"
   },
   {
    "fieldname": "location",
    "fieldtype": "Link",
    "label": "Location",
    "options": "Location",
-   "read_only": 1
+   "read_only": 1,
+   "depends_on": "eval:doc.request_type == 'Transportation'"
   },
   {
    "fieldname": "vehicle_type",
@@ -327,7 +329,8 @@
   {
    "fieldname": "employee_passanger",
    "fieldtype": "Tab Break",
-   "label": "Employee Passengers "
+   "label": "Employee Passengers ",
+   "depends_on": "eval:doc.request_type == 'Private Vehicle' || doc.request_type == 'Transportation'"
   },
   {
    "fieldname": "request_type",
@@ -344,7 +347,8 @@
    "fieldtype": "Link",
    "label": "Employee",
    "options": "Employee",
-   "read_only": 1
+   "read_only": 0,
+   "mandatory_depends_on": "eval:doc.request_type == 'Private Vehicle'"
   },
   {
    "depends_on": "eval:doc.request_type == 'Transportation'",
@@ -361,7 +365,7 @@
    "fieldtype": "Table",
    "label": "Employees",
    "options": "Rent Emp",
-   "read_only": 1
+   "read_only": 0
   },
   {
    "fieldname": "private_vehicle_contract",
@@ -374,11 +378,13 @@
   },
   {
    "fieldname": "section_break_xrse",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "depends_on": "eval:doc.request_type == 'Transportation'"
   },
   {
    "fieldname": "section_break_fkra",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "depends_on": "eval:doc.request_type == 'Transportation'"
   },
   {
    "fieldname": "column_break_hmzq",
