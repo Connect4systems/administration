@@ -266,6 +266,43 @@
    "share": 1,
    "submit": 1,
    "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "System Manager"
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Fleet Manager"
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Administration Manager"
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Legal User",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "Legal Manager",
+   "write": 1
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "General Director"
+  },
+  {
+   "permlevel": 1,
+   "read": 1,
+   "role": "VP-General"
   }
  ],
  "row_format": "Dynamic",
