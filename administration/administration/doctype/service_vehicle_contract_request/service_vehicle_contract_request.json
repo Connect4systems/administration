@@ -15,6 +15,7 @@
   "company_representative_id",
   "column_break_vgqu",
   "date",
+  "project",
   "transportation",
   "site_service",
   "contract_start_date",
@@ -119,13 +120,19 @@
    "fieldname": "contract_end_date",
    "fieldtype": "Date",
    "label": "Contract End Date"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-26 22:45:16.483198",
+ "modified": "2026-10-02 21:23:56.435642",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Service Vehicle Contract Request",
