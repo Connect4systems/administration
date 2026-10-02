@@ -10,6 +10,7 @@ class TestServiceVehicleCreation(TestCase):
 	def setUp(self):
 		VehicleCreationFixture.setUp(self)
 		self.source.name = "SVC-001"
+		self.frappe.get_all.return_value = []
 		self.row_values = {
 			"route": "PRICE-001", "qty": 2, "vehicle_type": "Bus",
 			"service_type": "Transportation", "vehicle_route": "Route A",
@@ -33,11 +34,11 @@ class TestServiceVehicleCreation(TestCase):
 		self.utils_patch.start()
 		self.addCleanup(self.utils_patch.stop)
 
-	def test_service_copies_row_and_contract_to_draft(self):
-		self.module.start_service("SVC-001", "ROW-001", "2026-10-03")
+	def test_service_copies_row_and_contract_and_submits(self):
+		self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 1, "REQ-001")
 		self.frappe.get_doc.assert_called_once_with("Service Vehicle Contract", "SVC-001", for_update=True)
 		self.source.check_permission.assert_called_once_with("read")
-		self.vehicle.check_permission.assert_called_once_with("create")
+		self.assertEqual([call.args for call in self.vehicle.check_permission.call_args_list], [("create",), ("submit",)])
 		values = self.vehicle.update.call_args.args[0]
 		self.assertEqual(values["rent_start_date"], date(2026, 10, 3))
 		self.assertEqual(values["project"], "Project A")
@@ -50,7 +51,7 @@ class TestServiceVehicleCreation(TestCase):
 		self.assertEqual(copied["midnight_allowance"], 1)
 		self.assertEqual(len(copied), len(self.row_values) - 1)
 		self.vehicle.insert.assert_called_once_with()
-		self.vehicle.submit.assert_not_called()
+		self.vehicle.submit.assert_called_once_with()
 
 	def test_service_rejects_invalid_selection_status_and_dates(self):
 		for row, start, status in [
@@ -62,16 +63,40 @@ class TestServiceVehicleCreation(TestCase):
 			with self.subTest(row=row, start=start, status=status):
 				self.source.docstatus = status
 				with self.assertRaises(ValueError):
-					self.module.start_service("SVC-001", row, start)
+					self.module.start_service("SVC-001", row, start, 1, "REQ-001")
 		self.frappe.new_doc.assert_not_called()
 
 	def test_service_repeat_opens_existing_vehicle(self):
-		self.frappe.db.get_value.return_value = "TV-A-001"
-		self.assertEqual(self.module.start_service("SVC-001", "ROW-001", "2026-10-03"), "TV-A-001")
+		self.frappe.get_all.return_value = [SimpleNamespace(name="TV-A-001", service_start_request="REQ-001", docstatus=1)]
+		self.assertEqual(self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 1, "REQ-001"), ["TV-A-001"])
 		self.frappe.new_doc.assert_not_called()
 
 	def test_service_create_permission_failure_prevents_insert(self):
 		self.vehicle.check_permission.side_effect = PermissionError()
 		with self.assertRaises(PermissionError):
-			self.module.start_service("SVC-001", "ROW-001", "2026-10-03")
+			self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 1, "REQ-001")
+		self.vehicle.insert.assert_not_called()
+
+	def test_quantity_creates_and_submits_multiple_vehicles(self):
+		self.assertEqual(self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 2, "REQ-001"), ["PV-A-001", "PV-A-001"])
+		self.assertEqual(self.vehicle.insert.call_count, 2)
+		self.assertEqual(self.vehicle.submit.call_count, 2)
+		self.vehicle.set.assert_any_call("qty", 1)
+
+	def test_invalid_or_excess_quantity_is_rejected(self):
+		for qty in (0, -1, 1.5, "bad", 3, "NaN", "Infinity"):
+			with self.subTest(qty=qty), self.assertRaises(ValueError):
+				self.module.start_service("SVC-001", "ROW-001", "2026-10-03", qty, "REQ-001")
+		self.vehicle.insert.assert_not_called()
+
+	def test_existing_vehicles_reduce_available_quantity(self):
+		self.frappe.get_all.return_value = [SimpleNamespace(name="TV-A-001", service_start_request="OTHER", docstatus=1)]
+		with self.assertRaises(ValueError):
+			self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 2, "REQ-001")
+		self.vehicle.insert.assert_not_called()
+
+	def test_submit_permission_failure_prevents_insert(self):
+		self.vehicle.check_permission.side_effect = [None, PermissionError()]
+		with self.assertRaises(PermissionError):
+			self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 1, "REQ-001")
 		self.vehicle.insert.assert_not_called()

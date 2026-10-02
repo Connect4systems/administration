@@ -53,7 +53,7 @@ def create_vehicle(source_name):
 
 
 @frappe.whitelist()
-def start_service(source_name, row_name, start_date):
+def start_service(source_name, row_name, start_date, qty, request_id):
 	from frappe.utils import getdate
 
 	source = frappe.get_doc("Service Vehicle Contract", source_name, for_update=True)
@@ -75,38 +75,62 @@ def start_service(source_name, row_name, start_date):
 	if row.get("service_type") not in {"Transportation", "Site Service"}:
 		frappe.throw(_("The selected row must have a valid Service Type."))
 
-	existing = frappe.db.get_value(
-		"Vehicles",
-		{"service_vehicle_contract": source.name, "service_contract_row": row_name, "docstatus": ["!=", 2]},
-		"name",
-	)
-	if existing:
-		frappe.get_doc("Vehicles", existing).check_permission("read")
-		return existing
+	try:
+		quantity = float(qty)
+		contract_qty = float(row.get("qty") or 0)
+	except (TypeError, ValueError):
+		frappe.throw(_("Quantity must be a positive whole number."))
+	if not quantity.is_integer() or quantity <= 0:
+		frappe.throw(_("Quantity must be a positive whole number."))
+	if not contract_qty.is_integer() or contract_qty <= 0:
+		frappe.throw(_("The contract row must have a positive whole-number quantity."))
+	quantity = int(quantity)
+	if not isinstance(request_id, str) or not request_id or len(request_id) > 140:
+		frappe.throw(_("A valid service request reference is required."))
 
-	vehicle = frappe.new_doc("Vehicles")
-	vehicle.check_permission("create")
-	vehicle.update({
-		"service_vehicle_contract": source.name,
-		"service_contract_row": row_name,
-		"project": source.get("project"),
-		"vehicle_owner": source.get("provider_company"),
-		"rent_start_date": start_date,
-		"rent_end_date": source.get("contract_end_date"),
-		"request_type": row.get("service_type"),
-		"vehical_type": row.get("service_type"),
-		"drive_type": "With Driver",
-	})
-	field_map = {
-		"route": "route", "qty": "qty", "vehicle_type": "vehicle_type",
-		"vehicle_route": "vehicle_route", "location": "location",
-		"passengers": "no_of_employee", "overtime": "extra_hour_fees",
-		"extra_km": "extra_kelometer_fees", "allowance": "midnight_allowance",
-		"half_day_allowance": "half_day_allowance", "allowance_time": "allowance_time",
-		"rent_cycle": "payment_cycle", "rent_amount": "rent_amount",
-		"check_in": "check_in", "check_out": "check_out",
-	}
-	for source_field, target_field in field_map.items():
-		vehicle.set(target_field, row.get(source_field))
-	vehicle.insert()
-	return vehicle.name
+	existing = frappe.get_all(
+		"Vehicles",
+		filters={"service_vehicle_contract": source.name, "service_contract_row": row_name, "docstatus": ["!=", 2]},
+		fields=["name", "service_start_request", "docstatus"],
+	)
+	repeated = [item for item in existing if item.service_start_request == request_id]
+	if repeated:
+		for item in repeated:
+			frappe.get_doc("Vehicles", item.name).check_permission("read")
+		return [item.name for item in repeated]
+	if quantity + len(existing) > contract_qty:
+		frappe.throw(_("Quantity exceeds the remaining contract quantity ({0}).").format(max(0, contract_qty - len(existing))))
+
+	created = []
+	for _index in range(quantity):
+		vehicle = frappe.new_doc("Vehicles")
+		vehicle.check_permission("create")
+		vehicle.check_permission("submit")
+		vehicle.update({
+			"service_vehicle_contract": source.name,
+			"service_contract_row": row_name,
+			"service_start_request": request_id,
+			"project": source.get("project"),
+			"vehicle_owner": source.get("provider_company"),
+			"rent_start_date": start_date,
+			"rent_end_date": source.get("contract_end_date"),
+			"request_type": row.get("service_type"),
+			"vehical_type": row.get("service_type"),
+			"drive_type": "With Driver",
+		})
+		field_map = {
+			"route": "route", "qty": "qty", "vehicle_type": "vehicle_type",
+			"vehicle_route": "vehicle_route", "location": "location",
+			"passengers": "no_of_employee", "overtime": "extra_hour_fees",
+			"extra_km": "extra_kelometer_fees", "allowance": "midnight_allowance",
+			"half_day_allowance": "half_day_allowance", "allowance_time": "allowance_time",
+			"rent_cycle": "payment_cycle", "rent_amount": "rent_amount",
+			"check_in": "check_in", "check_out": "check_out",
+		}
+		for source_field, target_field in field_map.items():
+			vehicle.set(target_field, row.get(source_field))
+		vehicle.set("qty", 1)
+		vehicle.insert()
+		vehicle.submit()
+		created.append(vehicle.name)
+	return created

@@ -6,11 +6,36 @@ frappe.ui.form.on("Service Vehicle Contract", {
 	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
 		administration.approval.refresh(frm);
-		if (frm.doc.docstatus === 1 && frappe.model.can_create("Vehicles")) {
+		enable_service_row_selection(frm);
+		if (frm.doc.docstatus === 1 && frappe.model.can_create("Vehicles") && frappe.model.can_submit("Vehicles")) {
 			frm.add_custom_button(__("Start service"), () => start_contract_service(frm));
 		}
 	},
 });
+
+function enable_service_row_selection(frm) {
+	const grid = frm.fields_dict.contract_details.grid;
+	grid.wrapper.off("change.start_service click.start_service");
+	if (frm.doc.docstatus !== 1) return;
+	grid.df.cannot_delete_rows = true;
+	const show_selection = () => {
+		grid.toggle_checkboxes(true);
+		grid.wrapper.find(".grid-heading-row .grid-row-check").hide();
+		grid.wrapper.find(".grid-body .grid-row-check").prop("disabled", false);
+		grid.wrapper.find(".grid-remove-rows, .grid-remove-all-rows").addClass("hidden");
+	};
+	grid.wrapper.on("change.start_service", show_selection);
+	grid.wrapper.on("click.start_service", ".grid-body .grid-row-check", function () {
+		const selected_name = $(this).closest(".grid-row").attr("data-name");
+		const checked = $(this).prop("checked");
+		for (const row of frm.doc.contract_details || []) {
+			row.__checked = checked && row.name === selected_name ? 1 : 0;
+		}
+		for (const row of grid.grid_rows || []) row?.refresh_check();
+		show_selection();
+	});
+	show_selection();
+}
 
 function start_contract_service(frm) {
 	const rows = frm.get_selected().contract_details || [];
@@ -23,6 +48,7 @@ function start_contract_service(frm) {
 		return;
 	}
 	const row = frm.doc.contract_details.find(row => row.name === rows[0]);
+	const request_id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 	const dialog = new frappe.ui.Dialog({
 		title: __("Start service"),
 		fields: [
@@ -30,22 +56,33 @@ function start_contract_service(frm) {
 				label: __("Route"), default: row.route, read_only: 1 },
 			{ fieldname: "vehicle_route", fieldtype: "Link", options: "Vehicle Route",
 				label: __("Vehicle Route"), default: row.vehicle_route, read_only: 1 },
+			{ fieldname: "qty", fieldtype: "Int", label: __("Quantity"), default: row.qty || 1, reqd: 1 },
 			{ fieldname: "start_date", fieldtype: "Date", label: __("Start Date"),
 				default: frm.doc.contract_start_date || frappe.datetime.get_today(), reqd: 1 },
 		],
 		primary_action_label: __("Confirm"),
 		async primary_action(values) {
+			if (!Number.isInteger(values.qty) || values.qty <= 0) {
+				frappe.msgprint(__("Quantity must be a positive whole number."));
+				return;
+			}
 			dialog.get_primary_btn().prop("disabled", true);
 			try {
 				const response = await frappe.call({
 					method: "administration.vehicle_creation.start_service",
-					args: { source_name: frm.doc.name, row_name: row.name, start_date: values.start_date },
+					args: { source_name: frm.doc.name, row_name: row.name, start_date: values.start_date,
+						qty: values.qty, request_id },
 					freeze: true,
-					freeze_message: __("Creating vehicle..."),
+					freeze_message: __("Creating and submitting vehicles..."),
 				});
 				if (response.message) {
 					dialog.hide();
-					frappe.set_route("Form", "Vehicles", response.message);
+					if (response.message.length === 1) {
+						frappe.set_route("Form", "Vehicles", response.message[0]);
+					} else {
+						frappe.route_options = { service_vehicle_contract: frm.doc.name, service_contract_row: row.name };
+						frappe.set_route("List", "Vehicles");
+					}
 				}
 			} finally {
 				dialog.get_primary_btn().prop("disabled", false);
