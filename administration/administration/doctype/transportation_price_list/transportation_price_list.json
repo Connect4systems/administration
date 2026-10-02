@@ -56,7 +56,8 @@
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Vehicle Route",
-   "options": "Vehicle Route"
+   "options": "Vehicle Route",
+   "reqd": 1
   },
   {
    "fieldname": "vehicle_type",
@@ -100,7 +101,8 @@
    "in_preview": 1,
    "in_standard_filter": 1,
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_rrlx",
@@ -170,6 +172,7 @@
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Transportation Price List",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
