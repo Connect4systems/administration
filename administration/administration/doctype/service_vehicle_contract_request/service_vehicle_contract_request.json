@@ -5,6 +5,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "request_details_tab",
   "section_break_skxn",
   "company_provider_column",
   "provider_company",
@@ -22,7 +23,10 @@
   "contract_end_date",
   "section_break_mcpb",
   "contract_details",
-  "amended_from"
+  "amended_from",
+  "document_approval_tab",
+  "document_approval_help",
+  "document_approval"
  ],
  "fields": [
   {
@@ -125,7 +129,32 @@
    "fieldname": "project",
    "fieldtype": "Link",
    "label": "Project",
-   "options": "Project"
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "request_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Request Details"
+  },
+  {
+   "fieldname": "document_approval_tab",
+   "fieldtype": "Tab Break",
+   "label": "Document Approval"
+  },
+  {
+   "fieldname": "document_approval_help",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted\">Workflow actions are recorded below with the status, approving role, user, date and note. No approval entries appear until a workflow action is completed.</p>"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "document_approval",
+   "fieldtype": "Table",
+   "label": "Workflow Approval",
+   "no_copy": 1,
+   "options": "Flat Request Approval",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
@@ -225,5 +254,6 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "naming_rule": "By script"
 }

@@ -87,6 +87,7 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 # after_install = "administration.install.after_install"
 after_install = [
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",
+    "administration.flat_request_layout.ensure_service_vehicle_contract_request_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_approval_layout",
     "administration.flat_contract_attachments.setup_legal_roles",
@@ -103,6 +104,7 @@ after_install = [
 after_migrate = [
     "administration.legal_document_status.update_statuses",
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",
+    "administration.flat_request_layout.ensure_service_vehicle_contract_request_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_approval_layout",
     "administration.flat_lifecycle_setup.ensure_layouts",
