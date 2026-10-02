@@ -6,7 +6,10 @@
  "engine": "InnoDB",
  "field_order": [
   "request_details_tab",
+  "project",
   "service_vehicle_contract_request",
+  "column_break_elmw",
+  "date",
   "attach_contract",
   "section_break_skxn",
   "company_provider_column",
@@ -17,7 +20,6 @@
   "address",
   "company_representative_id",
   "column_break_vgqu",
-  "date",
   "transportation",
   "site_service",
   "contract_start_date",
@@ -161,13 +163,23 @@
    "fieldtype": "Attach",
    "label": "Attach Contract",
    "permlevel": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "column_break_elmw",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-26 23:35:21.066067",
+ "modified": "2026-10-02 23:01:27.387734",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Service Vehicle Contract",
