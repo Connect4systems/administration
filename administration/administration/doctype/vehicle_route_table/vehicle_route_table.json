@@ -6,7 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "transportation",
+  "route",
   "qty",
   "vehicle_type",
   "service_type",
@@ -27,7 +27,7 @@
  "fields": [
   {
    "columns": 1,
-   "fetch_from": "transportation.vehicle_type",
+   "fetch_from": "route.vehicle_type",
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -38,6 +38,7 @@
   },
   {
    "columns": 1,
+   "fetch_from": "route.vehicle_route",
    "fieldname": "vehicle_route",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -48,7 +49,7 @@
   },
   {
    "columns": 1,
-   "fetch_from": "transportation.location",
+   "fetch_from": "route.location",
    "fieldname": "location",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -59,7 +60,7 @@
   },
   {
    "columns": 1,
-   "fetch_from": "transportation.passengers",
+   "fetch_from": "route.passengers",
    "fieldname": "passengers",
    "fieldtype": "Float",
    "in_preview": 1,
@@ -68,7 +69,7 @@
    "reqd": 1
   },
   {
-   "fetch_from": "transportation.overtime",
+   "fetch_from": "route.overtime",
    "fieldname": "overtime",
    "fieldtype": "Currency",
    "label": "Overtime",
@@ -76,7 +77,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "transportation.midnight_allowance",
+   "fetch_from": "route.midnight_allowance",
    "fieldname": "allowance",
    "fieldtype": "Check",
    "in_list_view": 1,
@@ -84,7 +85,7 @@
    "label": "Midnight allowance"
   },
   {
-   "fetch_from": "transportation.allowance_time",
+   "fetch_from": "route.allowance_time",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
    "in_list_view": 1,
@@ -92,7 +93,7 @@
    "label": "Allowance Time"
   },
   {
-   "fetch_from": "transportation.rent_cycle",
+   "fetch_from": "route.rent_cycle",
    "fieldname": "rent_cycle",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -102,7 +103,7 @@
    "reqd": 1
   },
   {
-   "fetch_from": "transportation.extra_km",
+   "fetch_from": "route.extra_km",
    "fieldname": "extra_km",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -113,7 +114,7 @@
   {
    "columns": 1,
    "default": "08:00:00",
-   "fetch_from": "transportation.check_in",
+   "fetch_from": "route.check_in",
    "fieldname": "check_in",
    "fieldtype": "Time",
    "in_list_view": 1,
@@ -124,7 +125,7 @@
   {
    "columns": 1,
    "default": "17:00:00",
-   "fetch_from": "transportation.check_out",
+   "fetch_from": "route.check_out",
    "fieldname": "check_out",
    "fieldtype": "Time",
    "in_list_view": 1,
@@ -134,7 +135,7 @@
   },
   {
    "columns": 1,
-   "fetch_from": "transportation.service_type",
+   "fetch_from": "route.service_type",
    "fieldname": "service_type",
    "fieldtype": "Select",
    "in_list_view": 1,
@@ -145,7 +146,7 @@
   },
   {
    "columns": 1,
-   "fetch_from": "transportation.rent_amount",
+   "fetch_from": "route.rent_amount",
    "fieldname": "rent_amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
@@ -156,7 +157,7 @@
   },
   {
    "default": "0",
-   "fetch_from": "transportation.half_day_allowance",
+   "fetch_from": "route.half_day_allowance",
    "fieldname": "half_day_allowance",
    "fieldtype": "Check",
    "label": "Half Day Allowance"
@@ -173,9 +174,9 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "transportation",
+   "fieldname": "route",
    "fieldtype": "Link",
-   "label": "Transportation",
+   "label": "Route",
    "options": "Transportation Price List"
   }
  ],
@@ -183,7 +184,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-10-02 23:10:32.230154",
+ "modified": "2026-10-02 23:16:54.259877",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicle Route Table",
