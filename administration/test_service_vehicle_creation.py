@@ -95,6 +95,26 @@ class TestServiceVehicleCreation(TestCase):
 			self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 2, "REQ-001")
 		self.vehicle.insert.assert_not_called()
 
+	def test_remaining_quantity_after_partial_and_complete_creation(self):
+		self.row_values["qty"] = 3
+		for created, remaining in ((0, 3), (1, 2), (3, 0), (4, 0)):
+			with self.subTest(created=created):
+				self.frappe.db.count.return_value = created
+				self.assertEqual(self.module.get_service_remaining_qty("SVC-001", "ROW-001"), remaining)
+		self.frappe.db.count.assert_called_with("Vehicles", {
+			"service_vehicle_contract": "SVC-001", "service_contract_row": "ROW-001",
+			"docstatus": ["!=", 2],
+		})
+
+	def test_remaining_quantity_checks_permission_and_row(self):
+		with self.assertRaises(ValueError):
+			self.module.get_service_remaining_qty("SVC-001", "OTHER")
+		self.frappe.db.count.assert_not_called()
+		self.source.check_permission.side_effect = PermissionError()
+		with self.assertRaises(PermissionError):
+			self.module.get_service_remaining_qty("SVC-001", "ROW-001")
+		self.frappe.db.count.assert_not_called()
+
 	def test_submit_permission_failure_prevents_insert(self):
 		self.vehicle.check_permission.side_effect = [None, PermissionError()]
 		with self.assertRaises(PermissionError):

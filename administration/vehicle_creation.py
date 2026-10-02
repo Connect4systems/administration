@@ -53,6 +53,23 @@ def create_vehicle(source_name):
 
 
 @frappe.whitelist()
+def get_service_remaining_qty(source_name, row_name):
+	source = frappe.get_doc("Service Vehicle Contract", source_name)
+	source.check_permission("read")
+	if source.docstatus != 1:
+		frappe.throw(_("Submit the Service Vehicle Contract before starting service."))
+	row = next((row for row in source.get("contract_details") or [] if row.name == row_name), None)
+	if not row:
+		frappe.throw(_("The selected row does not belong to this contract."))
+	created = frappe.db.count("Vehicles", {
+		"service_vehicle_contract": source.name,
+		"service_contract_row": row_name,
+		"docstatus": ["!=", 2],
+	})
+	return max(0, int(row.get("qty") or 0) - created)
+
+
+@frappe.whitelist()
 def start_service(source_name, row_name, start_date, qty, request_id):
 	from frappe.utils import getdate
 
