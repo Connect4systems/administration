@@ -133,7 +133,7 @@
    "label": "Half Day Allowance"
   },
   {
-   "default": "21:00:00",
+   "depends_on": "eval:doc.half_day_allowance == 1",
    "fieldname": "allowance_time",
    "fieldtype": "Time",
    "label": "Allowance Time"

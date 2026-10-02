@@ -8,6 +8,13 @@ from frappe.model.naming import getseries
 
 
 class TransportationPriceList(Document):
+	def validate(self):
+		if self.half_day_allowance:
+			if not self.allowance_time:
+				self.allowance_time = "21:00:00"
+		else:
+			self.allowance_time = None
+
 	def autoname(self):
 		if not self.project:
 			frappe.throw(_("Please select a Project before saving."))
