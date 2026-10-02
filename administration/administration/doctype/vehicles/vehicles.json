@@ -43,6 +43,10 @@
   "column_break_ltxa",
   "private_vehicle_contract_request",
   "private_vehicle_contract",
+  "service_vehicle_contract",
+  "service_contract_row",
+  "route",
+  "qty",
   "naming_series",
   "employee_passanger",
   "employee",
@@ -59,6 +63,38 @@
   "document_approval"
  ],
  "fields": [
+  {
+   "fieldname": "service_vehicle_contract",
+   "fieldtype": "Link",
+   "label": "Service Vehicle Contract",
+   "options": "Service Vehicle Contract",
+   "read_only": 1,
+   "no_copy": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "service_contract_row",
+   "fieldtype": "Data",
+   "label": "Service Contract Row",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Link",
+   "label": "Route",
+   "options": "Transportation Price List",
+   "read_only": 1
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Contract Quantity",
+   "precision": "0",
+   "read_only": 1
+  },
   {
    "fieldname": "vehical_type",
    "fieldtype": "Select",
