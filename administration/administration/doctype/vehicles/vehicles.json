@@ -9,7 +9,6 @@
   "request_details_tab",
   "project",
   "request_type",
-  "vehical_type",
   "vehicle_type",
   "drive_type",
   "rent_period",
@@ -67,27 +66,27 @@
   {
    "fieldname": "service_start_request",
    "fieldtype": "Data",
-   "label": "Service Start Request",
    "hidden": 1,
-   "read_only": 1,
-   "no_copy": 1
+   "label": "Service Start Request",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "service_vehicle_contract",
    "fieldtype": "Link",
    "label": "Service Vehicle Contract",
+   "no_copy": 1,
    "options": "Service Vehicle Contract",
    "read_only": 1,
-   "no_copy": 1,
    "search_index": 1
   },
   {
    "fieldname": "service_contract_row",
    "fieldtype": "Data",
-   "label": "Service Contract Row",
    "hidden": 1,
-   "read_only": 1,
+   "label": "Service Contract Row",
    "no_copy": 1,
+   "read_only": 1,
    "search_index": 1
   },
   {
@@ -103,15 +102,6 @@
    "label": "Quantity",
    "precision": "0",
    "read_only": 1
-  },
-  {
-   "fieldname": "vehical_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Vehical Type",
-   "options": "Private Vehicle\nTransportation\nSite Service",
-   "read_only": 1,
-   "reqd": 1
   },
   {
    "fieldname": "amended_from",
@@ -328,20 +318,20 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "vehicle_route",
    "fieldtype": "Link",
    "label": "Vehicle Route",
    "options": "Vehicle Route",
-   "read_only": 1,
-   "depends_on": "eval:doc.request_type == 'Transportation'"
+   "read_only": 1
   },
   {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "location",
    "fieldtype": "Link",
    "label": "Location",
    "options": "Location",
-   "read_only": 1,
-   "depends_on": "eval:doc.request_type == 'Transportation'"
+   "read_only": 1
   },
   {
    "fieldname": "vehicle_type",
@@ -372,10 +362,10 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.request_type == 'Private Vehicle' || doc.request_type == 'Transportation'",
    "fieldname": "employee_passanger",
    "fieldtype": "Tab Break",
-   "label": "Employee Passengers ",
-   "depends_on": "eval:doc.request_type == 'Private Vehicle' || doc.request_type == 'Transportation'"
+   "label": "Employee Passengers "
   },
   {
    "fieldname": "request_type",
@@ -391,9 +381,8 @@
    "fieldname": "employee",
    "fieldtype": "Link",
    "label": "Employee",
-   "options": "Employee",
-   "read_only": 0,
-   "mandatory_depends_on": "eval:doc.request_type == 'Private Vehicle'"
+   "mandatory_depends_on": "eval:doc.request_type == 'Private Vehicle'",
+   "options": "Employee"
   },
   {
    "depends_on": "eval:doc.request_type == 'Transportation'",
@@ -409,8 +398,7 @@
    "fieldname": "employees",
    "fieldtype": "Table",
    "label": "Employees",
-   "options": "Rent Emp",
-   "read_only": 0
+   "options": "Rent Emp"
   },
   {
    "fieldname": "private_vehicle_contract",
@@ -422,14 +410,14 @@
    "search_index": 1
   },
   {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "section_break_xrse",
-   "fieldtype": "Section Break",
-   "depends_on": "eval:doc.request_type == 'Transportation'"
+   "fieldtype": "Section Break"
   },
   {
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "section_break_fkra",
-   "fieldtype": "Section Break",
-   "depends_on": "eval:doc.request_type == 'Transportation'"
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "column_break_hmzq",
@@ -444,7 +432,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-01 12:13:11.460857",
+ "modified": "2026-10-03 13:44:13.218941",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
