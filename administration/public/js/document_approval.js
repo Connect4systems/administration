@@ -1,4 +1,4 @@
-// Shared workflow note, uploads and audit display for accommodation documents.
+// Shared workflow note, uploads and audit display for documents.
 frappe.provide("administration.approval");
 
 administration.approval = {

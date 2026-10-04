@@ -86,6 +86,7 @@ webform_include_css = {"job-application": "/assets/administration/css/job_applic
 # before_install = "administration.install.before_install"
 # after_install = "administration.install.after_install"
 after_install = [
+    "administration.travel_request.setup_document_approval",
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_service_vehicle_contract_request_layout",
     "administration.flat_request_layout.ensure_private_vehicle_contract_layout",
@@ -102,6 +103,7 @@ after_install = [
     "administration.flat_lifecycle_setup.install",
 ]
 after_migrate = [
+    "administration.travel_request.setup_document_approval",
     "administration.legal_document_status.update_statuses",
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",
     "administration.flat_request_layout.ensure_service_vehicle_contract_request_layout",
@@ -172,7 +174,8 @@ override_doctype_class = {
 
 doc_events = {
     "Travel Request": {
-        "validate": "administration.travel_request.update_costing_currencies",
+        "validate": ["administration.travel_request.validate_document_approval", "administration.travel_request.update_costing_currencies"],
+        "before_update_after_submit": "administration.travel_request.validate_document_approval",
     },
     "Flat Contract": {
         "validate": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],

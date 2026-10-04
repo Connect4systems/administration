@@ -46,7 +46,12 @@
 	}
 
 	frappe.ui.form.on("Travel Request", {
-		refresh: update_costings,
+		before_workflow_action: (frm) => administration.approval.before_workflow_action(frm),
+		after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
+		refresh(frm) {
+			administration.approval.refresh(frm);
+			return update_costings(frm);
+		},
 		company: update_costings,
 	});
 	frappe.ui.form.on("Travel Request Costing", {

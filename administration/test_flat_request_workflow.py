@@ -46,6 +46,36 @@ class TestFlatRequestWorkflow(TestCase):
 			self.assertEqual(workflow.apply_workflow({"doctype": "Purchase Order"}, "Approve"), "unchanged")
 			core.assert_called_once_with({"doctype": "Purchase Order"}, "Approve")
 
+	def test_travel_request_uses_configured_workflow_and_records_attachments(self):
+		self.current.update(doctype="Travel Request", approval_status="Pending")
+		payload = dict(self.current, __approval_note="  Travel reviewed  ", __approval_attachments=["travel-file"])
+		previous = Record(approval_status="Pending", document_approval=[])
+		doc = Record(doctype="Travel Request", name=self.current.name, approval_status="Accepted", document_approval=[])
+		doc.get_doc_before_save = lambda: previous
+		doc.append = lambda field, row: doc[field].append(row)
+		transition = Record(action="Approve", next_state="Accepted", allowed="Travel Manager")
+		configured = Record(workflow_state_field="approval_status", states=[Record(state="New")])
+		with patch.object(workflow, "get_workflow", return_value=configured), \
+			patch.object(workflow, "get_transitions", return_value=[transition]), \
+			patch.object(workflow, "has_approval_access", return_value=True), \
+			patch.object(workflow, "get_approval_attachments", return_value='[{"name":"travel-file"}]') as attachments, \
+			patch.object(workflow, "core_apply_workflow", side_effect=lambda *_: workflow.validate_approval_history(doc)):
+			workflow.apply_workflow(payload, "Approve")
+		attachments.assert_called_once_with(["travel-file"], self.current.name, "Travel Request")
+		self.assertEqual(len(doc.document_approval), 1)
+		self.assertEqual(doc.document_approval[0]["status"], "Accepted")
+		self.assertEqual(doc.document_approval[0]["approved_by_role"], "Travel Manager")
+		self.assertEqual(doc.document_approval[0]["note"], "Travel reviewed")
+		self.assertEqual(doc.document_approval[0]["attachments"], '[{"name":"travel-file"}]')
+		self.assertIsNone(self.frappe.flags.flat_request_approval)
+
+	def test_travel_request_history_is_protected_without_active_workflow(self):
+		self.frappe.db.get_value.return_value = None
+		doc = Record(doctype="Travel Request", document_approval=[Record(note="Forged")])
+		doc.get_doc_before_save = lambda: Record(document_approval=[])
+		with self.assertRaises(ValueError):
+			workflow.validate_approval_history(doc)
+
 	def test_non_text_note_is_rejected(self):
 		for note in (["invalid"], 123):
 			self.payload["__approval_note"] = note

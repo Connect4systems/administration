@@ -1,5 +1,6 @@
-"""Convert travel costings from the company's currency to USD and CNY (RMB)."""
+"""Travel costing conversions and protected document approval history."""
 
+import json
 import math
 
 import frappe
@@ -10,6 +11,37 @@ from erpnext.setup.utils import get_exchange_rate
 
 AMOUNT_FIELDS = ("sponsored_amount", "funded_amount", "total_amount")
 TARGET_CURRENCIES = {"usd": "USD", "rmb": "CNY"}
+
+
+def validate_document_approval(doc, method=None):
+	from administration.flat_request_workflow import validate_approval_history
+
+	validate_approval_history(doc)
+
+
+def setup_document_approval():
+	from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
+	frappe.reload_doc("administration", "doctype", "flat_request_approval", force=True)
+	meta = frappe.get_meta("Travel Request", cached=False)
+	managed = ("document_approval_tab", "document_approval_help", "document_approval")
+	other_fields = [field.fieldname for field in meta.fields if field.fieldname not in managed]
+	create_custom_fields({"Travel Request": [
+		{"fieldname": managed[0], "fieldtype": "Tab Break", "label": "Document Approval",
+			"insert_after": other_fields[-1]},
+		{"fieldname": managed[1], "fieldtype": "HTML", "insert_after": managed[0],
+			"options": '<p class="text-muted">Workflow actions are recorded below with the status, approving role, user, date, note and attachments.</p>'},
+		{"fieldname": managed[2], "fieldtype": "Table", "label": "Document Approval",
+			"options": "Flat Request Approval", "insert_after": managed[1],
+			"read_only": 1, "allow_on_submit": 1, "no_copy": 1},
+	]})
+	make_property_setter("Travel Request", None, "field_order", json.dumps(other_fields + list(managed)), "Data", for_doctype=True)
+	for field in managed:
+		for prop, value, kind in (("hidden", 0, "Check"), ("depends_on", "", "Data"), ("permlevel", 0, "Int")):
+			make_property_setter("Travel Request", field, prop, value, kind)
+	make_property_setter("Travel Request", "document_approval", "read_only", 1, "Check")
+	frappe.clear_cache(doctype="Travel Request")
 
 
 def _get_rates(company):

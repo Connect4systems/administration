@@ -48,7 +48,7 @@ _APPROVAL_TOKEN = object()
 @frappe.whitelist()
 def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
-	if payload.get("doctype") not in ("Flat Request", "Flat Contract Request", "Add Flat to Contract", "Flat Contract", "Rent Termination Request", "Flat Termination", "Private Vehicle Contract Request", "Private Vehicle Contract", "Service Vehicle Contract", "Service Vehicle Contract Request"):
+	if payload.get("doctype") not in ("Travel Request", "Flat Request", "Flat Contract Request", "Add Flat to Contract", "Flat Contract", "Rent Termination Request", "Flat Termination", "Private Vehicle Contract Request", "Private Vehicle Contract", "Service Vehicle Contract", "Service Vehicle Contract Request"):
 		return core_apply_workflow(doc, action)
 	note = payload.get("__approval_note") or ""
 	if not isinstance(note, str):
@@ -106,8 +106,17 @@ def validate_approval_history(doc):
 		return [tuple(str(row.get(field) or "") for field in HISTORY_FIELDS) for row in items]
 	if signature(rows) != signature(old_rows):
 		frappe.throw(_("Document Approval history cannot be edited manually."))
-	old_state = previous.get("workflow_state") if previous else "Draft"
-	new_state = doc.get("workflow_state") or "Draft"
+	state_field = "workflow_state"
+	initial_state = "Draft"
+	if doc.get("doctype") == "Travel Request":
+		workflow_name = frappe.db.get_value("Workflow", {"document_type": doc.doctype, "is_active": 1}, "name")
+		if not workflow_name:
+			return
+		workflow = get_workflow(doc.doctype)
+		state_field = workflow.workflow_state_field
+		initial_state = workflow.states[0].state
+	old_state = previous.get(state_field) if previous else initial_state
+	new_state = doc.get(state_field) or initial_state
 	if new_state == old_state:
 		return
 	context = frappe.flags.get("flat_request_approval") or {}
