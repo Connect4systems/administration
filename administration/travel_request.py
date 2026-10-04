@@ -39,6 +39,11 @@ def update_costing_currencies(doc, method=None):
 	rows = doc.get("costings") or []
 	if not rows:
 		return
+	for row in rows:
+		row.set("total_amount", flt(
+			flt(row.get("sponsored_amount")) + flt(row.get("funded_amount")),
+			row.precision("total_amount"),
+		))
 	has_amounts = any(flt(row.get(field)) for row in rows for field in AMOUNT_FIELDS)
 	rates = _get_rates(doc.get("company")) if has_amounts else dict.fromkeys(TARGET_CURRENCIES, 0)
 	for row in rows:

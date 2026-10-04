@@ -25,8 +25,9 @@ class TestTravelRequestCurrencies(TestCase):
 		self.get_rate.side_effect = lambda source, target, date: {"USD": 0.02, "CNY": 0.14}[target]
 
 	def test_all_amounts_are_converted_and_rounded(self):
-		row = CostingRow(sponsored_amount=100.30, funded_amount=200, total_amount=300.30)
+		row = CostingRow(sponsored_amount=100.30, funded_amount=200, total_amount=999)
 		travel_request.update_costing_currencies({"company": "Company", "costings": [row]})
+		self.assertEqual(row["total_amount"], 300.30)
 		for field, usd, rmb in (
 			("sponsored_amount", 2.01, 14.04),
 			("funded_amount", 4, 28),
@@ -37,9 +38,10 @@ class TestTravelRequestCurrencies(TestCase):
 		self.assertEqual(self.get_rate.call_count, 2)
 
 	def test_zero_amounts_clear_old_conversions_without_fetching(self):
-		row = CostingRow(custom_sponsored_amount_usd=100)
+		row = CostingRow(custom_sponsored_amount_usd=100, total_amount=999)
 		travel_request.update_costing_currencies({"costings": [row]})
 		self.assertEqual(row["custom_sponsored_amount_usd"], 0)
+		self.assertEqual(row["total_amount"], 0)
 		self.get_rate.assert_not_called()
 
 	def test_company_currency_is_used_and_same_currency_has_rate_one(self):
@@ -54,11 +56,11 @@ class TestTravelRequestCurrencies(TestCase):
 		self.get_rate.return_value = 0
 		self.get_rate.side_effect = None
 		with self.assertRaises(ValueError):
-			travel_request.update_costing_currencies({"company": "Company", "costings": [CostingRow(total_amount=10)]})
+			travel_request.update_costing_currencies({"company": "Company", "costings": [CostingRow(funded_amount=10)]})
 
 	def test_missing_company_prevents_nonzero_conversion(self):
 		with self.assertRaises(ValueError):
-			travel_request.update_costing_currencies({"costings": [CostingRow(total_amount=10)]})
+			travel_request.update_costing_currencies({"costings": [CostingRow(funded_amount=10)]})
 
 	def test_rate_endpoint_checks_company_permissions(self):
 		travel_request.get_costing_exchange_rates("Company")

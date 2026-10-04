@@ -672,6 +672,16 @@
    "property_type": "Data",
    "row_name": null,
    "value": "Total Amount EGP"
+  },
+  {
+   "doctype": "Property Setter",
+   "doctype_or_field": "DocField",
+   "doc_type": "Travel Request Costing",
+   "field_name": "total_amount",
+   "name": "Travel Request Costing-total_amount-read_only",
+   "property": "read_only",
+   "property_type": "Check",
+   "value": "1"
   }
  ],
  "sync_on_migrate": 1

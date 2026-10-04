@@ -7,6 +7,12 @@
 		const date = frappe.datetime.get_today();
 		const key = `${company}:${date}`;
 		const rows = frm.doc.costings || [];
+		for (const row of rows) {
+			const total = flt(flt(row.sponsored_amount) + flt(row.funded_amount), precision("total_amount", row));
+			if (flt(row.total_amount) !== total) {
+				await frappe.model.set_value(row.doctype, row.name, "total_amount", total);
+			}
+		}
 		const has_amounts = rows.some(row => amount_fields.some(field => flt(row[field])));
 		let rates = { usd: 0, rmb: 0 };
 		if (has_amounts) {
@@ -46,7 +52,6 @@
 	frappe.ui.form.on("Travel Request Costing", {
 		sponsored_amount: update_costings,
 		funded_amount: update_costings,
-		total_amount: update_costings,
 		costings_add: update_costings,
 	});
 })();
