@@ -171,6 +171,9 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+    "Travel Request": {
+        "validate": "administration.travel_request.update_costing_currencies",
+    },
     "Flat Contract": {
         "validate": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
         "before_update_after_submit": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
@@ -330,6 +333,7 @@ override_whitelisted_methods = {
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "Travel Request": "public/js/doctype/travel_request/travel_request.js",
     "Job Applicant": "public/js/doctype/job_applicant/job_applicant.js",
     "Purchase Order": "public/js/doctype/purchase_order/create_shipment_request.js",
 }
