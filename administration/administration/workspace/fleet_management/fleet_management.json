@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"kCoqcQjYwz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"Sxew2FTpIC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract Request\",\"col\":3}},{\"id\":\"OJeRO3R-AD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":3}},{\"id\":\"gtJzxZ18qD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract Request\",\"col\":3}},{\"id\":\"C7NbQGAA2t\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract\",\"col\":3}},{\"id\":\"rSEz3tyCPy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"B-tR7xhiZS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"oMSNYY_Jj-\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Driver\",\"col\":3}},{\"id\":\"ilgQtTr9_n\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transportation Price List\",\"col\":3}}]",
+ "content": "[{\"id\":\"kCoqcQjYwz\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"dRolGmA67S\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Management</span>\",\"col\":12}},{\"id\":\"Sxew2FTpIC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract Request\",\"col\":3}},{\"id\":\"OJeRO3R-AD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":3}},{\"id\":\"gtJzxZ18qD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract Request\",\"col\":3}},{\"id\":\"C7NbQGAA2t\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract\",\"col\":3}},{\"id\":\"rSEz3tyCPy\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"ADg6GBcwYP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle\",\"col\":3}},{\"id\":\"B-tR7xhiZS\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Type\",\"col\":3}},{\"id\":\"ilgQtTr9_n\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transportation Price List\",\"col\":3}}]",
  "creation": "2025-08-17 09:25:52.948056",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Fleet Management",
  "links": [],
- "modified": "2026-10-01 14:16:08.937595",
+ "modified": "2026-10-03 21:58:10.746725",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Fleet Management",
@@ -74,14 +74,6 @@
    "doc_view": "List",
    "label": "Service Vehicle Contract Request",
    "link_to": "Service Vehicle Contract Request",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Driver",
-   "link_to": "Driver",
    "stats_filter": "[]",
    "type": "DocType"
   },
