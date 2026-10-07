@@ -9,10 +9,10 @@
  "doctype": "Report",
  "doctype_to_sync": [],
  "filters": [],
- "idx": 1,
+ "idx": 2,
  "is_standard": "Yes",
  "letter_head": null,
- "modified": "2026-09-26 20:18:03.334219",
+ "modified": "2026-10-07 11:26:21.408468",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Accommodation Report",
@@ -39,6 +39,9 @@
   },
   {
    "role": "Accounts Manager"
+  },
+  {
+   "role": "Site Admin"
   }
  ],
  "snapshot_report": 0,

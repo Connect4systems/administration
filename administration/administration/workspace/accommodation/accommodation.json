@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"AHlpsqc5NG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"1pUqtYB5_2\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"BxIfyjGI7_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Flat To Contract\",\"col\":4}},{\"id\":\"i_p8-ZLRSP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accommodation Report\",\"col\":4}},{\"id\":\"1lvo9sn23L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":4}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":4}},{\"id\":\"4hVFsJa0va\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"DA-B1sWe5L\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rent Termination Request\",\"col\":4}},{\"id\":\"MajHd_53oO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Termination\",\"col\":4}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}},{\"id\":\"qB1Axy_WfN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"gqwJ3z0dOj\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "content": "[{\"id\":\"xhV1yTrgRo\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Accommodation </span>\",\"col\":12}},{\"id\":\"7H5ZD9i02N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Request\",\"col\":4}},{\"id\":\"_jpVf4dDR1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":4}},{\"id\":\"AHlpsqc5NG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":4}},{\"id\":\"1pUqtYB5_2\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"YyEBfbxuhj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Owners\",\"col\":4}},{\"id\":\"BxIfyjGI7_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Flat To Contract\",\"col\":4}},{\"id\":\"i_p8-ZLRSP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accommodation Report\",\"col\":4}},{\"id\":\"1lvo9sn23L\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"dXtAiw06B7\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat\",\"col\":4}},{\"id\":\"VOI0HjNRQq\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Room\",\"col\":4}},{\"id\":\"8RCkhFWrAe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Bed\",\"col\":4}},{\"id\":\"4hVFsJa0va\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"DA-B1sWe5L\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rent Termination Request\",\"col\":4}},{\"id\":\"MajHd_53oO\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Termination\",\"col\":4}},{\"id\":\"52yu6kDOGo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accommodation Contract\",\"col\":3}},{\"id\":\"Ukne-CvtWP\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"N1-US385C1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Petty Cash Purchase\",\"col\":3}},{\"id\":\"qB1Axy_WfN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Supplier\",\"col\":3}},{\"id\":\"gqwJ3z0dOj\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
  "creation": "2025-10-08 14:55:15.430530",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Accommodation",
  "links": [],
- "modified": "2026-10-04 13:53:08.681121",
+ "modified": "2026-10-07 11:21:44.720543",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Accommodation",
@@ -25,15 +25,26 @@
  "roles": [
   {
    "role": "Admin supervisor (Accommodation)"
+  },
+  {
+   "role": "Site Admin"
   }
  ],
- "sequence_id": 2.0,
+ "sequence_id": 4.0,
  "shortcuts": [
   {
    "color": "Grey",
    "doc_view": "List",
    "label": "Supplier",
    "link_to": "Supplier",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Accommodation Contract",
+   "link_to": "Accommodation Contract",
    "stats_filter": "[]",
    "type": "DocType"
   },

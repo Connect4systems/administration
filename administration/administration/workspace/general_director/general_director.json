@@ -1,0 +1,146 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"YI-jkzMfQV\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>General Request</b></span>\",\"col\":12}},{\"id\":\"KZpstC2XKM\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Travel Request\",\"col\":3}},{\"id\":\"Ec3Ix4nmG0\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"WRrCiQyG-L\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Fleet Approvals</span>\",\"col\":12}},{\"id\":\"iHjMfrUvbk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Vehicle Request\",\"col\":3}},{\"id\":\"aaWjFSwqob\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract Request\",\"col\":3}},{\"id\":\"PfcNDzKvCN\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Private Vehicle Contract\",\"col\":3}},{\"id\":\"20yNSFjlJ6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Transportation Price List\",\"col\":3}},{\"id\":\"rLxFXdtFS1\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"oFYdMzmihp\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract Request\",\"col\":3}},{\"id\":\"oYLM8X1yVt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Vehicle Contract\",\"col\":3}},{\"id\":\"1I1DjiGnkB\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"bbMYxGJUJp\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Accommodations Approvals</b></span>\",\"col\":12}},{\"id\":\"wAtsch3RvU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Request\",\"col\":3}},{\"id\":\"ULeR6eZ7Fn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract Request\",\"col\":3}},{\"id\":\"1eQf4CgNsL\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Flat Contract\",\"col\":3}},{\"id\":\"hK3zFw3K14\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accommodation Report\",\"col\":3}},{\"id\":\"UNbeBrbaJ_\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"vVPIdNN5cY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Accommodation Contract\",\"col\":3}},{\"id\":\"z15XRmOeDf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Add Flat To Contract\",\"col\":3}},{\"id\":\"cW1gLd4BRZ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rent Termination Request\",\"col\":3}}]",
+ "creation": "2026-10-04 16:10:01.376042",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "color-review-points",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "General Director",
+ "links": [],
+ "modified": "2026-10-04 16:38:57.839277",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "General Director",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "General Director"
+  }
+ ],
+ "sequence_id": 7.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Vehicle Request",
+   "link_to": "Vehicle Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Travel Request",
+   "link_to": "Travel Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Private Vehicle Contract Request",
+   "link_to": "Private Vehicle Contract Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Service Vehicle Contract Request",
+   "link_to": "Service Vehicle Contract Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Private Vehicle Contract",
+   "link_to": "Private Vehicle Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Service Vehicle Contract",
+   "link_to": "Service Vehicle Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Transportation Price List",
+   "link_to": "Transportation Price List",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Flat Request",
+   "link_to": "Flat Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Flat Contract Request",
+   "link_to": "Flat Contract Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Flat Contract",
+   "link_to": "Flat Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Accommodation Report",
+   "link_to": "Accommodation Report",
+   "report_ref_doctype": "Flat",
+   "type": "Report"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Accommodation Contract",
+   "link_to": "Accommodation Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Add Flat To Contract",
+   "link_to": "Add Flat to Contract",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Rent Termination Request",
+   "link_to": "Rent Termination Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "General Director"
+}

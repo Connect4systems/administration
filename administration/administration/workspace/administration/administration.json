@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Administration",
  "links": [],
- "modified": "2026-10-04 13:53:08.591166",
+ "modified": "2026-10-07 12:12:04.928561",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Administration",
@@ -36,9 +36,15 @@
   },
   {
    "role": "Fleet Manager"
+  },
+  {
+   "role": "Site Admin"
+  },
+  {
+   "role": "Fleet admin"
   }
  ],
- "sequence_id": 1.0,
+ "sequence_id": 2.0,
  "shortcuts": [],
  "title": "Administration"
 }
