@@ -15,7 +15,6 @@
   "project",
   "flat_title",
   "monthly_rent",
-  "deposit",
   "insurance",
   "column_break_vimy",
   "date",
@@ -186,14 +185,9 @@
    "reqd": 1
   },
   {
-   "fieldname": "deposit",
-   "fieldtype": "Currency",
-   "label": "Deposit"
-  },
-  {
    "fieldname": "insurance",
    "fieldtype": "Currency",
-   "label": "Insurance"
+   "label": "Insurance Deposite"
   },
   {
    "fieldname": "owner_details_section",
@@ -297,54 +291,55 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "type",
-   "label": "Type",
-   "fieldtype": "Select",
-   "options": "New Flat\nRenew",
    "default": "New Flat",
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "New Flat\nRenew",
    "reqd": 1
   },
   {
    "fieldname": "flat",
-   "label": "Flat",
    "fieldtype": "Link",
+   "label": "Flat",
+   "no_copy": 1,
    "options": "Flat",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
    "fieldname": "last_add_flat_to_contract",
-   "label": "Last Add Flat to Contract",
    "fieldtype": "Link",
+   "label": "Last Add Flat to Contract",
+   "no_copy": 1,
    "options": "Add Flat to Contract",
-   "read_only": 1,
-   "no_copy": 1
+   "read_only": 1
   },
   {
+   "allow_on_submit": 1,
+   "default": "0",
    "fieldname": "lifecycle_applied",
    "fieldtype": "Check",
-   "label": "Renewal Applied",
-   "read_only": 1,
    "hidden": 1,
+   "label": "Renewal Applied",
    "no_copy": 1,
-   "allow_on_submit": 1
+   "read_only": 1
   },
   {
-   "fieldname": "contract_status",
-   "label": "Contract Status",
-   "fieldtype": "Select",
-   "options": "Active\nTerminated",
-   "default": "Active",
-   "read_only": 1,
    "allow_on_submit": 1,
-   "in_list_view": 1
+   "default": "Active",
+   "fieldname": "contract_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Contract Status",
+   "options": "Active\nTerminated",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-25 23:49:26.681941",
+ "modified": "2026-10-07 12:44:20.138656",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Add Flat to Contract",
