@@ -67,7 +67,7 @@ class TestVehiclePassengers(TestCase):
 					doc.validate_employee.assert_called_once_with()
 					doc.has_value_changed.assert_called_once_with("employee")
 
-	def test_submitted_table_changes_require_fleet_manager(self):
+	def test_submitted_table_changes_are_allowed_for_all_writers(self):
 		row = {"name": "ROW-1", "idx": 1, "code": "EMP-001", "employee": "Employee One"}
 		for old, new in (
 			([], [row]),
@@ -85,12 +85,9 @@ class TestVehiclePassengers(TestCase):
 					doc.get.return_value = new
 					doc.get_doc_before_save.return_value = {"employees": old}
 					doc.has_value_changed.return_value = False
-					if old != new and role != "Fleet Manager":
-						with self.assertRaises(PermissionError):
-							vehicles.Vehicles.before_update_after_submit(doc)
-					else:
-						vehicles.Vehicles.before_update_after_submit(doc)
-						frappe.throw.assert_not_called()
+					vehicles.Vehicles.before_update_after_submit(doc)
+					frappe.throw.assert_not_called()
+					doc.validate_employee_assignments.assert_called_once_with()
 
 
 class TestVehiclesNaming(TestCase):

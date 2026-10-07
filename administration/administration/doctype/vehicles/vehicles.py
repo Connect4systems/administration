@@ -44,18 +44,9 @@ class Vehicles(Document):
 
 	def before_update_after_submit(self):
 		self.validate_employee()
-		previous = self.get_doc_before_save()
-		passenger_fields = ("name", "idx", "code", "employee", "job_title", "department")
-		def passenger_values(doc):
-			return [
-				tuple(row.get(field) for field in passenger_fields)
-				for row in (doc.get("employees") or [])
-			] if doc else []
-
-		employees_changed = passenger_values(self) != passenger_values(previous)
-		if (self.has_value_changed("employee") or employees_changed) and "Fleet Manager" not in frappe.get_roles():
+		if self.has_value_changed("employee") and "Fleet Manager" not in frappe.get_roles():
 			frappe.throw(
-				_("Only Fleet Manager can change Employee or the Employees table after submission."),
+				_("Only Fleet Manager can change Employee after submission."),
 				frappe.PermissionError,
 			)
 		self.validate_employee_assignments()

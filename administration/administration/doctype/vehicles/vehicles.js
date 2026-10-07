@@ -16,9 +16,8 @@ frappe.ui.form.on("Vehicles", {
 	},
 	refresh(frm) {
 		const read_only = frm.doc.docstatus === 1 && !frappe.user.has_role("Fleet Manager");
-		for (const fieldname of ["employee", "employees"]) {
-			frm.set_df_property(fieldname, "read_only", read_only);
-		}
+		frm.set_df_property("employee", "read_only", read_only);
+		frm.set_df_property("employees", "read_only", 0);
 	},
 });
 
