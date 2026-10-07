@@ -13,6 +13,7 @@
  ],
  "fields": [
   {
+   "allow_on_submit": 1,
    "fieldname": "code",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -21,6 +22,7 @@
    "options": "Employee"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "code.employee_name",
    "fieldname": "employee",
    "fieldtype": "Data",
@@ -28,6 +30,7 @@
    "label": "Employee"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "code.designation",
    "fieldname": "job_title",
    "fieldtype": "Link",
@@ -36,6 +39,7 @@
    "options": "Designation"
   },
   {
+   "allow_on_submit": 1,
    "fetch_from": "code.department",
    "fieldname": "department",
    "fieldtype": "Link",
