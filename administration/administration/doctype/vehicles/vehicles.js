@@ -4,10 +4,18 @@
 frappe.ui.form.on("Vehicles", {
 	setup(frm) {
 		frm.set_query("employee", () => ({
-			filters: { status: "Active", custom_transportation: "Privat car" },
+			filters: {
+				status: "Active",
+				custom_transportation: "Privat car",
+				custom_project: frm.doc.project || "",
+			},
 		}));
 		frm.set_query("code", "employees", () => ({
-			filters: { status: "Active", custom_transportation: "Shared" },
+			filters: {
+				status: "Active",
+				custom_transportation: "Shared",
+				custom_project: frm.doc.project || "",
+			},
 		}));
 	},
 	employee(frm) {
