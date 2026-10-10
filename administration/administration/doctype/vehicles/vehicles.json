@@ -9,6 +9,7 @@
   "request_details_tab",
   "project",
   "request_type",
+  "employee",
   "vehicle_type",
   "drive_type",
   "rent_period",
@@ -49,7 +50,6 @@
   "qty",
   "naming_series",
   "employee_passanger",
-  "employee",
   "section_break_fkra",
   "no_of_employee",
   "column_break_hmzq",
@@ -376,7 +376,7 @@
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.request_type == 'Private Vehicle' || doc.request_type == 'Transportation'",
+   "depends_on": "eval:doc.request_type == 'Transportation'",
    "fieldname": "employee_passanger",
    "fieldtype": "Tab Break",
    "label": "Employee Passengers "
@@ -395,7 +395,6 @@
    "fieldname": "employee",
    "fieldtype": "Link",
    "label": "Employee",
-   "mandatory_depends_on": "eval:doc.request_type == 'Private Vehicle'",
    "options": "Employee"
   },
   {

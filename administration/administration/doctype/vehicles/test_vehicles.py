@@ -30,17 +30,23 @@ class TestVehiclePassengers(TestCase):
 			vehicles.Vehicles.validate_employee_assignments(doc)
 			frappe.throw.assert_not_called()
 
-	def test_private_vehicle_requires_employee(self):
-		for request_type in ("Private Vehicle", "Transportation", "Site Service"):
-			with self.subTest(request_type=request_type), patch.object(vehicles, "frappe") as frappe:
-				frappe.throw.side_effect = ValueError
-				doc = Mock(request_type=request_type, employee=None)
+	def test_employee_assignments_follow_request_type(self):
+		for request_type, employee, clear_table in (
+			("Private Vehicle", "EMP-001", True),
+			("Private Vehicle", None, True),
+			("Transportation", None, False),
+			("Site Service", None, True),
+		):
+			with self.subTest(request_type=request_type, employee=employee):
+				doc = Mock(request_type=request_type, employee=employee or "EMP-OLD")
 				if request_type == "Private Vehicle":
-					with self.assertRaises(ValueError):
-						vehicles.Vehicles.validate_employee(doc)
+					doc.employee = employee
+				vehicles.Vehicles.validate_employee(doc)
+				self.assertEqual(doc.employee, employee)
+				if clear_table:
+					doc.set.assert_called_once_with("employees", [])
 				else:
-					vehicles.Vehicles.validate_employee(doc)
-					frappe.throw.assert_not_called()
+					doc.set.assert_not_called()
 
 	def test_assigned_private_vehicle_employee_is_valid(self):
 		with patch.object(vehicles, "frappe") as frappe:
@@ -54,7 +60,7 @@ class TestVehiclePassengers(TestCase):
 					frappe.get_roles.return_value = [role]
 					frappe.PermissionError = PermissionError
 					frappe.throw.side_effect = PermissionError
-					doc = Mock()
+					doc = Mock(request_type="Private Vehicle")
 					doc.get.return_value = []
 					doc.get_doc_before_save.return_value = {"employees": []}
 					doc.has_value_changed.return_value = changed
@@ -81,7 +87,7 @@ class TestVehiclePassengers(TestCase):
 					frappe.get_roles.return_value = [role]
 					frappe.PermissionError = PermissionError
 					frappe.throw.side_effect = PermissionError
-					doc = Mock()
+					doc = Mock(request_type="Private Vehicle")
 					doc.get.return_value = new
 					doc.get_doc_before_save.return_value = {"employees": old}
 					doc.has_value_changed.return_value = False

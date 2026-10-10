@@ -22,7 +22,8 @@ def find_employee_vehicles(employee, current_vehicle=None):
 			AND passenger.parentfield = 'employees'
 		WHERE vehicle.docstatus < 2
 			AND vehicle.name != %(current_vehicle)s
-			AND (vehicle.employee = %(employee)s OR passenger.code = %(employee)s)
+			AND ((vehicle.request_type = 'Private Vehicle' AND vehicle.employee = %(employee)s)
+				OR (vehicle.request_type = 'Transportation' AND passenger.code = %(employee)s))
 		ORDER BY vehicle.name
 		""",
 		{"employee": employee, "current_vehicle": current_vehicle or ""},
@@ -44,7 +45,7 @@ class Vehicles(Document):
 
 	def before_update_after_submit(self):
 		self.validate_employee()
-		if self.has_value_changed("employee") and "Fleet Manager" not in frappe.get_roles():
+		if self.request_type == "Private Vehicle" and self.has_value_changed("employee") and "Fleet Manager" not in frappe.get_roles():
 			frappe.throw(
 				_("Only Fleet Manager can change Employee after submission."),
 				frappe.PermissionError,
@@ -65,8 +66,10 @@ class Vehicles(Document):
 				)
 
 	def validate_employee(self):
-		if self.request_type == "Private Vehicle" and not self.employee:
-			frappe.throw(_("Employee is required for a Private Vehicle."))
+		if self.request_type in {"Transportation", "Site Service"}:
+			self.employee = None
+		if self.request_type in {"Private Vehicle", "Site Service"}:
+			self.set("employees", [])
 
 	def autoname(self):
 		prefix = VEHICLE_PREFIXES.get(self.vehical_type)
