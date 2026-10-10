@@ -1,0 +1,60 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"rKVyEWi7dJ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">My Profile</span>\",\"col\":12}},{\"id\":\"eE8tqK7eK4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leave Application\",\"col\":6}},{\"id\":\"lkU4K5hlua\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Permission\",\"col\":6}},{\"id\":\"_H0NZSMwZx\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"C7fDJF30h3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Training Video\",\"col\":6}},{\"id\":\"Mx_CsjXB08\",\"type\":\"spacer\",\"data\":{\"col\":12}}]",
+ "creation": "2024-08-31 16:30:31.369687",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "assign",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "My Profile",
+ "links": [],
+ "modified": "2026-10-07 15:57:17.201335",
+ "modified_by": "Administrator",
+ "module": "Administration",
+ "name": "My Profile",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Employee"
+  }
+ ],
+ "sequence_id": 65.0,
+ "shortcuts": [
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "label": "Leave Application",
+   "link_to": "Leave Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Employee Permission",
+   "link_to": "Employee Permission",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Training Video",
+   "link_to": "Video",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "My Profile"
+}

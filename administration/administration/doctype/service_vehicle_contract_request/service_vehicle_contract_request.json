@@ -128,6 +128,7 @@
   {
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Project",
    "options": "Project",
    "reqd": 1
@@ -161,10 +162,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-02 21:23:56.435642",
+ "modified": "2026-10-07 15:11:50.563339",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Service Vehicle Contract Request",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {
@@ -190,6 +192,7 @@
    "report": 1,
    "role": "Fleet Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   },
   {
@@ -254,6 +257,5 @@
  "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "naming_rule": "By script"
+ "states": []
 }
