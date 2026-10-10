@@ -97,11 +97,12 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
+   "default": "1",
    "fieldname": "qty",
    "fieldtype": "Float",
    "label": "Quantity",
-   "precision": "0",
-   "read_only": 1
+   "precision": "0"
   },
   {
    "fieldname": "amended_from",
@@ -116,6 +117,9 @@
   {
    "fieldname": "vehicle_owner",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Vehicle Owner",
    "options": "Supplier",
    "read_only": 1
@@ -162,6 +166,9 @@
    "allow_on_submit": 1,
    "fieldname": "project",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Project",
    "options": "Project",
    "reqd": 1
@@ -169,6 +176,7 @@
   {
    "fieldname": "rent_amount",
    "fieldtype": "Float",
+   "in_preview": 1,
    "label": "Rent amount",
    "precision": "0",
    "read_only": 1
@@ -277,6 +285,9 @@
   {
    "fieldname": "payment_cycle",
    "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Payment Cycle",
    "options": "Daily\nMonthly",
    "read_only": 1
@@ -336,6 +347,9 @@
   {
    "fieldname": "vehicle_type",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Vehicle Type",
    "options": "Vehicle Type",
    "read_only": 1
@@ -432,7 +446,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-10-03 13:44:13.218941",
+ "modified": "2026-10-10 13:08:18.775604",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "Vehicles",
