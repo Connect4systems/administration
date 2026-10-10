@@ -9,8 +9,6 @@ from frappe.utils import escape_html
 
 class Bed(Document):
 	def validate(self):
-		from administration.flat_accommodation import ensure_shared_flat
-		ensure_shared_flat(self.flat)
 		if self.flat and self.room:
 			room_flat = frappe.db.get_value("Room", self.room, "flat")
 			if room_flat != self.flat:

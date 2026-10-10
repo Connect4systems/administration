@@ -2,26 +2,19 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Flat", {
-	setup(frm) {
-		frm.set_query("employee", () => ({
-			filters: {
-				status: "Active",
-				custom_project: frm.doc.project || "",
-				custom_accommidation: "Private",
-			},
-		}));
-	},
-	request_type(frm) {
-		if (frm.doc.request_type !== "Private" && frm.doc.employee) {
-			frm.set_value("employee", null);
-		}
-		frm.trigger("refresh");
-	},
 	refresh(frm) {
-		// Hide Room and Bed dashboard links and their create buttons for private flats.
 		for (const doctype of ["Room", "Bed"]) {
-			frm.dashboard?.wrapper.find(`[data-doctype="${doctype}"]`)
-				.closest(".document-link").toggle(frm.doc.request_type !== "Private");
+			const label = __("Create {0}", [__(doctype)]);
+			frm.remove_custom_button(label);
+			if (frm.is_new() || frm.doc.docstatus === 2
+				|| !frappe.model.can_create(doctype)) continue;
+			frm.add_custom_button(label, () => {
+				if (frm.is_dirty()) {
+					frappe.msgprint(__("Save the Flat before creating rooms or beds."));
+					return;
+				}
+				return frappe.new_doc(doctype, {flat: frm.doc.name});
+			});
 		}
 		if (frm.doc.docstatus === 1 && !frm.is_dirty() && frm.doc.flat_status) {
 			const colors = {Active: "green", Inactive: "gray", Expired: "orange"};

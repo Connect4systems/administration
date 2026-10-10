@@ -18,7 +18,6 @@
   "column_break_itcu",
   "project",
   "request_type",
-  "employee",
   "rent_type",
   "rent",
   "no_of_room",
@@ -79,8 +78,7 @@
    "fieldname": "no_of_room",
    "fieldtype": "Select",
    "label": "No of Room",
-   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10",
-   "depends_on": "eval:doc.request_type != 'Private'"
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10"
   },
   {
    "fieldname": "section_break_sxmy",
@@ -125,8 +123,7 @@
   {
    "fieldname": "no_of_beds",
    "fieldtype": "Float",
-   "label": "No Of Beds",
-   "depends_on": "eval:doc.request_type != 'Private'"
+   "label": "No Of Beds"
   },
   {
    "fieldname": "flat_information_section",
@@ -273,14 +270,6 @@
    "options": "Share\nPrivate",
    "default": "Share",
    "reqd": 1,
-   "allow_on_submit": 1
-  },
-  {
-   "fieldname": "employee",
-   "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee",
-   "depends_on": "eval:doc.request_type == 'Private'",
    "allow_on_submit": 1
   }
  ],

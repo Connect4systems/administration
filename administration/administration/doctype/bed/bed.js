@@ -6,7 +6,7 @@ frappe.ui.form.on("Bed", {
 		frm.set_query("employee", () => ({
 			filters: {
 				status: "Active",
-				custom_accommidation: "Share",
+				custom_accommidation: frm.doc.request_type === "Private" ? "Private" : "Share",
 				custom_project: frm.doc.project || "",
 			},
 		}));
@@ -16,13 +16,8 @@ frappe.ui.form.on("Bed", {
 			},
 		}));
 	},
-	async onload(frm) {
-		if (!frm.doc.flat) return;
-		const flat = frm.doc.flat;
-		const result = await frappe.db.get_value("Flat", flat, "project");
-		if (frm.doc.flat === flat) {
-			frm.doc.project = result.message?.project || "";
-		}
+	onload(frm) {
+		return load_bed_flat_details(frm);
 	},
 	refresh(frm) {
 		if (frm.is_new() || !frm.doc.employee) {
@@ -44,7 +39,8 @@ frappe.ui.form.on("Bed", {
 		});
 	},
 	flat(frm) {
-		frm.set_value("room", null);
+		frm.set_value({room: null, employee: null});
+		return load_bed_flat_details(frm);
 	},
 	async employee(frm) {
 		frm.set_value("status", frm.doc.employee ? "Booked" : "Open");
@@ -76,3 +72,15 @@ frappe.ui.form.on("Bed", {
 		});
 	},
 });
+
+async function load_bed_flat_details(frm) {
+	const flat = frm.doc.flat;
+	frm.doc.project = "";
+	frm.doc.request_type = "";
+	if (!flat) return;
+	const result = await frappe.db.get_value("Flat", flat, ["project", "request_type"]);
+	if (frm.doc.flat === flat) {
+		frm.doc.project = result.message?.project || "";
+		frm.doc.request_type = result.message?.request_type || "Share";
+	}
+}
