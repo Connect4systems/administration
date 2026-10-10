@@ -3,11 +3,25 @@
 
 frappe.ui.form.on("Bed", {
 	setup(frm) {
+		frm.set_query("employee", () => ({
+			filters: {
+				status: "Active",
+				custom_project: frm.doc.project || "",
+			},
+		}));
 		frm.set_query("room", () => ({
 			filters: {
 				flat: frm.doc.flat || "",
 			},
 		}));
+	},
+	async onload(frm) {
+		if (!frm.doc.flat) return;
+		const flat = frm.doc.flat;
+		const result = await frappe.db.get_value("Flat", flat, "project");
+		if (frm.doc.flat === flat) {
+			frm.doc.project = result.message?.project || "";
+		}
 	},
 	refresh(frm) {
 		if (frm.is_new() || !frm.doc.employee) {
