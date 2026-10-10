@@ -4,6 +4,7 @@
 administration.patches.rename_flat_rent_request
 
 [post_model_sync]
+administration.patches.set_flat_accommodation_request_type
 administration.patches.sync_service_vehicle_fields
 # Patches added in this section will be executed after doctypes are migrated
 administration.patches.disable_party_ledger_prepared_report

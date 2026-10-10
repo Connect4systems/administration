@@ -6,7 +6,9 @@ from frappe.model.document import Document
 
 
 class Room(Document):
-	pass
+	def validate(self):
+		from administration.flat_accommodation import ensure_shared_flat
+		ensure_shared_flat(self.flat)
 
 
 @frappe.whitelist()

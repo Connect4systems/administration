@@ -14,6 +14,7 @@
   "lifecycle_applied",
   "contract_status",
   "project",
+  "request_type",
   "date",
   "column_break_eqmm",
   "flat_request",
@@ -304,7 +305,7 @@
   {
    "fieldname": "terms",
    "fieldtype": "Table",
-   "label": "Terms and Conditions / \u0627\u0644\u0634\u0631\u0648\u0637 \u0648\u0627\u0644\u0623\u062d\u0643\u0627\u0645",
+   "label": "Terms and Conditions / الشروط والأحكام",
    "options": "Flat Contract Term"
   },
   {
@@ -460,6 +461,14 @@
    "label": "Contract Status",
    "options": "Active\nTerminated",
    "read_only": 1
+  },
+  {
+   "fieldname": "request_type",
+   "fieldtype": "Select",
+   "label": "Request Type",
+   "options": "Share\nPrivate",
+   "default": "Share",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,

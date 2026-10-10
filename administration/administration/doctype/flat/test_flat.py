@@ -61,6 +61,12 @@ class TestFlat(TestCase):
 		with self.assertRaises(PermissionError):
 			module._get_source(flat)
 
+	def test_private_request_type_is_carried_to_created_flat(self):
+		self.source.request_type = "Private"
+		flat = DocumentValues(flat_contract="FC-001")
+		module._set_source_values(flat, self.source)
+		self.assertEqual(flat.request_type, "Private")
+
 	def test_request_maps_contract_party_and_contents(self):
 		flat = DocumentValues(flat_contract="FC-001")
 		flat.flags.creation_action = module._CREATE_FLAT_TOKEN
@@ -68,6 +74,7 @@ class TestFlat(TestCase):
 		self.assertEqual(flat.flat_title, "Building A - Flat 12")
 		self.assertEqual(flat.rent_contracts[0]["rent_contract"], "FC-001")
 		self.assertEqual(flat.rent_type, "Direct Rent")
+		self.assertEqual(flat.request_type, "Share")
 		self.assertEqual(flat.rent_contracts[0]["rent_contract_type"], "Flat Contract")
 		self.assertEqual(flat.rent_contracts[0]["rent_start_date"], "2026-10-01")
 		self.assertEqual(flat.rent_contracts[0]["rent_end_date"], "2027-09-30")

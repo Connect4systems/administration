@@ -25,6 +25,8 @@ class Flat(Document):
 	def validate(self):
 		from administration.flat_lifecycle import _FLAT_UPDATE, validate_flat_update
 		validate_flat_update(self)
+		from administration.flat_accommodation import validate_flat_accommodation
+		validate_flat_accommodation(self)
 		if self.flags.get("lifecycle_update") is _FLAT_UPDATE:
 			return
 		if self.get("add_flat_to_contract"):
@@ -101,6 +103,7 @@ def _set_source_values(flat, source):
 		"security_deposit": "deposit",
 	}.items():
 		flat.set(target, source.get(origin))
+	flat.request_type = source.get("request_type") or "Share"
 	flat.flat_title = flat_name
 	flat.set("rent_contracts", [])
 	flat.append("rent_contracts", {

@@ -6,6 +6,7 @@ frappe.ui.form.on("Bed", {
 		frm.set_query("employee", () => ({
 			filters: {
 				status: "Active",
+				custom_accommidation: "Share",
 				custom_project: frm.doc.project || "",
 			},
 		}));

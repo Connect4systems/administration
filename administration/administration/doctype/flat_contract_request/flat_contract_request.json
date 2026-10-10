@@ -13,6 +13,7 @@
   "last_rent_contract",
   "lifecycle_applied",
   "project",
+  "request_type",
   "flat_request",
   "monthly_rent",
   "deposit",
@@ -356,6 +357,14 @@
    "read_only": 1,
    "no_copy": 1,
    "allow_on_submit": 1
+  },
+  {
+   "fieldname": "request_type",
+   "fieldtype": "Select",
+   "label": "Request Type",
+   "options": "Share\nPrivate",
+   "default": "Share",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,

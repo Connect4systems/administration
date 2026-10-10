@@ -116,6 +116,7 @@ frappe.ui.form.on("Flat Contract Request", {
 				const contract = frappe.model.get_new_doc("Flat Contract");
 				const copied_fields = [
 					"project",
+					"request_type",
 					"date",
 					"contract_start_date",
 					"contract_end_date",
