@@ -3,6 +3,7 @@
 
 frappe.ui.form.on("Flat", {
 	refresh(frm) {
+		administration.approval.flat_transaction_buttons(frm);
 		for (const doctype of ["Room", "Bed"]) {
 			const label = __("Create {0}", [__(doctype)]);
 			frm.remove_custom_button(label);
@@ -28,7 +29,7 @@ frappe.ui.form.on("Flat", {
 		}
 		if (frm.is_new()) {
 			frm.disable_save();
-			frm.set_intro(__("Create a Flat using the Create Flat button on a submitted Flat Contract or Add Flat to Contract."));
+			frm.set_intro(__("A Flat is created automatically when a Flat Contract or Add Flat to Contract is submitted."));
 		}
 		frm.remove_custom_button(__("Renew"));
 		frm.remove_custom_button(__("Terminate"));

@@ -164,3 +164,63 @@ def make_flat(source_doctype, source_name):
 	# Keep the result visible on the source even after leaving the Flat form.
 	source.db_set({"created_flat": flat.name, "flat_title": flat.flat_title})
 	return flat
+
+
+def create_flat_on_submit(source, method=None):
+	"""Create the initial Flat in the source submission's transaction."""
+	if source.get("type") == "Renew":
+		return
+	flat = frappe.new_doc("Flat")
+	flat.set(SOURCE_FIELDS[source.doctype], source.name)
+	flat.flags.creation_action = _CREATE_FLAT_TOKEN
+	flat.flags.ignore_permissions = True
+	try:
+		flat.insert(ignore_permissions=True)
+		flat.submit()
+	finally:
+		flat.flags.pop("creation_action", None)
+	source.db_set({"created_flat": flat.name, "flat_title": flat.flat_title})
+
+
+@frappe.whitelist()
+def unlink_and_cancel(source_doctype, source_name):
+	"""Cancel both documents without bypassing linked-document checks."""
+	if "System Manager" not in frappe.get_roles():
+		frappe.throw(_("Only System Manager can unlink and cancel a Flat."), frappe.PermissionError)
+	if source_doctype not in SOURCE_FIELDS:
+		frappe.throw(_("Invalid Flat source document."))
+	source = frappe.get_doc(source_doctype, source_name, for_update=True)
+	source.check_permission("read")
+	if source.docstatus != 1 or source.get("type") == "Renew":
+		frappe.throw(_("Select a submitted source with its automatically created Flat."))
+	# Older submitted Flats may predate the source's created_flat backlink.
+	flat_name = source.get("created_flat") or _existing_flat(source, for_update=True)
+	if not flat_name:
+		frappe.throw(_("No linked Flat was found for this source document."))
+	flat = frappe.get_doc("Flat", flat_name, for_update=True)
+	field = SOURCE_FIELDS[source_doctype]
+	if flat.docstatus != 1 or flat.get(field) != source.name:
+		frappe.throw(_("The submitted Flat and source links do not match."))
+	if flat.get("pending_document") or source.get("contract_status") == "Terminated":
+		frappe.throw(_("Resolve the Flat's renewal or termination before cancelling its original transaction."))
+	from administration.flat_lifecycle import row_reference
+	if any(row_reference(row) != (source_doctype, source.name) for row in flat.get("rent_contracts") or []):
+		frappe.throw(_("A Flat with later rent contracts cannot be cancelled with its original transaction."))
+	# A savepoint also protects callers that catch the exception in a larger transaction.
+	savepoint = "unlink_and_cancel_flat"
+	frappe.db.savepoint(savepoint)
+	try:
+		source.db_set("created_flat", None)
+		flat.db_set(field, None)
+		for row in flat.get("rent_contracts") or []:
+			row.db_set({"rent_contract": None, "add_flat_to_contract": None})
+		flat.flags.ignore_permissions = True
+		flat.cancel()
+		source.flags.ignore_permissions = True
+		source.cancel()
+		if source.meta.has_field("workflow_state"):
+			source.db_set("workflow_state", "Cancelled")
+	except Exception:
+		frappe.db.rollback(save_point=savepoint)
+		raise
+	return {"source": source.name, "flat": flat.name}

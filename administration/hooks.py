@@ -180,7 +180,7 @@ doc_events = {
     "Flat Contract": {
         "validate": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
         "before_update_after_submit": ["administration.flat_contract_attachments.validate_contract_attachments", "administration.flat_lifecycle.validate_document"],
-        "on_submit": "administration.flat_lifecycle.apply_renewal",
+        "on_submit": ["administration.flat_lifecycle.apply_renewal", "administration.administration.doctype.flat.flat.create_flat_on_submit"],
         "on_update": "administration.flat_lifecycle.workflow_updated",
         "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
         "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
@@ -204,7 +204,7 @@ doc_events = {
         "validate": "administration.flat_lifecycle.validate_document",
         "before_update_after_submit": "administration.flat_lifecycle.validate_document",
         "after_insert": "administration.flat_lifecycle.reserve_request",
-        "on_submit": "administration.flat_lifecycle.apply_renewal",
+        "on_submit": ["administration.flat_lifecycle.apply_renewal", "administration.administration.doctype.flat.flat.create_flat_on_submit"],
         "on_update": "administration.flat_lifecycle.workflow_updated",
         "before_cancel": "administration.flat_lifecycle.prevent_cancel_or_delete",
         "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",

@@ -246,3 +246,94 @@ class TestFlat(TestCase):
 		with self.assertRaises(PermissionError):
 			module.make_flat("Flat Contract", self.source.name)
 		flat.insert.assert_not_called()
+
+
+	def test_submission_creates_and_submits_for_both_sources(self):
+		for doctype, field in module.SOURCE_FIELDS.items():
+			with self.subTest(doctype=doctype):
+				self.source.doctype = doctype
+				flat = DocumentValues(insert=Mock(), submit=Mock(), name="FLAT-1", flat_title="Flat")
+				self.frappe.new_doc.return_value = flat
+				module.create_flat_on_submit(self.source)
+				self.assertEqual(flat.get(field), self.source.name)
+				flat.insert.assert_called_once_with(ignore_permissions=True)
+				flat.submit.assert_called_once()
+				self.assertNotIn("creation_action", flat.flags)
+
+	def test_renewal_submission_does_not_create_another_flat(self):
+		self.source.type = "Renew"
+		module.create_flat_on_submit(self.source)
+		self.frappe.new_doc.assert_not_called()
+
+
+class TestUnlinkAndCancel(TestCase):
+	def setUp(self):
+		self.patcher = patch.object(module, "frappe")
+		self.frappe = self.patcher.start()
+		self.addCleanup(self.patcher.stop)
+		self.frappe.throw.side_effect = ValueError
+		self.frappe.get_roles.return_value = ["System Manager"]
+		self.source = DocumentValues(doctype="Flat Contract", name="FC-1", docstatus=1,
+			created_flat="FLAT-1", check_permission=Mock(), db_set=Mock(), cancel=Mock(),
+			meta=SimpleNamespace(has_field=lambda field: True))
+		self.row = DocumentValues(rent_contract_type="Flat Contract", rent_contract="FC-1", db_set=Mock())
+		self.flat = DocumentValues(name="FLAT-1", docstatus=1, flat_contract="FC-1",
+			rent_contracts=[self.row], db_set=Mock(), cancel=Mock())
+		self.frappe.get_doc.side_effect = [self.source, self.flat]
+
+	def test_role_required_before_document_access(self):
+		self.frappe.get_roles.return_value = ["Legal Manager"]
+		with self.assertRaises(ValueError):
+			module.unlink_and_cancel("Flat Contract", "FC-1")
+		self.frappe.get_doc.assert_not_called()
+
+	def test_cancels_both_and_clears_both_links(self):
+		result = module.unlink_and_cancel("Flat Contract", "FC-1")
+		self.assertEqual(result, {"source": "FC-1", "flat": "FLAT-1"})
+		self.source.db_set.assert_any_call("created_flat", None)
+		self.flat.db_set.assert_called_once_with("flat_contract", None)
+		self.row.db_set.assert_called_once_with({"rent_contract": None, "add_flat_to_contract": None})
+		self.flat.cancel.assert_called_once()
+		self.source.cancel.assert_called_once()
+		self.frappe.db.commit.assert_not_called()
+
+	def test_failure_at_either_cancel_rolls_back(self):
+		for target in (self.flat, self.source):
+			with self.subTest(target=target.name):
+				self.frappe.get_doc.side_effect = [self.source, self.flat]
+				target.cancel.side_effect = RuntimeError("linked document blocks cancellation")
+				with self.assertRaises(RuntimeError):
+					module.unlink_and_cancel("Flat Contract", "FC-1")
+				self.frappe.db.rollback.assert_called_with(save_point="unlink_and_cancel_flat")
+				target.cancel.side_effect = None
+
+	def test_mismatched_link_changes_nothing(self):
+		self.flat.flat_contract = "OTHER"
+		with self.assertRaises(ValueError):
+			module.unlink_and_cancel("Flat Contract", "FC-1")
+		self.source.db_set.assert_not_called()
+		self.flat.cancel.assert_not_called()
+
+	def test_legacy_flat_without_source_backlink(self):
+		self.source.created_flat = None
+		self.frappe.db.get_value.return_value = self.flat.name
+		module.unlink_and_cancel("Flat Contract", "FC-1")
+		self.frappe.db.get_value.assert_called_once_with(
+			"Flat", {"flat_contract": "FC-1"}, "name", for_update=True)
+		self.flat.cancel.assert_called_once()
+
+	def test_add_flat_to_contract_cancellation(self):
+		self.source.doctype = "Add Flat to Contract"
+		self.flat.flat_contract = None
+		self.flat.add_flat_to_contract = self.source.name
+		self.row.rent_contract = None
+		self.row.add_flat_to_contract = self.source.name
+		module.unlink_and_cancel("Add Flat to Contract", self.source.name)
+		self.flat.db_set.assert_called_once_with("add_flat_to_contract", None)
+		self.source.cancel.assert_called_once()
+
+	def test_renewal_history_blocks_original_cancellation(self):
+		self.flat.rent_contracts.append(DocumentValues(rent_contract_type="Flat Contract", rent_contract="FC-2"))
+		with self.assertRaises(ValueError):
+			module.unlink_and_cancel("Flat Contract", "FC-1")
+		self.source.db_set.assert_not_called()
