@@ -103,6 +103,7 @@ after_install = [
     "administration.flat_lifecycle_setup.install",
 ]
 after_migrate = [
+	"administration.flat_lifecycle_setup.repair_termination_permissions",
     "administration.travel_request.setup_document_approval",
     "administration.legal_document_status.update_statuses",
     "administration.flat_request_layout.ensure_service_vehicle_contract_layout",

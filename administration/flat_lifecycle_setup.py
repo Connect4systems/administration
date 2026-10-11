@@ -42,7 +42,7 @@ def install():
 
 
 def repair_termination_permissions():
-	"""Grant legal staff draft deletion without replacing the site's workflow."""
+	"""Grant draft deletion without replacing the site's workflow."""
 	from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
 	doctype = "Rent Termination Request"
 	setup_custom_perms(doctype)
@@ -50,4 +50,14 @@ def repair_termination_permissions():
 		if not frappe.db.exists("Custom DocPerm", {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0}):
 			add_permission(doctype, role)
 		update_permission_property(doctype, role, 0, "delete", 1)
+	frappe.clear_cache(doctype=doctype)
+	# System Managers must be able to remove an abandoned draft termination
+	# so on_trash releases the Flat's pending lifecycle reservation.
+	doctype = "Flat Termination"
+	setup_custom_perms(doctype)
+	role = "System Manager"
+	if not frappe.db.exists("Custom DocPerm", {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0}):
+		add_permission(doctype, role)
+	for permission in ("read", "delete"):
+		update_permission_property(doctype, role, 0, permission, 1)
 	frappe.clear_cache(doctype=doctype)
