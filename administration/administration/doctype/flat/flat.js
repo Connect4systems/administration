@@ -56,7 +56,23 @@ frappe.ui.form.on("Flat", {
 				});
 			}
 		}
-		// Shared assets may still be cached during deployment. Keep the other actions usable.
-		window.administration?.approval?.flat_transaction_buttons?.(frm);
+		frm.remove_custom_button(__("Unlink and Cancel"));
+		if (frm.doc.docstatus === 1 && frappe.user_roles.includes("System Manager")) {
+			frm.add_custom_button(__("Unlink and Cancel"), () => {
+				if (frm.is_dirty()) {
+					frappe.msgprint(__("Save or reload the Flat before cancelling."));
+					return;
+				}
+				frappe.confirm(__("Cancel this Flat and its source contract, and clear their links? Both documents will remain saved as Cancelled."), () => {
+					frappe.call({
+						method: "administration.administration.doctype.flat.flat.unlink_and_cancel_flat",
+						args: {flat_name: frm.doc.name},
+						freeze: true,
+						freeze_message: __("Unlinking and cancelling..."),
+						callback: (r) => { if (r.message) frm.reload_doc(); },
+					});
+				});
+			});
+		}
 	},
 });

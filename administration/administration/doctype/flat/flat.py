@@ -183,7 +183,7 @@ def create_flat_on_submit(source, method=None):
 
 
 @frappe.whitelist()
-def unlink_and_cancel(source_doctype, source_name):
+def unlink_and_cancel(source_doctype, source_name, expected_flat=None):
 	"""Cancel both documents without bypassing linked-document checks."""
 	if "System Manager" not in frappe.get_roles():
 		frappe.throw(_("Only System Manager can unlink and cancel a Flat."), frappe.PermissionError)
@@ -194,12 +194,18 @@ def unlink_and_cancel(source_doctype, source_name):
 	if source.docstatus != 1 or source.get("type") == "Renew":
 		frappe.throw(_("Select a submitted source with its automatically created Flat."))
 	# Older submitted Flats may predate the source's created_flat backlink.
-	flat_name = source.get("created_flat") or _existing_flat(source, for_update=True)
+	flat_name = source.get("created_flat") or expected_flat or _existing_flat(source, for_update=True)
+	if expected_flat and flat_name != expected_flat:
+		frappe.throw(_("The source document is linked to a different Flat."))
 	if not flat_name:
 		frappe.throw(_("No linked Flat was found for this source document."))
 	flat = frappe.get_doc("Flat", flat_name, for_update=True)
 	field = SOURCE_FIELDS[source_doctype]
-	if flat.docstatus != 1 or flat.get(field) != source.name:
+	from administration.flat_lifecycle import row_reference
+	rows = flat.get("rent_contracts") or []
+	legacy_link = not any(flat.get(key) for key in SOURCE_FIELDS.values()) and bool(rows) and all(
+		row_reference(row) == (source_doctype, source.name) for row in rows)
+	if flat.docstatus != 1 or (flat.get(field) != source.name and not legacy_link):
 		frappe.throw(_("The submitted Flat and source links do not match."))
 	if flat.get("pending_document") or source.get("contract_status") == "Terminated":
 		frappe.throw(_("Resolve the Flat's renewal or termination before cancelling its original transaction."))
@@ -224,3 +230,20 @@ def unlink_and_cancel(source_doctype, source_name):
 		frappe.db.rollback(save_point=savepoint)
 		raise
 	return {"source": source.name, "flat": flat.name}
+
+
+@frappe.whitelist()
+def unlink_and_cancel_flat(flat_name):
+	"""Resolve historical source links on the server, not in the form script."""
+	if "System Manager" not in frappe.get_roles():
+		frappe.throw(_("Only System Manager can unlink and cancel a Flat."), frappe.PermissionError)
+	flat = frappe.get_doc("Flat", flat_name)
+	flat.check_permission("read")
+	from administration.flat_lifecycle import row_reference
+	links = {(doctype, flat.get(field)) for doctype, field in SOURCE_FIELDS.items() if flat.get(field)}
+	if not links:
+		links = {row_reference(row) for row in flat.get("rent_contracts") or []}
+	if len(links) != 1:
+		frappe.throw(_("The Flat must have exactly one source contract to unlink and cancel."))
+	doctype, name = links.pop()
+	return unlink_and_cancel(doctype, name, expected_flat=flat.name)

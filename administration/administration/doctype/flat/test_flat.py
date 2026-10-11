@@ -337,3 +337,28 @@ class TestUnlinkAndCancel(TestCase):
 		with self.assertRaises(ValueError):
 			module.unlink_and_cancel("Flat Contract", "FC-1")
 		self.source.db_set.assert_not_called()
+
+
+	def test_legacy_rent_table_link_can_cancel(self):
+		self.flat.flat_contract = None
+		module.unlink_and_cancel("Flat Contract", "FC-1", expected_flat="FLAT-1")
+		self.flat.cancel.assert_called_once()
+
+	def test_requested_flat_must_match_source_backlink(self):
+		with self.assertRaises(ValueError):
+			module.unlink_and_cancel("Flat Contract", "FC-1", expected_flat="OTHER")
+		self.source.db_set.assert_not_called()
+
+	def test_flat_endpoint_resolves_legacy_rent_table(self):
+		self.flat.flat_contract = None
+		self.flat.check_permission = Mock()
+		self.frappe.get_doc.side_effect = [self.flat]
+		with patch.object(module, "unlink_and_cancel") as cancel:
+			module.unlink_and_cancel_flat("FLAT-1")
+			cancel.assert_called_once_with("Flat Contract", "FC-1", expected_flat="FLAT-1")
+
+	def test_flat_endpoint_requires_system_manager(self):
+		self.frappe.get_roles.return_value = ["Legal User"]
+		with self.assertRaises(ValueError):
+			module.unlink_and_cancel_flat("FLAT-1")
+		self.frappe.get_doc.assert_not_called()
