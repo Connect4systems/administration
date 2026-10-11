@@ -55,6 +55,7 @@ frappe.query_reports["Party Ledger (Party & Against)"] = {
 			label: __("Party"),
 			fieldtype: "Dynamic Link",
 			options: "party_type",
+			get_options: () => frappe.query_report.get_filter_value("party_type"),
 		},
 		{
 			fieldname: "project",
