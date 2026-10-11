@@ -53,3 +53,18 @@ class TestBed(TestCase):
 		with self.assertRaises(ValueError):
 			module.check_employee_assignment("E1")
 		self.frappe.db.sql.assert_not_called()
+
+	def test_room_sets_missing_flat(self):
+		self.bed.room = "ROOM-1"
+		self.bed.flat = None
+		self.frappe.db.get_value.return_value = "F1"
+		self.frappe.db.sql.return_value = []
+		module.Bed.validate(self.bed)
+		self.assertEqual(self.bed.flat, "F1")
+
+	def test_room_from_another_flat_is_rejected(self):
+		self.bed.room = "ROOM-1"
+		self.frappe.db.get_value.return_value = "F1"
+		with self.assertRaises(ValueError):
+			module.Bed.validate(self.bed)
+		self.frappe.db.sql.assert_not_called()

@@ -38,8 +38,15 @@ frappe.ui.form.on("Bed", {
 			);
 		});
 	},
-	flat(frm) {
-		frm.set_value({room: null, employee: null});
+	async flat(frm) {
+		const flat = frm.doc.flat;
+		const room = frm.doc.room;
+		if (room) {
+			const result = await frappe.db.get_value("Room", room, "flat");
+			if (frm.doc.flat !== flat || frm.doc.room !== room) return;
+			if (result.message?.flat !== flat) await frm.set_value("room", null);
+		}
+		await frm.set_value("employee", null);
 		return load_bed_flat_details(frm);
 	},
 	async employee(frm) {

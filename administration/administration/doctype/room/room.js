@@ -6,6 +6,16 @@ frappe.ui.form.on("Room", {
 		if (frm.is_new()) {
 			return;
 		}
+		frm.remove_custom_button(__("Create Bed"));
+		if (frm.doc.flat && frappe.model.can_create("Bed")) {
+			frm.add_custom_button(__("Create Bed"), () => {
+				if (frm.is_dirty()) {
+					frappe.msgprint(__("Save the Room before creating a Bed."));
+					return;
+				}
+				return frappe.new_doc("Bed", {flat: frm.doc.flat, room: frm.doc.name});
+			});
+		}
 
 		frm.add_custom_button(__("Employee Left"), () => {
 			frappe.confirm(

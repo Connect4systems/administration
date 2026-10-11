@@ -3,7 +3,6 @@
 
 frappe.ui.form.on("Flat", {
 	refresh(frm) {
-		administration.approval.flat_transaction_buttons(frm);
 		for (const doctype of ["Room", "Bed"]) {
 			const label = __("Create {0}", [__(doctype)]);
 			frm.remove_custom_button(label);
@@ -14,7 +13,13 @@ frappe.ui.form.on("Flat", {
 					frappe.msgprint(__("Save the Flat before creating rooms or beds."));
 					return;
 				}
-				return frappe.new_doc(doctype, {flat: frm.doc.name});
+				if (doctype === "Room") return frappe.new_doc("Room", {flat: frm.doc.name});
+				frappe.prompt([{
+					fieldname: "room", fieldtype: "Link", options: "Room",
+					label: __("Room"), reqd: 1,
+					get_query: () => ({filters: {flat: frm.doc.name}}),
+				}], ({room}) => frappe.new_doc("Bed", {flat: frm.doc.name, room}),
+				__("Create Bed"), __("Continue"));
 			});
 		}
 		if (frm.doc.docstatus === 1 && !frm.is_dirty() && frm.doc.flat_status) {
@@ -51,5 +56,7 @@ frappe.ui.form.on("Flat", {
 				});
 			}
 		}
+		// Shared assets may still be cached during deployment. Keep the other actions usable.
+		window.administration?.approval?.flat_transaction_buttons?.(frm);
 	},
 });

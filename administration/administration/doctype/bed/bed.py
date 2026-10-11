@@ -9,8 +9,10 @@ from frappe.utils import escape_html
 
 class Bed(Document):
 	def validate(self):
-		if self.flat and self.room:
+		if self.room:
 			room_flat = frappe.db.get_value("Room", self.room, "flat")
+			if not self.flat:
+				self.flat = room_flat
 			if room_flat != self.flat:
 				frappe.throw("Room must belong to the selected Flat.")
 
