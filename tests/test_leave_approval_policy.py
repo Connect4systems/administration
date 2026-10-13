@@ -125,7 +125,13 @@ class PolicyTests(unittest.TestCase):
     def test_assignment_reconciliation_and_terminal_cleanup(self):
         calls = []
         module = types.ModuleType("frappe.desk.form.assign_to")
-        module.add = lambda args, **kw: calls.append(("add", args))
+        # Match Frappe v15: the public add accepts only args; _add supports
+        # trusted server-side assignment with ignore_permissions.
+        module.add = lambda args=None: calls.append(("public_add", args))
+        def add_assignment(args=None, *, ignore_permissions=False):
+            self.assertTrue(ignore_permissions)
+            calls.append(("add", args))
+        module._add = add_assignment
         module.set_status = lambda *args, **kw: calls.append(("close", kw["todo"]))
         self.frappe.get_all = lambda *args, **kw: [Doc(name="old", allocated_to="first")]
         self.frappe.has_permission = lambda *args, **kw: False

@@ -96,7 +96,7 @@ def before_cancel(doc, method=None):
 
 
 def sync_assignments(doc, method=None):
-    from frappe.desk.form.assign_to import add, set_status
+    from frappe.desk.form.assign_to import _add, set_status
     target = doc.leave_approver if doc.workflow_state == "Pending Approval" else (
         doc.custom_second_leave_approver if doc.workflow_state == "Pending Management Approval" else None
     )
@@ -113,7 +113,7 @@ def sync_assignments(doc, method=None):
             frappe.share.add(doc.doctype, doc.name, target, read=1, write=1,
                 flags={"ignore_share_permission": True})
         if not kept:
-            add({"doctype": doc.doctype, "name": doc.name, "assign_to": [target],
+            _add({"doctype": doc.doctype, "name": doc.name, "assign_to": [target],
                 "description": _("Leave Application awaiting your approval")}, ignore_permissions=True)
 
 
