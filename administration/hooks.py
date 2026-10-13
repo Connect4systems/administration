@@ -350,6 +350,9 @@ override_whitelisted_methods = {
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "Flat": "public/js/flat_transaction_buttons.js",
+    "Flat Contract": "public/js/flat_transaction_buttons.js",
+    "Add Flat to Contract": "public/js/flat_transaction_buttons.js",
     "Employee": "public/js/employee_leave_approval.js",
     "Leave Application": "public/js/leave_approval.js",
     "Travel Request": "public/js/doctype/travel_request/travel_request.js",
