@@ -51,8 +51,11 @@ administration.approval.flat_transaction_buttons = function (frm) {
 	});
 };
 
-for (const doctype of ["Flat Contract", "Add Flat to Contract", "Flat"]) {
-	frappe.ui.form.on(doctype, {
-		refresh: (frm) => administration.approval.flat_transaction_buttons(frm),
-	});
+if (!administration.approval.flat_transaction_events_registered) {
+	for (const doctype of ["Flat Contract", "Add Flat to Contract", "Flat"]) {
+		frappe.ui.form.on(doctype, {
+			refresh: (frm) => administration.approval.flat_transaction_buttons(frm),
+		});
+	}
+	administration.approval.flat_transaction_events_registered = true;
 }

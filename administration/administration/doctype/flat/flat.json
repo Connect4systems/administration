@@ -141,6 +141,7 @@
    "label": "Flat Contents"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "flat_contents",
    "fieldtype": "Table",
    "label": "Flat Contents",

@@ -10,6 +10,21 @@ def ensure_layouts():
 		ensure_approval_layout(doctype, schema)
 
 
+def allow_submitted_flat_contents():
+	"""Keep the contents table editable on existing submitted Flats."""
+	from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
+	for schema in ("flat_contents", "flat"):
+		frappe.reload_doc("administration", "doctype", schema, force=True)
+	for doctype, fields in (
+		("Flat", ("flat_contents",)),
+		("Flat Contents", ("item_name", "description", "qty", "image")),
+	):
+		for field in fields:
+			make_property_setter(doctype, field, "allow_on_submit", 1, "Check")
+		frappe.clear_cache(doctype=doctype)
+
+
 def install():
 	from administration.flat_contract_workflow import STATES as legal_states, TRANSITIONS as legal_transitions
 	from administration.add_flat_to_contract_workflow import STATES, TRANSITIONS

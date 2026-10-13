@@ -26,7 +26,10 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/administration/css/administration.css"
-app_include_js = "/assets/administration/js/document_approval.js?v=20261013-flat-actions"
+app_include_js = [
+    "/assets/administration/js/document_approval.js?v=20261013-flat-actions",
+    "/assets/administration/js/flat_transaction_buttons.js?v=20261013-2",
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/administration/css/administration.css"
@@ -104,6 +107,7 @@ after_install = [
     "administration.leave_approval_setup.setup",
 ]
 after_migrate = [
+    "administration.flat_lifecycle_setup.allow_submitted_flat_contents",
     "administration.leave_approval_setup.setup",
 	"administration.flat_lifecycle_setup.repair_termination_permissions",
     "administration.travel_request.setup_document_approval",
