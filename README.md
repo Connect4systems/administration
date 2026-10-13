@@ -206,3 +206,55 @@ This app can use GitHub Actions for CI. The following workflows are configured:
 ### License
 
 mit
+
+### Leave approval
+
+The app installs **Administration Leave Approval** on install and after each migrate.
+Employee approval settings appear in Attendance & Leaves. First and second approver
+users are derived from their Employee records, and each Leave Application keeps its
+own immutable snapshot. One level routes through first approver and HR; two levels
+adds management before HR. Only final HR approval submits through the normal Frappe
+workflow. Rejection remains draft and closes assignments. HR may cancel an approved
+application using normal cancellation.
+
+Pending stages use the standard HRMS `status = Open`; `workflow_state` identifies
+the approval stage. This retains standard overlap, balance and validation behavior.
+Approved, Rejected and Cancelled synchronize both fields. No core files are changed.
+The **Pending Approval** shortcut in My Profile opens **Pending Leave Approval**,
+a role restricted report scoped to the logged-in user's current approval stage.
+Refresh the report after taking an action in another browser tab.
+
+Deploy the full revision to the Linux bench app path, disable the old Leave
+Application Client Script and assignment/share Server Script, then run:
+
+```bash
+bench --site <site> backup
+bench --site <site> migrate
+bench --site <site> clear-cache
+bench restart
+```
+
+Assign `Leave Approver` to configured first/second approver Users and
+`HR Leave Approver` to final HR Users. The app does not grant roles to users
+automatically. Existing active Leave Application workflows are replaced by this
+workflow. Existing unambiguous first-approver Employee links are backfilled; HR
+must complete missing Employee configurations before new leave requests can be
+created or those Employee masters saved. Historical applications retain their
+stored first approver, and missing approval levels default to One Level Approval.
+Legacy `Pending` maps to Pending Approval and `Draft` maps to Open. Unknown legacy
+draft states and submitted non-approved applications stop migration for explicit
+resolution; document status is never rewritten by the migration.
+
+Before production rollout, validate on a restored staging site: migrate twice;
+check Employee layout and report shortcut visibility using an ordinary Employee;
+exercise both approval routes and every rejection route; confirm assignment/share
+idempotence, unrelated approver access denial, HR submission, leave ledger and
+attendance updates, cancellation, and unchanged snapshots after Employee edits.
+Confirm the old standalone scripts are disabled. Live site configuration and
+Frappe lifecycle integration cannot be verified from this standalone checkout.
+
+Run the standalone policy regression suite with:
+
+```bash
+python -m unittest discover -s tests -v
+```

@@ -48,6 +48,12 @@ _APPROVAL_TOKEN = object()
 @frappe.whitelist()
 def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
+	if payload.get("doctype") == "Leave Application":
+		current = frappe.get_doc("Leave Application", payload.get("name"), for_update=True)
+		current.check_permission("read")
+		if str(payload.get("modified")) != str(current.modified):
+			frappe.throw(_("This request has changed. Reload it before taking a workflow action."))
+		return core_apply_workflow(current.as_dict(), action)
 	if payload.get("doctype") not in ("Travel Request", "Flat Request", "Flat Contract Request", "Add Flat to Contract", "Flat Contract", "Rent Termination Request", "Flat Termination", "Private Vehicle Contract Request", "Private Vehicle Contract", "Service Vehicle Contract", "Service Vehicle Contract Request"):
 		return core_apply_workflow(doc, action)
 	note = payload.get("__approval_note") or ""

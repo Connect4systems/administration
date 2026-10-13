@@ -101,8 +101,10 @@ after_install = [
     "administration.flat_request_layout.ensure_flat_contract_approval_layout",
     "administration.flat_request_layout.ensure_flat_contract_request_approval_layout",
     "administration.flat_lifecycle_setup.install",
+    "administration.leave_approval_setup.setup",
 ]
 after_migrate = [
+    "administration.leave_approval_setup.setup",
 	"administration.flat_lifecycle_setup.repair_termination_permissions",
     "administration.travel_request.setup_document_approval",
     "administration.legal_document_status.update_statuses",
@@ -174,6 +176,13 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+    "Leave Application": {
+        "before_validate": "administration.leave_approval.validate_leave",
+        "before_update_after_submit": "administration.leave_approval.validate_leave",
+        "before_cancel": "administration.leave_approval.before_cancel",
+        "on_update": "administration.leave_approval.sync_assignments",
+        "on_cancel": "administration.leave_approval.sync_assignments",
+    },
     "Flat": {
         "validate": "administration.flat_title.validate_flat_title",
         "before_update_after_submit": "administration.flat_title.validate_flat_title",
@@ -215,7 +224,7 @@ doc_events = {
         "on_trash": "administration.flat_lifecycle.prevent_cancel_or_delete",
     },
     "Employee": {
-        "validate": "administration.employee.validate_accommodation_status",
+        "validate": ["administration.employee.validate_accommodation_status", "administration.leave_approval.validate_employee"],
         "on_update": "administration.user_employee.sync_employee_to_user",
         "on_trash": "administration.user_employee.clear_employee_from_user",
     },
@@ -341,6 +350,8 @@ override_whitelisted_methods = {
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "Employee": "public/js/employee_leave_approval.js",
+    "Leave Application": "public/js/leave_approval.js",
     "Travel Request": "public/js/doctype/travel_request/travel_request.js",
     "Job Applicant": "public/js/doctype/job_applicant/job_applicant.js",
     "Purchase Order": "public/js/doctype/purchase_order/create_shipment_request.js",
@@ -349,3 +360,6 @@ doctype_js = {
 
 
 fixtures = ["Custom Field", "Property Setter", "DocType Link", "Web Form"]
+
+permission_query_conditions = {"Leave Application": "administration.leave_approval.permission_query"}
+has_permission = {"Leave Application": "administration.leave_approval.has_permission"}

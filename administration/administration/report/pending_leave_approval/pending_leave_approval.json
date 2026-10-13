@@ -1,0 +1,19 @@
+{
+ "doctype": "Report",
+ "name": "Pending Leave Approval",
+ "report_name": "Pending Leave Approval",
+ "ref_doctype": "Leave Application",
+ "report_type": "Script Report",
+ "is_standard": "Yes",
+ "module": "Administration",
+ "disabled": 0,
+ "prepared_report": 0,
+ "roles": [
+  {
+   "role": "Leave Approver"
+  },
+  {
+   "role": "HR Leave Approver"
+  }
+ ]
+}
