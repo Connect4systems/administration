@@ -6,7 +6,7 @@ frappe.ui.form.on("Add Flat to Contract", {
 	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
 		administration.approval.refresh(frm);
-		if (frm.doc.docstatus !== 1 || frm.doc.workflow_state !== "Approved") return;
+		if (frm.doc.docstatus !== 1) return;
 		if (frm.doc.contract_status === "Terminated") return;
 		if (frm.doc.type === "Renew") {
 			frm.add_custom_button(__("View Flat"), () => frappe.set_route("Form", "Flat", frm.doc.flat));

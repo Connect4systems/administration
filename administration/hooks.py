@@ -26,7 +26,7 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/administration/css/administration.css"
-app_include_js = "/assets/administration/js/document_approval.js"
+app_include_js = "/assets/administration/js/document_approval.js?v=20261013-flat-actions"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/administration/css/administration.css"

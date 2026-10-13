@@ -1,7 +1,7 @@
 // Shared workflow note, uploads and audit display for documents.
 frappe.provide("administration.approval");
 
-administration.approval = {
+Object.assign(administration.approval, {
 	before_workflow_action(frm) {
 		frappe.dom.unfreeze();
 		return new Promise((resolve, reject) => {
@@ -73,7 +73,7 @@ administration.approval = {
 			frm.refresh_field("document_approval");
 		}
 	},
-};
+});
 
 function format_approval_attachments(value) {
 	let files;
@@ -94,7 +94,7 @@ administration.approval.flat_transaction_buttons = function (frm) {
 	frm.remove_custom_button(__("Unlink and Cancel"));
 	if (frm.doc.docstatus !== 1 || !source_name) return;
 	if (!is_flat && !frm.doc.created_flat) {
-		if (frm.doc.workflow_state !== "Approved" || frm.doc.contract_status === "Terminated" || frm.doc.type === "Renew") return;
+		if (frm.doc.contract_status === "Terminated" || frm.doc.type === "Renew") return;
 		frm.add_custom_button(__("Create Flat"), () => {
 			frappe.call({
 				method: "administration.administration.doctype.flat.flat.make_flat",
