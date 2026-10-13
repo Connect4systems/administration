@@ -92,7 +92,22 @@ administration.approval.flat_transaction_buttons = function (frm) {
 	const source_name = is_flat
 		? (frm.doc.flat_contract || frm.doc.add_flat_to_contract) : frm.doc.name;
 	frm.remove_custom_button(__("Unlink and Cancel"));
-	if (frm.doc.docstatus !== 1 || !source_name || (!is_flat && !frm.doc.created_flat)) return;
+	if (frm.doc.docstatus !== 1 || !source_name) return;
+	if (!is_flat && !frm.doc.created_flat) {
+		if (frm.doc.workflow_state !== "Approved" || frm.doc.contract_status === "Terminated" || frm.doc.type === "Renew") return;
+		frm.add_custom_button(__("Create Flat"), () => {
+			frappe.call({
+				method: "administration.administration.doctype.flat.flat.make_flat",
+				args: { source_doctype, source_name },
+				freeze: true,
+				freeze_message: __("Creating Flat..."),
+				callback: (r) => {
+					if (r.message?.name) frappe.set_route("Form", "Flat", r.message.name);
+				},
+			});
+		});
+		return;
+	}
 	if (!is_flat) {
 		frm.add_custom_button(__("View Flat"), () => frappe.set_route("Form", "Flat", frm.doc.created_flat));
 	}
