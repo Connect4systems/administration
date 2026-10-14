@@ -155,7 +155,7 @@
    "default": "Transportation",
    "fieldname": "service_type",
    "fieldtype": "Select",
-   "label": "Vehicle Type",
+   "label": "Request Type",
    "options": "Transportation\nSite Service\nTransportation and Service"
   },
   {

@@ -21,7 +21,7 @@ def execute():
 			fields=["name", "field_name", "property", "value"]):
 			field = fields.get(item.field_name, {})
 			if item.property == "label" and item.field_name in {"request_type", "vehicle_type", "service_type"}:
-				value = "Vehicle Type"
+				value = field.get("label", item.value)
 			elif item.property == "options" and item.field_name in {"request_type", "service_type"}:
 				# Retain site-specific options as well as every standard option.
 				value = "\n".join(dict.fromkeys((item.value or "").split("\n") + field["options"].split("\n")))

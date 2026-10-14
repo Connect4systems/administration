@@ -42,7 +42,7 @@ class TestTransportationFields(TestCase):
 		for slug in ("vehicle_request", "private_vehicle_contract_request", "private_vehicle_contract", "vehicles"):
 			with self.subTest(doctype=slug):
 				category = fields(slug)["request_type"]
-				self.assertEqual(category["label"], "Vehicle Type")
+				self.assertEqual(category["label"], "Request Type")
 				self.assertEqual(category["options"].splitlines(),
 					["Private Vehicle", "Transportation", "Site Service", "Transportation and Service"])
 
@@ -50,8 +50,8 @@ class TestTransportationFields(TestCase):
 		price = fields("transportation_price_list")
 		terms = fields("vehicle_route_table")
 		for name in ("vehicle_type", "service_type"):
-			self.assertEqual(price[name]["label"], "Vehicle Type")
-			self.assertEqual(terms[name]["label"], "Vehicle Type")
+			self.assertEqual(price[name]["label"], "Request Type" if name == "service_type" else "Vehicle Type")
+			self.assertEqual(terms[name]["label"], "Request Type" if name == "service_type" else "Vehicle Type")
 			self.assertEqual(terms[name]["fetch_from"], f"route.{name}")
 		self.assertEqual(terms["vehicle_type"]["options"], "Vehicle Type")
 		self.assertEqual(price["service_type"]["options"], terms["service_type"]["options"])

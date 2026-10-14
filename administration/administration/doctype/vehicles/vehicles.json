@@ -385,7 +385,7 @@
    "fieldname": "request_type",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Vehicle Type",
+   "label": "Request Type",
    "options": "Private Vehicle\nTransportation\nSite Service\nTransportation and Service",
    "read_only": 1
   },

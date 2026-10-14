@@ -276,7 +276,7 @@ python -m unittest discover -s tests -v
 
 ### Transportation field standardization
 
-Request category labels now use **Vehicle Type** across requests, contracts,
+Request category labels now use **Request Type** across requests, contracts,
 Vehicles, Transportation Price List, and Contract Terms (Vehicle Route Table).
 The existing `request_type`, `service_type`, and `vehicle_type` field IDs remain
 separate to preserve category values, catalog links, and price fetches. Existing
