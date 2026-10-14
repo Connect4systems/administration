@@ -11,6 +11,9 @@ VEHICLE_PREFIXES = {
 	"Transportation and Service": "TSV",
 }
 
+VEHICLE_DETAIL_FIELDS = ("brand", "model", "motor_number", "chassis_number", "plat_number")
+EDITABLE_VEHICLE_TYPES = {"Transportation", "Site Service", "Transportation and Service"}
+
 
 def find_employee_vehicles(employee, current_vehicle=None):
 	return frappe.db.sql(
@@ -44,7 +47,14 @@ class Vehicles(Document):
 		self.validate_employee()
 		self.validate_employee_assignments()
 
+	def validate_vehicle_details_update(self):
+		if self.request_type not in EDITABLE_VEHICLE_TYPES and any(
+			self.has_value_changed(fieldname) for fieldname in VEHICLE_DETAIL_FIELDS
+		):
+			frappe.throw(_("Vehicle details can only be updated after submission for Transportation, Site Service, or Transportation and Service."))
+
 	def before_update_after_submit(self):
+		self.validate_vehicle_details_update()
 		self.validate_employee()
 		if self.request_type == "Private Vehicle" and self.has_value_changed("employee") and "Fleet Manager" not in frappe.get_roles():
 			frappe.throw(

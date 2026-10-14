@@ -97,6 +97,32 @@ class TestVehiclePassengers(TestCase):
 					doc.validate_employee_assignments.assert_called_once_with()
 
 
+class TestVehicleDetailsUpdate(TestCase):
+	def test_supported_request_types_allow_detail_changes(self):
+		for request_type in vehicles.EDITABLE_VEHICLE_TYPES:
+			with self.subTest(request_type=request_type), patch.object(vehicles, "frappe") as frappe:
+				doc = Mock(request_type=request_type)
+				doc.has_value_changed.return_value = True
+				vehicles.Vehicles.validate_vehicle_details_update(doc)
+				frappe.throw.assert_not_called()
+
+	def test_private_vehicle_details_cannot_change_after_submission(self):
+		for fieldname in vehicles.VEHICLE_DETAIL_FIELDS:
+			with self.subTest(fieldname=fieldname), patch.object(vehicles, "frappe") as frappe:
+				frappe.throw.side_effect = ValueError
+				doc = Mock(request_type="Private Vehicle")
+				doc.has_value_changed.side_effect = lambda field: field == fieldname
+				with self.assertRaises(ValueError):
+					vehicles.Vehicles.validate_vehicle_details_update(doc)
+
+	def test_unchanged_private_vehicle_details_allow_other_updates(self):
+		with patch.object(vehicles, "frappe") as frappe:
+			doc = Mock(request_type="Private Vehicle")
+			doc.has_value_changed.return_value = False
+			vehicles.Vehicles.validate_vehicle_details_update(doc)
+			frappe.throw.assert_not_called()
+
+
 class TestVehiclesNaming(TestCase):
 	def test_name_uses_type_year_and_three_digit_sequence(self):
 		for vehicle_type, prefix in (

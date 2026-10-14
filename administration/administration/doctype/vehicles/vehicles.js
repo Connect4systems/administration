@@ -32,8 +32,40 @@ frappe.ui.form.on("Vehicles", {
 		const read_only = frm.doc.docstatus === 1 && !frappe.user.has_role("Fleet Manager");
 		frm.set_df_property("employee", "read_only", read_only);
 		frm.set_df_property("employees", "read_only", !["Transportation", "Transportation and Service"].includes(frm.doc.request_type));
+		if (frm.doc.docstatus === 1 && frm.perm?.some(permission => permission.write)
+			&& ["Transportation", "Site Service", "Transportation and Service"].includes(frm.doc.request_type)) {
+			frm.add_custom_button(__("Update vehicle details"), () => show_vehicle_details_dialog(frm));
+		}
 	},
 });
+
+function show_vehicle_details_dialog(frm) {
+	const detail_fields = ["brand", "model", "motor_number", "chassis_number", "plat_number"];
+	const fields = detail_fields.map(fieldname => ({
+		fieldname,
+		fieldtype: "Data",
+		label: __(frm.fields_dict[fieldname].df.label),
+		default: frm.doc[fieldname] || "",
+	}));
+	fields.splice(2, 0, { fieldtype: "Column Break" });
+	const dialog = new frappe.ui.Dialog({
+		title: __("Update vehicle details"),
+		fields,
+		primary_action_label: __("Update"),
+		async primary_action(values) {
+			dialog.disable_primary_action();
+			try {
+				await frm.set_value(values);
+				await frm.save("Update");
+				dialog.hide();
+				frappe.show_alert({ message: __("Vehicle details updated"), indicator: "green" });
+			} finally {
+				dialog.enable_primary_action();
+			}
+		},
+	});
+	dialog.show();
+}
 
 frappe.ui.form.on("Rent Emp", {
 	code(frm, cdt, cdn) {
