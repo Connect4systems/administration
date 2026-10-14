@@ -65,7 +65,20 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
+ "links": [
+  {
+   "link_doctype": "Flat",
+   "link_fieldname": "accommodation_contract"
+  },
+  {
+   "link_doctype": "Add Flat to Contract",
+   "link_fieldname": "accommodation_contract"
+  },
+  {
+   "link_doctype": "Flat Termination",
+   "link_fieldname": "accommodation_contract"
+  }
+ ],
  "modified": "2026-10-06 15:46:24.581097",
  "modified_by": "Administrator",
  "module": "Administration",
