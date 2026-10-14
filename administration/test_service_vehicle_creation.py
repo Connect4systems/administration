@@ -7,6 +7,15 @@ from administration.test_vehicle_creation import TestVehicleCreation as VehicleC
 
 
 class TestServiceVehicleCreation(TestCase):
+	def test_service_preserves_category_catalog_type_and_price(self):
+		self.row_values["service_type"] = "Transportation and Service"
+		self.module.start_service("SVC-001", "ROW-001", "2026-10-03", 1, "REQ-SERVICE")
+		self.assertEqual(self.vehicle.update.call_args.args[0]["request_type"], "Transportation and Service")
+		copied = dict(call.args for call in self.vehicle.set.call_args_list)
+		self.assertEqual(copied["vehicle_type"], "Bus")
+		self.assertEqual(copied["rent_amount"], 5000)
+		self.vehicle.submit.assert_called_once_with()
+
 	def setUp(self):
 		VehicleCreationFixture.setUp(self)
 		self.source.name = "SVC-001"

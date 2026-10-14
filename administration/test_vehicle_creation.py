@@ -79,7 +79,7 @@ class TestVehicleCreation(unittest.TestCase):
 		self.module.create_vehicle("PVC-001")
 		self.vehicle.append.assert_called_once_with("employees", {"code": "EMP-001"})
 
-	def test_vehicle_schema_locks_every_data_field_except_project(self):
+	def test_vehicle_schema_preserves_editable_assignment_fields(self):
 		base = ROOT / "administration/doctype"
 		vehicle = json.loads((base / "vehicles/vehicles.json").read_text())
 		contract = json.loads((base / "private_vehicle_contract/private_vehicle_contract.json").read_text())
@@ -90,12 +90,13 @@ class TestVehicleCreation(unittest.TestCase):
 		for field in fields.values():
 			if field["fieldtype"] in self.module.LAYOUT_FIELDS:
 				continue
-			project = field["fieldname"] == "project"
-			self.assertEqual(bool(field.get("read_only")), not project)
-			self.assertEqual(bool(field.get("allow_on_submit")), project)
-		for field in contract["fields"]:
-			if field["fieldtype"] not in self.module.LAYOUT_FIELDS:
-				self.assertIn(field["fieldname"], fields)
+			editable = field["fieldname"] in {"project", "employee", "employees", "qty"}
+			self.assertEqual(bool(field.get("read_only")), not editable)
+			self.assertEqual(bool(field.get("allow_on_submit")), editable)
+		contract_fields = {field["fieldname"]: field for field in contract["fields"]}
+		for name in ("request_type", "vehicle_type", "employees", "rent_amount", "project"):
+			self.assertIn(name, fields)
+			self.assertEqual(fields[name]["fieldtype"], contract_fields[name]["fieldtype"])
 
 
 if __name__ == "__main__":

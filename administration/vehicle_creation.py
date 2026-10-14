@@ -89,8 +89,8 @@ def start_service(source_name, row_name, start_date, qty, request_id):
 		frappe.throw(_("Start Date cannot be before the contract start date."))
 	if source.get("contract_end_date") and start_date > getdate(source.contract_end_date):
 		frappe.throw(_("Start Date cannot be after the contract end date."))
-	if row.get("service_type") not in {"Transportation", "Site Service"}:
-		frappe.throw(_("The selected row must have a valid Service Type."))
+	if row.get("service_type") not in {"Transportation", "Transportation and Service", "Site Service"}:
+		frappe.throw(_("The selected row must have a valid Vehicle Type."))
 
 	try:
 		quantity = float(qty)

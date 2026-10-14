@@ -273,3 +273,32 @@ Run the standalone policy regression suite with:
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+### Transportation field standardization
+
+Request category labels now use **Vehicle Type** across requests, contracts,
+Vehicles, Transportation Price List, and Contract Terms (Vehicle Route Table).
+The existing `request_type`, `service_type`, and `vehicle_type` field IDs remain
+separate to preserve category values, catalog links, and price fetches. Existing
+options, including Site Service, remain available; Transportation and Service is added as one option.
+
+Transportation and the combined Transportation and Service option show the Employees table and use the same duplicate
+assignment checks. Private Vehicle Contract now carries the existing Rent Emp
+child table from the request through to Vehicles. No historical documents are
+rewritten by the migration. Transportation and Service uses the existing SV naming series; vehicle
+naming reads request_type with a fallback for the legacy vehical_type field.
+
+Deploy this revision to the target bench, then run:
+
+```sh
+bench --site <site> backup
+bench build --app administration
+bench --site <site> migrate
+bench --site <site> clear-cache
+bench restart
+```
+
+The metadata patch also updates existing label, options, and visibility Property
+Setters while retaining additional site-specific category options. Refresh Desk
+and verify the request-to-contract-to-vehicle flow and approval transitions on
+a staging site before production rollout.

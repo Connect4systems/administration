@@ -8,6 +8,7 @@ VEHICLE_PREFIXES = {
 	"Private Vehicle": "PV",
 	"Transportation": "TV",
 	"Site Service": "SV",
+	"Transportation and Service": "SV",
 }
 
 
@@ -23,7 +24,7 @@ def find_employee_vehicles(employee, current_vehicle=None):
 		WHERE vehicle.docstatus < 2
 			AND vehicle.name != %(current_vehicle)s
 			AND ((vehicle.request_type = 'Private Vehicle' AND vehicle.employee = %(employee)s)
-				OR (vehicle.request_type = 'Transportation' AND passenger.code = %(employee)s))
+				OR (vehicle.request_type IN ('Transportation', 'Transportation and Service') AND passenger.code = %(employee)s))
 		ORDER BY vehicle.name
 		""",
 		{"employee": employee, "current_vehicle": current_vehicle or ""},
@@ -66,15 +67,15 @@ class Vehicles(Document):
 				)
 
 	def validate_employee(self):
-		if self.request_type in {"Transportation", "Site Service"}:
+		if self.request_type in {"Transportation", "Transportation and Service", "Site Service"}:
 			self.employee = None
 		if self.request_type in {"Private Vehicle", "Site Service"}:
 			self.set("employees", [])
 
 	def autoname(self):
-		prefix = VEHICLE_PREFIXES.get(self.vehical_type)
+		prefix = VEHICLE_PREFIXES.get(self.request_type) or VEHICLE_PREFIXES.get(self.get("vehical_type"))
 		if not prefix:
-			frappe.throw(_("Please select a valid Vehical Type."))
+			frappe.throw(_("Please select a valid Vehicle Type."))
 		if not self.project:
 			frappe.throw(_("Please select a Project before saving."))
 		abbreviation = frappe.db.get_value("Project", self.project, "custom_abbreviation")

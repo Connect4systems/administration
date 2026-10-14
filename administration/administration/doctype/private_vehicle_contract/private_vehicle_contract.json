@@ -52,7 +52,8 @@
   "naming_series",
   "document_approval_tab",
   "document_approval_help",
-  "document_approval"
+  "document_approval",
+  "employees"
  ],
  "fields": [
   {
@@ -315,14 +316,21 @@
    "fieldname": "request_type",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Request Type",
-   "options": "Private Vehicle\nTransportation\nSite Service"
+   "label": "Vehicle Type",
+   "options": "Private Vehicle\nTransportation\nSite Service\nTransportation and Service"
   },
   {
-   "depends_on": "eval:doc.request_type == 'Transportation'",
+   "depends_on": "eval:['Transportation', 'Transportation and Service'].includes(doc.request_type)",
    "fieldname": "no_of_employee",
    "fieldtype": "Float",
    "label": "No of Employee"
+  },
+  {
+   "depends_on": "eval:['Transportation', 'Transportation and Service'].includes(doc.request_type)",
+   "fieldname": "employees",
+   "fieldtype": "Table",
+   "label": "Employees",
+   "options": "Rent Emp"
   }
  ],
  "grid_page_length": 50,

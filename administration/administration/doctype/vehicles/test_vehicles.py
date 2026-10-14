@@ -35,6 +35,7 @@ class TestVehiclePassengers(TestCase):
 			("Private Vehicle", "EMP-001", True),
 			("Private Vehicle", None, True),
 			("Transportation", None, False),
+			("Transportation and Service", None, False),
 			("Site Service", None, True),
 		):
 			with self.subTest(request_type=request_type, employee=employee):
@@ -99,10 +100,10 @@ class TestVehiclePassengers(TestCase):
 class TestVehiclesNaming(TestCase):
 	def test_name_uses_type_and_project_abbreviation(self):
 		for vehicle_type, prefix in (
-			("Private Vehicle", "PV"), ("Transportation", "TV"), ("Site Service", "SV")
+			("Private Vehicle", "PV"), ("Transportation", "TV"), ("Site Service", "SV"), ("Transportation and Service", "SV")
 		):
 			with self.subTest(vehicle_type=vehicle_type):
-				doc = Mock(vehical_type=vehicle_type, project="PROJ-001")
+				doc = Mock(request_type=vehicle_type, project="PROJ-001")
 				with patch.object(vehicles.frappe, "db") as db, patch.object(vehicles, "getseries") as series:
 					db.get_value.return_value = " ABC "
 					series.return_value = "001"
@@ -119,7 +120,7 @@ class TestVehiclesNaming(TestCase):
 			("Site Service", "PROJ-001", "  "),
 		):
 			with self.subTest(vehicle_type=vehicle_type, project=project, abbreviation=abbreviation):
-				doc = Mock(vehical_type=vehicle_type, project=project)
+				doc = Mock(request_type=vehicle_type, project=project)
 				with patch.object(vehicles.frappe, "db") as db, patch.object(vehicles, "getseries") as series:
 					db.get_value.return_value = abbreviation
 					with patch.object(vehicles.frappe, "throw", side_effect=ValueError), self.assertRaises(ValueError):
