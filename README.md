@@ -38,6 +38,21 @@ to System Manager, matching the Flat, Room and Bed DocTypes.
 After deploying, run `bench --site admin.cscec.live migrate` and
 `bench --site admin.cscec.live clear-cache`, then refresh Desk.
 
+### Flat Report
+
+Open **Flat Report** from the Accommodation workspace or Desk search. It shows one
+row per submitted Flat, with filters for Project, Governorate, Rent Type and Flat
+Status (Active, Inactive or Expired). Rent comes from the Flat; Total Rooms and
+Total Beds count linked Room and Bed records rather than the Flat's capacity fields.
+Booked Beds counts beds with Booked status, and Free Beds counts beds with Open
+status, including beds without a Room. Flats without connections show zero counts.
+Rent Start Date and Rent End Date come from the Rent Contracts row with the latest
+start date, then end date, then grid position for ties; missing contracts show blank
+dates. The report uses the same roles and document permissions as Accommodation Report.
+
+After deploying, run `bench --site admin.cscec.live migrate` and
+`bench --site admin.cscec.live clear-cache`, then refresh Desk.
+
 ### Updating Flat Rent Request to Flat Request
 
 Deploy the complete app revision, including the new `flat_request` package and both
