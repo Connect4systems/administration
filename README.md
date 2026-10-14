@@ -285,8 +285,10 @@ options, including Site Service, remain available; Transportation and Service is
 Transportation and the combined Transportation and Service option show the Employees table and use the same duplicate
 assignment checks. Private Vehicle Contract now carries the existing Rent Emp
 child table from the request through to Vehicles. No historical documents are
-rewritten by the migration. Transportation and Service uses the existing SV naming series; vehicle
-naming reads request_type with a fallback for the legacy vehical_type field.
+rewritten by the migration. New Vehicles use PV-.YY.-.### for Private Vehicle, TV-.YY.-.### for
+Transportation, SV-.YY.-.### for Site Service, and TSV-.YY.-.### for
+Transportation and Service. Naming reads request_type with a fallback for the
+legacy vehical_type field. Existing vehicle names remain unchanged.
 
 Deploy this revision to the target bench, then run:
 

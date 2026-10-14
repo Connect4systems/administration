@@ -1,14 +1,14 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.model.naming import getseries
+from frappe.model.naming import make_autoname
 
 
 VEHICLE_PREFIXES = {
 	"Private Vehicle": "PV",
 	"Transportation": "TV",
 	"Site Service": "SV",
-	"Transportation and Service": "SV",
+	"Transportation and Service": "TSV",
 }
 
 
@@ -78,9 +78,5 @@ class Vehicles(Document):
 			frappe.throw(_("Please select a valid Vehicle Type."))
 		if not self.project:
 			frappe.throw(_("Please select a Project before saving."))
-		abbreviation = frappe.db.get_value("Project", self.project, "custom_abbreviation")
-		abbreviation = (abbreviation or "").strip()
-		if not abbreviation:
-			frappe.throw(_("Please set the abbreviation on Project {0} before saving.").format(self.project))
-		self.naming_series = f"{prefix}-{abbreviation}-"
-		self.name = self.naming_series + getseries(self.naming_series, 3)
+		self.naming_series = f"{prefix}-.YY.-.###"
+		self.name = make_autoname(self.naming_series, doc=self)

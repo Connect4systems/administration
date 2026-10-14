@@ -5,27 +5,28 @@ from administration.administration.doctype.service_vehicle_contract import servi
 
 
 class TestServiceVehicleContractNaming(TestCase):
-	def test_project_and_year_naming(self):
-		doc = Mock(project="PROJECT-001")
-		with patch.object(controller, "frappe") as frappe, \
-			patch.object(controller, "nowdate", return_value="2026-10-14"), \
-			patch.object(controller, "getseries", return_value="001") as series:
+	def test_project_abbreviation_and_title_naming(self):
+		doc = Mock(project="PROJECT-001", title=" Staff Transport ")
+		with patch.object(controller, "frappe") as frappe:
 			frappe.db.get_value.return_value = " ABC "
 			controller.ServiceVehicleContract.autoname(doc)
-			self.assertEqual(doc.name, "ABC-26-001")
-			series.assert_called_once_with("ABC-26-", 3)
+			self.assertEqual(doc.name, "ABC-Staff Transport")
+			self.assertEqual(doc.title, "Staff Transport")
 			frappe.db.get_value.assert_called_once_with("Project", "PROJECT-001", "custom_abbreviation")
 
-	def test_missing_project_or_abbreviation_is_rejected(self):
-		for project, abbreviation in ((None, "ABC"), ("PROJECT-001", " "), ("PROJECT-001", None)):
-			with self.subTest(project=project, abbreviation=abbreviation):
-				doc = Mock(project=project)
-				with patch.object(controller, "frappe") as frappe, patch.object(controller, "getseries") as series:
+	def test_missing_project_abbreviation_or_title_is_rejected(self):
+		for project, abbreviation, title in (
+			(None, "ABC", "Transport"), ("PROJECT-001", " ", "Transport"),
+			("PROJECT-001", None, "Transport"), ("PROJECT-001", "ABC", None),
+			("PROJECT-001", "ABC", "   "),
+		):
+			with self.subTest(project=project, abbreviation=abbreviation, title=title):
+				doc = Mock(project=project, title=title)
+				with patch.object(controller, "frappe") as frappe:
 					frappe.throw.side_effect = ValueError
 					frappe.db.get_value.return_value = abbreviation
 					with self.assertRaises(ValueError):
 						controller.ServiceVehicleContract.autoname(doc)
-					series.assert_not_called()
 
 
 class TestContractAttachmentPermissions(TestCase):

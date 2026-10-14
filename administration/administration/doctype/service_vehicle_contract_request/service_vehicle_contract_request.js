@@ -6,6 +6,9 @@ frappe.ui.form.on("Service Vehicle Contract Request", {
 	after_workflow_action: (frm) => administration.approval.after_workflow_action(frm),
 	refresh(frm) {
 		administration.approval.refresh(frm);
+		const grid = frm.fields_dict.contract_details.grid;
+		grid.df.cannot_add_rows = frm.doc.docstatus === 1;
+		grid.df.cannot_delete_rows = frm.doc.docstatus === 1;
 		if (frm.doc.docstatus === 1 && frappe.model.can_create("Service Vehicle Contract")) {
 			frm.add_custom_button(__("Create Contract"), () => {
 				frappe.model.open_mapped_doc({

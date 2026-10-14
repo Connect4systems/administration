@@ -22,3 +22,4 @@ administration.patches.setup_flat_lifecycle
 administration.patches.repair_flat_lifecycle_actions
 
 administration.patches.standardize_transportation_fields
+administration.patches.allow_service_request_quantity_after_submit

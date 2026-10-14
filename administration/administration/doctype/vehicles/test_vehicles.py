@@ -98,31 +98,34 @@ class TestVehiclePassengers(TestCase):
 
 
 class TestVehiclesNaming(TestCase):
-	def test_name_uses_type_and_project_abbreviation(self):
+	def test_name_uses_type_year_and_three_digit_sequence(self):
 		for vehicle_type, prefix in (
-			("Private Vehicle", "PV"), ("Transportation", "TV"), ("Site Service", "SV"), ("Transportation and Service", "SV")
+			("Private Vehicle", "PV"), ("Transportation", "TV"),
+			("Site Service", "SV"), ("Transportation and Service", "TSV"),
 		):
 			with self.subTest(vehicle_type=vehicle_type):
 				doc = Mock(request_type=vehicle_type, project="PROJ-001")
-				with patch.object(vehicles.frappe, "db") as db, patch.object(vehicles, "getseries") as series:
-					db.get_value.return_value = " ABC "
-					series.return_value = "001"
+				with patch.object(vehicles.frappe, "db") as db, patch.object(vehicles, "make_autoname") as naming:
+					naming.return_value = f"{prefix}-26-001"
 					vehicles.Vehicles.autoname(doc)
-					self.assertEqual(doc.name, f"{prefix}-ABC-001")
-					series.assert_called_once_with(f"{prefix}-ABC-", 3)
-					db.get_value.assert_called_once_with("Project", "PROJ-001", "custom_abbreviation")
+					self.assertEqual(doc.name, f"{prefix}-26-001")
+					self.assertEqual(doc.naming_series, f"{prefix}-.YY.-.###")
+					naming.assert_called_once_with(f"{prefix}-.YY.-.###", doc=doc)
+					db.get_value.assert_not_called()
+
+	def test_legacy_category_uses_the_same_year_series(self):
+		doc = Mock(request_type=None, project="PROJ-001")
+		doc.get.return_value = "Transportation and Service"
+		with patch.object(vehicles, "make_autoname", return_value="TSV-26-001") as naming:
+			vehicles.Vehicles.autoname(doc)
+			naming.assert_called_once_with("TSV-.YY.-.###", doc=doc)
 
 	def test_missing_naming_inputs_do_not_allocate_a_number(self):
-		for vehicle_type, project, abbreviation in (
-			("Unknown", "PROJ-001", "ABC"),
-			("Private Vehicle", "", "ABC"),
-			("Transportation", "PROJ-001", None),
-			("Site Service", "PROJ-001", "  "),
-		):
-			with self.subTest(vehicle_type=vehicle_type, project=project, abbreviation=abbreviation):
+		for vehicle_type, project in (("Unknown", "PROJ-001"), ("Private Vehicle", "")):
+			with self.subTest(vehicle_type=vehicle_type, project=project):
 				doc = Mock(request_type=vehicle_type, project=project)
-				with patch.object(vehicles.frappe, "db") as db, patch.object(vehicles, "getseries") as series:
-					db.get_value.return_value = abbreviation
+				doc.get.return_value = None
+				with patch.object(vehicles, "make_autoname") as naming:
 					with patch.object(vehicles.frappe, "throw", side_effect=ValueError), self.assertRaises(ValueError):
 						vehicles.Vehicles.autoname(doc)
-					series.assert_not_called()
+					naming.assert_not_called()

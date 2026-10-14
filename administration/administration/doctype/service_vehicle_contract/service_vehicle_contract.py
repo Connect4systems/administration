@@ -1,8 +1,6 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.model.naming import getseries
-from frappe.utils import nowdate
 
 from administration.flat_request_workflow import require_workflow_submission, validate_approval_history
 
@@ -15,14 +13,23 @@ class ServiceVehicleContract(Document):
 		abbreviation = (abbreviation or "").strip()
 		if not abbreviation:
 			frappe.throw(_("Please set the abbreviation on Project {0} before saving.").format(self.project))
-		prefix = f"{abbreviation}-{nowdate()[2:4]}-"
-		self.name = prefix + getseries(prefix, 3)
+		title = (self.title or "").strip()
+		if not title:
+			frappe.throw(_("Please enter a Title before saving."))
+		self.title = title
+		self.name = f"{abbreviation}-{title}"
 
 	def validate(self):
 		self.validate_contract_attachment()
 		validate_approval_history(self)
 
 	def before_update_after_submit(self):
+		previous = self.get_doc_before_save()
+		if previous:
+			quantities = {row.name: row.get("qty") for row in previous.get("contract_details") or []}
+			for row in self.get("contract_details") or []:
+				if row.name in quantities and row.get("qty") != quantities[row.name]:
+					frappe.throw(_("Contract Terms Quantity cannot be changed on a submitted Service Vehicle Contract."))
 		self.validate_contract_attachment()
 		validate_approval_history(self)
 

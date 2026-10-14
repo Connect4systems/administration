@@ -51,7 +51,8 @@
    "fieldname": "contract_details",
    "fieldtype": "Table",
    "label": "Contract Terms",
-   "options": "Vehicle Route Table"
+   "options": "Vehicle Route Table",
+   "allow_on_submit": 1
   },
   {
    "fieldname": "provider_company",

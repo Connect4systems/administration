@@ -27,6 +27,12 @@ class ServiceVehicleContractRequest(Document):
 
 	def before_update_after_submit(self):
 		validate_approval_history(self)
+		previous = self.get_doc_before_save()
+		if previous:
+			old_rows = [row.name for row in previous.get("contract_details") or []]
+			new_rows = [row.name for row in self.get("contract_details") or []]
+			if old_rows != new_rows:
+				frappe.throw(_("Contract Terms rows cannot be added, removed or reordered after submission."))
 
 	def before_submit(self):
 		require_workflow_submission(self)
