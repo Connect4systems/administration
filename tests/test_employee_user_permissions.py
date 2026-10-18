@@ -207,6 +207,7 @@ class EmployeeAccessTests(unittest.TestCase):
         employee.date_of_birth = "1990-01-01"
         employee.gender = "Male"
         employee.image = None
+        employee.get_doc_before_save = lambda: {"user_id": employee.user_id}
         user = self.frappe.get_doc.return_value
         user.roles = []
         user.module_profile = "Manager Profile"
@@ -223,6 +224,23 @@ class EmployeeAccessTests(unittest.TestCase):
         self.frappe.db.assert_not_called()
         self.frappe.get_all.assert_not_called()
         self.frappe.get_doc.assert_called_once_with("User", "user@example.com")
+
+        # A new link grants the baseline roles; ordinary later saves do not.
+        employee.get_doc_before_save = lambda: {"user_id": None}
+        user.get.return_value = []
+        employee.update_user()
+        self.assertEqual([call.args for call in user.append_roles.call_args_list],
+            [("Employee",), ("Employee Self Service",)])
+        user.append_roles.reset_mock()
+        employee.get_doc_before_save = lambda: {"user_id": employee.user_id}
+        employee.update_user()
+        user.append_roles.assert_not_called()
+
+        # Reassignment grants only the missing baseline role to the newly linked user.
+        employee.get_doc_before_save = lambda: {"user_id": "old@example.com"}
+        user.get.return_value = [Mock(role="Employee")]
+        employee.update_user()
+        user.append_roles.assert_called_once_with("Employee Self Service")
 
 
 if __name__ == "__main__":

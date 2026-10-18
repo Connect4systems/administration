@@ -1,0 +1,185 @@
+[
+  {
+    "check": "Two-level rejects missing first approver",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"First Approval is required.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"25ef767034c791d733f3b8d515ae2b7299f89129b4ff9e108ac2862b\\\"}\"]"
+    }
+  },
+  {
+    "check": "Two-level maps both managers",
+    "http": 200,
+    "passed": true,
+    "fields": {
+      "custom_leave_approval_level": "Two Level Approval",
+      "custom_first_approval": "CIC-00737",
+      "custom_second_approval": "CIC-00738",
+      "leave_approver": "qa.employee.20261018.02@example.invalid",
+      "custom_second_leave_approver": "qa.employee.20261018.03@example.invalid"
+    }
+  },
+  {
+    "check": "Two Level Approval leave snapshot",
+    "http": 200,
+    "fields": {
+      "name": "HR-LAP-2026-00006",
+      "workflow_state": "Open",
+      "custom_leave_approval_level": "Two Level Approval",
+      "leave_approver": "qa.employee.20261018.02@example.invalid",
+      "custom_second_leave_approver": "qa.employee.20261018.03@example.invalid"
+    },
+    "passed": true
+  },
+  {
+    "check": "One-level clears second manager",
+    "http": 200,
+    "passed": true,
+    "fields": {
+      "custom_leave_approval_level": "One Level Approval",
+      "custom_first_approval": "CIC-00737",
+      "custom_second_approval": null,
+      "leave_approver": "qa.employee.20261018.02@example.invalid",
+      "custom_second_leave_approver": null
+    }
+  },
+  {
+    "check": "One Level Approval leave snapshot",
+    "http": 200,
+    "fields": {
+      "name": "HR-LAP-2026-00007",
+      "workflow_state": "Open",
+      "custom_leave_approval_level": "One Level Approval",
+      "leave_approver": "qa.employee.20261018.02@example.invalid",
+      "custom_second_leave_approver": null
+    },
+    "passed": true
+  },
+  {
+    "check": "Two-level rejects duplicate managers",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"First Approval and Second Approval must be different Employees.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"708891ef71cbd21cdad6b06723ad814ae0a331c3578706d297982dcb\\\"}\"]"
+    }
+  },
+  {
+    "check": "No approval clears both managers",
+    "http": 200,
+    "passed": true,
+    "fields": {
+      "custom_leave_approval_level": "No Approval Required",
+      "custom_first_approval": null,
+      "custom_second_approval": null,
+      "leave_approver": null,
+      "custom_second_leave_approver": null
+    }
+  },
+  {
+    "check": "Direct approval from Open denied",
+    "leave": "HR-LAP-2026-00005",
+    "http": 403,
+    "passed": true,
+    "error": {
+      "exc_type": "PermissionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"You are not authorized for this approval transition.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"13f82ec2ed35eb93a8cad675e436491c59b84871682eedc217eb7597\\\"}\"]"
+    }
+  },
+  {
+    "check": "Direct approval from Open denied",
+    "leave": "HR-LAP-2026-00006",
+    "http": 403,
+    "passed": true,
+    "error": {
+      "exc_type": "PermissionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"You are not authorized for this approval transition.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"a5fa540f4d827050fd8630680881b9df6d39b6dfd1ec7b689cfb5669\\\"}\"]"
+    }
+  },
+  {
+    "check": "Direct approval from Open denied",
+    "leave": "HR-LAP-2026-00007",
+    "http": 403,
+    "passed": true,
+    "error": {
+      "exc_type": "PermissionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"You are not authorized for this approval transition.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"a67009525f217fc78054d9c97aa75d088dc0a78b8edc3365de78bd6b\\\"}\"]"
+    }
+  },
+  {
+    "check": "Approval snapshot cannot be changed",
+    "leave": "HR-LAP-2026-00005",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"70dd0344d993ccfc52b5172e35df5148f64307987b41bb3afec12159\\\"}\"]"
+    }
+  },
+  {
+    "check": "Employee cannot be changed",
+    "leave": "HR-LAP-2026-00005",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"7bb01d869a7dd7103d4fb838b0f4f18ff5e876df7729120b847c4431\\\"}\"]"
+    }
+  },
+  {
+    "check": "Stored approval configuration preserved after Employee changes",
+    "leave": "HR-LAP-2026-00005",
+    "passed": true
+  },
+  {
+    "check": "Approval snapshot cannot be changed",
+    "leave": "HR-LAP-2026-00006",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"50cd12d7f3d208c905bda567dd0f11b88e38978bfc9b2971f8c0a680\\\"}\"]"
+    }
+  },
+  {
+    "check": "Employee cannot be changed",
+    "leave": "HR-LAP-2026-00006",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"4132e244e89e448f7158126f601067cad0e66937995ddddf353ca4a8\\\"}\"]"
+    }
+  },
+  {
+    "check": "Stored approval configuration preserved after Employee changes",
+    "leave": "HR-LAP-2026-00006",
+    "passed": true
+  },
+  {
+    "check": "Approval snapshot cannot be changed",
+    "leave": "HR-LAP-2026-00007",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"cdb0bb068fadb8d204486f0b81e43052cd98518ee91e63eebdb3fdb5\\\"}\"]"
+    }
+  },
+  {
+    "check": "Employee cannot be changed",
+    "leave": "HR-LAP-2026-00007",
+    "http": 417,
+    "passed": true,
+    "error": {
+      "exc_type": "ValidationError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"3fe7b06e706f4595e9e73ccb032ab5e8208879bf7ad9445c16259383\\\"}\"]"
+    }
+  },
+  {
+    "check": "Stored approval configuration preserved after Employee changes",
+    "leave": "HR-LAP-2026-00007",
+    "passed": true
+  }
+]

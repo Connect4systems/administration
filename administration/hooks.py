@@ -106,8 +106,10 @@ after_install = [
     "administration.flat_lifecycle_setup.install",
     "administration.leave_approval_setup.setup",
     "administration.employee_user_permissions.setup_user_manager_permissions",
+    "administration.system_email.setup_system_sender",
 ]
 after_migrate = [
+    "administration.system_email.setup_system_sender",
     "administration.employee_user_permissions.setup_user_manager_permissions",
     "administration.flat_lifecycle_setup.allow_submitted_flat_contents",
     "administration.leave_approval_setup.setup",
@@ -183,6 +185,12 @@ override_doctype_class = {
 # Hook on document methods and events
 
 doc_events = {
+    "Email Queue": {
+        "before_insert": "administration.system_email.enforce_system_sender",
+    },
+    "Email Account": {
+        "validate": "administration.system_email.configure_system_sender",
+    },
     "Leave Application": {
         "before_validate": "administration.leave_approval.validate_leave",
         "before_update_after_submit": "administration.leave_approval.validate_leave",

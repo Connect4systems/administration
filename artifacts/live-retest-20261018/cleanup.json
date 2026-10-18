@@ -1,0 +1,23 @@
+[
+  {
+    "doctype": "Leave Application",
+    "name": "HR-LAP-2026-00007",
+    "deleted": true,
+    "http": 202,
+    "absence_verified": true
+  },
+  {
+    "doctype": "Employee",
+    "name": "CIC-00738",
+    "deleted": true,
+    "http": 202,
+    "absence_verified": true
+  },
+  {
+    "doctype": "User",
+    "name": "qa.retest.20261018.01@example.invalid",
+    "deleted": true,
+    "http": 202,
+    "absence_verified": true
+  }
+]

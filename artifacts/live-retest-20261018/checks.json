@@ -1,0 +1,49 @@
+[
+  {
+    "check": "Create temporary employee",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "check": "User creation with all optional roles",
+    "passed": false,
+    "http": 500,
+    "result": {
+      "exception": "smtplib.SMTPRecipientsRefused: {'qa.retest.20261018.01@example.invalid': (550, b'5.1.0 <test@connect4systems.com>: Sender address rejected: User unknown')}",
+      "exc_type": "SMTPRecipientsRefused",
+      "_server_messages": "[\"{\\\"message\\\": \\\"Newly created user <strong>qa.retest.20261018.01@example.invalid</strong> has no roles enabled.\\\", \\\"title\\\": \\\"No Roles Specified\\\", \\\"indicator\\\": \\\"orange\\\", \\\"primary_action\\\": {\\\"label\\\": \\\"Add Roles\\\", \\\"client_action\\\": \\\"frappe.set_route\\\", \\\"args\\\": [\\\"Form\\\", \\\"User\\\", \\\"qa.retest.20261018.01@example.invalid\\\"]}}\"]"
+    }
+  },
+  {
+    "check": "Create no-manager-approval leave",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00007",
+      "workflow_state": "Open",
+      "custom_leave_approval_level": "No Approval Required"
+    }
+  },
+  {
+    "check": "No Approval Required submits directly to HR",
+    "passed": false,
+    "http": 417,
+    "result": {
+      "exception": "frappe.model.workflow.WorkflowTransitionError: Not a valid Workflow Action",
+      "exc_type": "WorkflowTransitionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"701280e1a595903e04278a92e6eb4891c4b7aa869a80bdde38497841\\\"}\"]"
+    }
+  },
+  {
+    "check": "Required test-account roles after fresh login",
+    "passed": false,
+    "roles": {
+      "Employee": false,
+      "Employee Self Service": false,
+      "User Manager": true,
+      "Leave Approver": true,
+      "HR Leave Approver": true,
+      "System Manager": false
+    }
+  }
+]

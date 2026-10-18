@@ -1,0 +1,17 @@
+{
+  "employees": [
+    "CIC-00736",
+    "CIC-00737",
+    "CIC-00738"
+  ],
+  "users": [
+    "qa.employee.20261018.01@example.invalid",
+    "qa.employee.20261018.02@example.invalid",
+    "qa.employee.20261018.03@example.invalid"
+  ],
+  "leaves": [
+    "HR-LAP-2026-00005",
+    "HR-LAP-2026-00006",
+    "HR-LAP-2026-00007"
+  ]
+}

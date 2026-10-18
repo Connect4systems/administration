@@ -1,4 +1,4 @@
-"""Keep subsequent Employee saves from changing administrator-managed access."""
+"""Grant baseline roles on linking, then preserve administrator-managed access."""
 
 import frappe
 from erpnext.setup.doctype.employee.employee import Employee
@@ -10,9 +10,17 @@ class AdministrationEmployee(Employee):
         return
 
     def update_user(self):
-        # Preserve ERPNext's profile synchronization without its automatic role grant.
+        # Preserve profile synchronization and grant baseline roles only on a new link.
         user = frappe.get_doc("User", self.user_id)
         user.flags.ignore_permissions = True
+        previous = self.get_doc_before_save()
+        if self.user_id not in ("Administrator", "Guest") and (
+            not previous or previous.get("user_id") != self.user_id
+        ):
+            existing_roles = {row.role for row in user.get("roles")}
+            for role in ("Employee", "Employee Self Service"):
+                if role not in existing_roles:
+                    user.append_roles(role)
         if self.employee_name and not (user.first_name and user.last_name):
             employee_name = self.employee_name.split(" ")
             if len(employee_name) >= 3:
