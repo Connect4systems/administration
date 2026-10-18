@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\": \"rKVyEWi7dJ\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\">My Profile</span>\", \"col\": 12}}, {\"id\": \"eE8tqK7eK4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Leave Application\", \"col\": 6}}, {\"id\": \"lkU4K5hlua\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Employee Permission\", \"col\": 6}}, {\"id\": \"_H0NZSMwZx\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"C7fDJF30h3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Training Video\", \"col\": 6}}, {\"id\": \"Mx_CsjXB08\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"pending-leave\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Pending Approval\", \"col\": 6}}]",
+ "content": "[{\"id\":\"rKVyEWi7dJ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">My Profile</span>\",\"col\":12}},{\"id\":\"eE8tqK7eK4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leave Application\",\"col\":6}},{\"id\":\"lkU4K5hlua\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Permission\",\"col\":6}},{\"id\":\"_H0NZSMwZx\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"C7fDJF30h3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Training Video\",\"col\":6}},{\"id\":\"uA-qiaCZ_w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Business Trip Request\",\"col\":4}},{\"id\":\"Mx_CsjXB08\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"pending-leave\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending Approval\",\"col\":6}}]",
  "creation": "2024-08-31 16:30:31.369687",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "My Profile",
  "links": [],
- "modified": "2026-10-07 15:57:17.201335",
+ "modified": "2026-10-18 14:52:21.451776",
  "modified_by": "Administrator",
  "module": "Administration",
  "name": "My Profile",
@@ -48,6 +48,14 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Business Trip Request",
+   "link_to": "Business Trip Request",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Employee Permission",
    "link_to": "Employee Permission",
    "stats_filter": "[]",
@@ -62,11 +70,12 @@
    "type": "DocType"
   },
   {
+   "color": "Orange",
+   "doc_view": "",
    "label": "Pending Approval",
-   "type": "Report",
    "link_to": "Pending Leave Approval",
    "report_ref_doctype": "Leave Application",
-   "color": "Orange"
+   "type": "Report"
   }
  ],
  "title": "My Profile"
