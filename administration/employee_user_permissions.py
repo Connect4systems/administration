@@ -4,14 +4,46 @@ import frappe
 
 
 @frappe.whitelist()
-def create_user(employee, user=None, email=None):
+def create_user(employee, user=None, email=None, leave_approver=0, expense_approver=0, line_manager=0):
     from erpnext.setup.doctype.employee.employee import create_user as standard_create_user
 
+    extra_roles = [role for role, checked in (
+        ("Leave Approver", leave_approver), ("Expense Approver", expense_approver),
+        ("Line Manager", line_manager),
+    ) if checked in (1, "1", True)]
+    if extra_roles:
+        frappe.only_for(["User Manager", "System Manager"])
     # Retain the standard Employee write check, creation, and linking behavior.
     user_name = standard_create_user(employee, user=user, email=email)
     provision_employee_user_access(frappe.get_doc("Employee", employee))
-    configure_employee_modules(frappe.get_doc("User", user_name))
+    user_doc = frappe.get_doc("User", user_name)
+    if extra_roles:
+        user_doc.flags.ignore_permissions = True
+        user_doc.add_roles(*extra_roles)
+    configure_employee_modules(user_doc)
     return user_name
+
+
+def setup_user_manager_permissions():
+    """Install the permissions needed to create users through Employee."""
+    from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
+
+    for role in ("User Manager", "Line Manager"):
+        if not frappe.db.exists("Role", role):
+            frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
+    permissions = {
+        "Employee": ("read", "write", "select"),
+        "User": ("read", "create", "select"),
+        "Project": ("select",),
+        "Company": ("select",),
+    }
+    for doctype, rights in permissions.items():
+        setup_custom_perms(doctype)
+        if not frappe.db.exists("Custom DocPerm", {"parent": doctype, "role": "User Manager", "permlevel": 0}):
+            add_permission(doctype, "User Manager")
+        for right in rights:
+            update_permission_property(doctype, "User Manager", 0, right, 1)
+    frappe.clear_cache()
 
 
 def configure_employee_modules(user_doc):

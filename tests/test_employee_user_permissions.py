@@ -123,6 +123,67 @@ class EmployeeAccessTests(unittest.TestCase):
                 self.access.create_user("EMP-001")
         configure.assert_not_called()
 
+    def test_checked_roles_are_added_only_to_new_user(self):
+        standard = types.ModuleType("erpnext.setup.doctype.employee.employee")
+        standard.create_user = Mock(return_value="new@example.com")
+        for flags, expected in [
+            ({"leave_approver": "1"}, ("Leave Approver",)),
+            ({"expense_approver": 1}, ("Expense Approver",)),
+            ({"line_manager": True}, ("Line Manager",)),
+            ({"leave_approver": 1, "expense_approver": 1, "line_manager": 1},
+                ("Leave Approver", "Expense Approver", "Line Manager")),
+            ({"leave_approver": "0", "expense_approver": "0", "line_manager": "0"}, ()),
+        ]:
+            with self.subTest(flags=flags):
+                self.frappe.reset_mock()
+                with patch.dict(sys.modules, {standard.__name__: standard}), patch.object(
+                    self.access, "provision_employee_user_access"
+                ), patch.object(self.access, "configure_employee_modules"):
+                    self.access.create_user("EMP-001", **flags)
+                user = self.frappe.get_doc.return_value
+                if expected:
+                    self.frappe.only_for.assert_called_once_with(["User Manager", "System Manager"])
+                    user.add_roles.assert_called_once_with(*expected)
+                else:
+                    self.frappe.only_for.assert_not_called()
+                    user.add_roles.assert_not_called()
+
+    def test_unauthorized_role_selection_fails_before_creation(self):
+        standard = types.ModuleType("erpnext.setup.doctype.employee.employee")
+        standard.create_user = Mock()
+        self.frappe.only_for.side_effect = PermissionError
+        with patch.dict(sys.modules, {standard.__name__: standard}):
+            with self.assertRaises(PermissionError):
+                self.access.create_user("EMP-001", line_manager=1)
+        standard.create_user.assert_not_called()
+        self.frappe.get_doc.assert_not_called()
+
+    def test_user_manager_permissions_setup_is_idempotent(self):
+        permissions = types.ModuleType("frappe.permissions")
+        permissions.add_permission = Mock()
+        permissions.setup_custom_perms = Mock()
+        permissions.update_permission_property = Mock()
+        self.frappe.db.exists.return_value = True
+        with patch.dict(sys.modules, {permissions.__name__: permissions}):
+            self.access.setup_user_manager_permissions()
+        permissions.add_permission.assert_not_called()
+        permissions.update_permission_property.assert_any_call("Employee", "User Manager", 0, "write", 1)
+        permissions.update_permission_property.assert_any_call("User", "User Manager", 0, "create", 1)
+        self.assertFalse(any(call.args[3] in ("delete", "submit", "cancel")
+            for call in permissions.update_permission_property.call_args_list))
+        self.frappe.clear_cache.assert_called_once_with()
+
+    def test_user_manager_setup_creates_missing_roles_and_permissions(self):
+        permissions = types.ModuleType("frappe.permissions")
+        permissions.add_permission = Mock()
+        permissions.setup_custom_perms = Mock()
+        permissions.update_permission_property = Mock()
+        self.frappe.db.exists.return_value = None
+        with patch.dict(sys.modules, {permissions.__name__: permissions}):
+            self.access.setup_user_manager_permissions()
+        self.assertEqual(permissions.add_permission.call_count, 4)
+        self.frappe.get_doc.assert_any_call({"doctype": "Role", "role_name": "Line Manager", "desk_access": 1})
+
     def test_employee_save_has_no_access_provisioning_hook(self):
         hooks = Path(__file__).parents[1] / "administration/hooks.py"
         namespace = {}

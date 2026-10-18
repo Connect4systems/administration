@@ -105,8 +105,10 @@ after_install = [
     "administration.flat_request_layout.ensure_flat_contract_request_approval_layout",
     "administration.flat_lifecycle_setup.install",
     "administration.leave_approval_setup.setup",
+    "administration.employee_user_permissions.setup_user_manager_permissions",
 ]
 after_migrate = [
+    "administration.employee_user_permissions.setup_user_manager_permissions",
     "administration.flat_lifecycle_setup.allow_submitted_flat_contents",
     "administration.leave_approval_setup.setup",
 	"administration.flat_lifecycle_setup.repair_termination_permissions",
