@@ -173,6 +173,7 @@ after_migrate = [
 # }
 override_doctype_class = {
     "File": "administration.legal_attachment_file.LegalAttachmentFile",
+    "Employee": "administration.employee_access.AdministrationEmployee",
 }
 
 # Document Events
@@ -229,7 +230,9 @@ doc_events = {
     },
     "Employee": {
         "validate": ["administration.employee.validate_accommodation_status", "administration.leave_approval.validate_employee"],
-        "on_update": "administration.user_employee.sync_employee_to_user",
+        "on_update": [
+            "administration.user_employee.sync_employee_to_user",
+        ],
         "on_trash": "administration.user_employee.clear_employee_from_user",
     },
     "User": {
@@ -280,6 +283,7 @@ scheduler_events = {"daily": [
 #
 override_whitelisted_methods = {
     "frappe.model.workflow.apply_workflow": "administration.flat_request_workflow.apply_workflow",
+    "erpnext.setup.doctype.employee.employee.create_user": "administration.employee_user_permissions.create_user",
 }
 
 # override_whitelisted_methods = {
@@ -366,7 +370,11 @@ doctype_js = {
 
 
 
-fixtures = ["Custom Field", "Property Setter", "DocType Link", "Web Form"]
+fixtures = [
+    "Custom Field", "Property Setter", "DocType Link", "Web Form",
+    {"dt": "Role", "filters": [["name", "=", "User Manager"]]},
+    {"dt": "Custom DocPerm", "filters": [["role", "=", "User Manager"]]},
+]
 
 permission_query_conditions = {"Leave Application": "administration.leave_approval.permission_query"}
 has_permission = {"Leave Application": "administration.leave_approval.has_permission"}
