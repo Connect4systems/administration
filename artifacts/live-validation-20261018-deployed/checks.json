@@ -1,0 +1,318 @@
+[
+  {
+    "check": "Default outgoing sender configuration",
+    "passed": true,
+    "http": 200,
+    "accounts": [
+      {
+        "name": "CSCEC System",
+        "email_id": "cscec@cscec.live",
+        "always_use_account_email_id_as_sender": 1
+      }
+    ]
+  },
+  {
+    "check": "Create Employee 1",
+    "passed": true,
+    "http": 200,
+    "result": "CIC-00738"
+  },
+  {
+    "check": "Create user qa.deployed.20261018.01@example.invalid",
+    "passed": false,
+    "http": 500,
+    "roles_selected": {
+      "leave_approver": 1,
+      "expense_approver": 1,
+      "line_manager": 1
+    },
+    "result": {
+      "exception": "smtplib.SMTPRecipientsRefused: {'qa.deployed.20261018.01@example.invalid': (450, b'4.1.2 <qa.deployed.20261018.01@example.invalid>: Recipient address rejected: Domain not found')}",
+      "exc_type": "SMTPRecipientsRefused",
+      "_server_messages": "[\"{\\\"message\\\": \\\"Newly created user <strong>qa.deployed.20261018.01@example.invalid</strong> has no roles enabled.\\\", \\\"title\\\": \\\"No Roles Specified\\\", \\\"indicator\\\": \\\"orange\\\", \\\"primary_action\\\": {\\\"label\\\": \\\"Add Roles\\\", \\\"client_action\\\": \\\"frappe.set_route\\\", \\\"args\\\": [\\\"Form\\\", \\\"User\\\", \\\"qa.deployed.20261018.01@example.invalid\\\"]}}\"]"
+    }
+  },
+  {
+    "check": "Create no-approval LWP draft",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00007"
+  },
+  {
+    "check": "No-approval route: Submit for Approval",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00007",
+      "workflow_state": "Pending HR Approval",
+      "docstatus": 0,
+      "status": "Open"
+    }
+  },
+  {
+    "check": "No-approval route: Approve",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00007",
+      "workflow_state": "Approved",
+      "docstatus": 1,
+      "status": "Approved"
+    }
+  },
+  {
+    "check": "No-approval route: Cancel",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00007",
+      "workflow_state": "Cancelled",
+      "docstatus": 2,
+      "status": "Cancelled"
+    }
+  },
+  {
+    "check": "One-level Employee manager mapping",
+    "passed": true,
+    "http": 200,
+    "first_employee": "993"
+  },
+  {
+    "check": "One-level route: Submit for Approval -> Pending Approval",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00008",
+      "workflow_state": "Pending Approval",
+      "docstatus": 0
+    }
+  },
+  {
+    "check": "First-manager assignment created",
+    "passed": true,
+    "todos": [
+      {
+        "name": "9ba9ia6509",
+        "allocated_to": "test@connect4systems.com",
+        "status": "Open"
+      }
+    ]
+  },
+  {
+    "check": "One-level route: Approve -> Pending HR Approval",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00008",
+      "workflow_state": "Pending HR Approval",
+      "docstatus": 0
+    }
+  },
+  {
+    "check": "One-level route: Approve -> Approved",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00008",
+      "workflow_state": "Approved",
+      "docstatus": 1
+    }
+  },
+  {
+    "check": "One-level route: Cancel -> Cancelled",
+    "passed": true,
+    "http": 200,
+    "result": {
+      "name": "HR-LAP-2026-00008",
+      "workflow_state": "Cancelled",
+      "docstatus": 2
+    }
+  },
+  {
+    "check": "Create Employee 2",
+    "passed": true,
+    "http": 200,
+    "result": "CIC-00739"
+  },
+  {
+    "check": "Link existing test-only User to Employee",
+    "passed": true,
+    "http": 200,
+    "result": "CIC-00739"
+  },
+  {
+    "check": "Employee linking grants both baseline roles",
+    "passed": true,
+    "roles": [
+      "Employee",
+      "Employee Self Service",
+      "All",
+      "Guest",
+      "Desk User"
+    ]
+  },
+  {
+    "check": "Employee-only account cannot grant approver roles",
+    "passed": true,
+    "http": 403,
+    "result": {
+      "exception": "frappe.exceptions.PermissionError",
+      "exc_type": "PermissionError"
+    }
+  },
+  {
+    "check": "User Manager has User creation permission",
+    "passed": true
+  },
+  {
+    "check": "Create Employee 3",
+    "passed": true,
+    "http": 200,
+    "result": "CIC-00740"
+  },
+  {
+    "check": "Create user cscec@cscec.live",
+    "passed": true,
+    "http": 200,
+    "roles_selected": {
+      "leave_approver": 1,
+      "expense_approver": 1,
+      "line_manager": 1
+    },
+    "result": "cscec@cscec.live"
+  },
+  {
+    "check": "Project permission created",
+    "passed": true,
+    "permissions": [
+      {
+        "name": "a062urpkq4",
+        "allow": "Project",
+        "for_value": "HQ",
+        "is_default": 0,
+        "apply_to_all_doctypes": 1
+      },
+      {
+        "name": "a075f374ir",
+        "allow": "Employee",
+        "for_value": "CIC-00740",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      }
+    ]
+  },
+  {
+    "check": "Employee permission is default",
+    "passed": true
+  },
+  {
+    "check": "New User linked to Employee",
+    "passed": true
+  },
+  {
+    "check": "All selected roles plus baseline roles assigned",
+    "passed": true,
+    "roles": [
+      "Employee Self Service",
+      "Employee",
+      "Line Manager",
+      "Expense Approver",
+      "Leave Approver",
+      "All",
+      "Guest",
+      "Desk User"
+    ]
+  },
+  {
+    "check": "My Profile workspace visible to new employee",
+    "passed": true,
+    "workspaces": [
+      {
+        "name": "My Profile",
+        "module": "Administration"
+      }
+    ]
+  },
+  {
+    "check": "Module Profile cleared at user creation",
+    "passed": true
+  },
+  {
+    "check": "Employee User Permission blocks unrelated Employee access",
+    "passed": true,
+    "http": 403,
+    "result": {
+      "exception": "frappe.exceptions.PermissionError",
+      "exc_type": "PermissionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"Not allowed for Employee: CIC-00738<br>User <strong>cscec@cscec.live</strong> does not have access to this document: Employee - CIC-00738\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    }
+  },
+  {
+    "check": "Two-level Employee configuration",
+    "passed": true,
+    "http": 200
+  },
+  {
+    "check": "Two-level route: applicant submission",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00009"
+  },
+  {
+    "check": "Second manager cannot approve first-manager stage",
+    "passed": true,
+    "http": 403,
+    "result": {
+      "exception": "frappe.exceptions.PermissionError",
+      "exc_type": "PermissionError",
+      "_server_messages": "[\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>cscec@cscec.live</strong> does not have access to this document: Leave Application - HR-LAP-2026-00009\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    }
+  },
+  {
+    "check": "Two-level route: first manager approves",
+    "passed": false,
+    "http": 500,
+    "result": {
+      "exception": "TypeError: add() got an unexpected keyword argument 'flags'",
+      "exc_type": "TypeError"
+    }
+  },
+  {
+    "check": "Restricted Employee can apply for own leave",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00010"
+  },
+  {
+    "check": "Restricted Employee submits directly to HR",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00010"
+  },
+  {
+    "check": "Applicant cannot self-approve HR stage",
+    "passed": true,
+    "http": 417
+  },
+  {
+    "check": "HR can reject applicant-owned request",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00010"
+  },
+  {
+    "check": "First manager can reject",
+    "passed": true,
+    "http": 200,
+    "result": "HR-LAP-2026-00011"
+  },
+  {
+    "check": "Rejection closes manager assignments",
+    "passed": true
+  },
+  {
+    "check": "Employee save preserves manually removed Project permission",
+    "passed": true,
+    "http": 200
+  }
+]

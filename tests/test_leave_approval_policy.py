@@ -170,7 +170,10 @@ class PolicyTests(unittest.TestCase):
         module.set_status = lambda *args, **kw: calls.append(("close", kw["todo"]))
         self.frappe.get_all = lambda *args, **kw: [Doc(name="old", allocated_to="first")]
         self.frappe.has_permission = lambda *args, **kw: False
-        self.frappe.share = Doc(add=lambda *args, **kw: calls.append(("share", args[2])))
+        def share_document(doctype, name, user, *, read=1, write=0, flags=None):
+            self.assertEqual(flags, {"ignore_share_permission": True})
+            calls.append(("share", user))
+        self.frappe.share = Doc(add_docshare=share_document)
         doc = self.document("Pending Management Approval", self.policy.TWO)
         doc.doctype = "Leave Application"
         with patch.dict(sys.modules, {"frappe.desk.form.assign_to": module}):

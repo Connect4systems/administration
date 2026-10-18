@@ -119,7 +119,7 @@ def sync_assignments(doc, method=None):
             set_status(doc.doctype, doc.name, todo=todo.name, assign_to=todo.allocated_to, status="Closed", ignore_permissions=True)
     if target:
         if not frappe.has_permission(doc.doctype, "write", doc=doc, user=target):
-            frappe.share.add(doc.doctype, doc.name, target, read=1, write=1,
+            frappe.share.add_docshare(doc.doctype, doc.name, target, read=1, write=1,
                 flags={"ignore_share_permission": True})
         if not kept:
             _add({"doctype": doc.doctype, "name": doc.name, "assign_to": [target],
