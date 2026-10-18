@@ -4,6 +4,7 @@ from frappe import _
 
 ONE = "One Level Approval"
 TWO = "Two Level Approval"
+NONE = "No Approval Required"
 SNAPSHOT = ("custom_leave_approval_level", "leave_approver", "custom_second_leave_approver")
 PENDING = ("Pending Approval", "Pending Management Approval", "Pending HR Approval")
 
@@ -19,8 +20,12 @@ def employee_user(employee, label):
 
 def validate_employee(doc, method=None):
     doc.custom_leave_approval_level = doc.get("custom_leave_approval_level") or ONE
-    if doc.custom_leave_approval_level not in (ONE, TWO):
+    if doc.custom_leave_approval_level not in (ONE, TWO, NONE):
         frappe.throw(_("Invalid Leave Approval Level."))
+    if doc.custom_leave_approval_level == NONE:
+        for field in ("custom_first_approval", "custom_second_approval", "leave_approver", "custom_second_leave_approver"):
+            doc.set(field, None)
+        return
     if not doc.get("custom_first_approval"):
         frappe.throw(_("First Approval is required."))
     doc.leave_approver = employee_user(doc.custom_first_approval, "First Approval")
@@ -66,7 +71,9 @@ def validate_leave(doc, method=None):
     state = doc.get("workflow_state") or "Open"
     previous = old.get("workflow_state") if old else "Open"
     if state != previous:
-        if previous == "Open" and state == "Pending Approval":
+        if previous == "Open" and state == (
+            "Pending HR Approval" if doc.custom_leave_approval_level == NONE else "Pending Approval"
+        ):
             employee_user_id = frappe.db.get_value("Employee", doc.employee, "user_id")
             if frappe.session.user not in (doc.owner, employee_user_id):
                 frappe.throw(_("Only the applicant may request approval."), frappe.PermissionError)
@@ -86,6 +93,8 @@ def validate_leave(doc, method=None):
         frappe.throw(_("Invalid approval state or document status. Use the workflow actions."))
     if state == "Pending Management Approval" and doc.custom_leave_approval_level != TWO:
         frappe.throw(_("Management approval requires Two Level Approval."))
+    if state == "Pending Approval" and doc.custom_leave_approval_level == NONE:
+        frappe.throw(_("No Approval Required applications must go directly to HR approval."))
     doc.status = state if state in ("Approved", "Rejected", "Cancelled") else "Open"
 
 

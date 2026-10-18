@@ -1,7 +1,7 @@
 """Idempotent setup after fixtures and customizations have been synchronized."""
 import json
 import frappe
-from administration.leave_approval import ONE, TWO, SNAPSHOT
+from administration.leave_approval import ONE, TWO, NONE, SNAPSHOT
 
 
 def setup():
@@ -13,11 +13,13 @@ def setup():
         if not frappe.db.exists("Role", role):
             frappe.get_doc({"doctype": "Role", "role_name": role, "desk_access": 1}).insert(ignore_permissions=True)
     two = 'eval:doc.custom_leave_approval_level == "Two Level Approval"'
+    approval = 'eval:doc.custom_leave_approval_level != "No Approval Required"'
     fields = [
         {"fieldname": "custom_leave_approval_level", "label": "Leave Approval Level", "fieldtype": "Select",
-            "options": ONE + "\n" + TWO, "default": ONE, "insert_after": "approvers_section", "reqd": 1},
+            "options": "\n".join((ONE, TWO, NONE)), "default": ONE, "insert_after": "approvers_section", "reqd": 1},
         {"fieldname": "custom_first_approval", "label": "First Approval", "fieldtype": "Link",
-            "options": "Employee", "insert_after": "custom_leave_approval_level", "reqd": 1},
+            "options": "Employee", "insert_after": "custom_leave_approval_level", "reqd": 0,
+            "depends_on": approval, "mandatory_depends_on": approval},
         {"fieldname": "custom_second_approval", "label": "Second Approval", "fieldtype": "Link",
             "options": "Employee", "insert_after": "leave_approver", "depends_on": two, "mandatory_depends_on": two},
         {"fieldname": "custom_second_leave_approver", "label": "Second Leave Approver", "fieldtype": "Link",
@@ -25,7 +27,7 @@ def setup():
     ]
     create_custom_fields({"Employee": fields, "Leave Application": [
         {"fieldname": "custom_leave_approval_level", "label": "Leave Approval Level", "fieldtype": "Select",
-            "options": ONE + "\n" + TWO, "read_only": 1, "insert_after": "leave_approver"},
+            "options": "\n".join((ONE, TWO, NONE)), "read_only": 1, "insert_after": "leave_approver"},
         {"fieldname": "custom_second_leave_approver", "label": "Second Leave Approver", "fieldtype": "Link",
             "options": "User", "read_only": 1, "insert_after": "custom_leave_approval_level", "depends_on": two},
         {"fieldname": "workflow_state", "label": "Approval State", "fieldtype": "Link", "options": "Workflow State",
@@ -33,6 +35,8 @@ def setup():
     ]}, update=True)
     for dt in ("Employee", "Leave Application"):
         make_property_setter(dt, "leave_approver", "read_only", 1, "Check")
+        make_property_setter(dt, "leave_approver", "reqd", 0, "Check")
+        make_property_setter(dt, "leave_approver", "depends_on", approval, "Data")
     make_property_setter("Employee", "leave_approver", "insert_after", "custom_first_approval", "Data")
     order = [f.fieldname for f in frappe.get_meta("Employee").fields]
     approval_fields = ["custom_leave_approval_level", "custom_first_approval", "leave_approver",
@@ -59,8 +63,10 @@ def setup():
         ("Cancelled", 2, "HR Leave Approver")]
     first = "doc.leave_approver == frappe.session.user"
     second = 'doc.custom_second_leave_approver == frappe.session.user and doc.custom_leave_approval_level == "Two Level Approval"'
+    applicant = "(doc.owner == frappe.session.user or frappe.db.get_value('Employee', doc.employee, 'user_id') == frappe.session.user)"
     transitions = [
-        ("Open", "Submit for Approval", "Pending Approval", "Employee", "doc.owner == frappe.session.user or frappe.db.get_value('Employee', doc.employee, 'user_id') == frappe.session.user"),
+        ("Open", "Submit for Approval", "Pending Approval", "Employee", applicant + ' and doc.custom_leave_approval_level in ("One Level Approval", "Two Level Approval")'),
+        ("Open", "Submit for Approval", "Pending HR Approval", "Employee", applicant + ' and doc.custom_leave_approval_level == "No Approval Required"'),
         ("Pending Approval", "Approve", "Pending HR Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "One Level Approval"'),
         ("Pending Approval", "Approve", "Pending Management Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "Two Level Approval"'),
         ("Pending Approval", "Reject", "Rejected", "Leave Approver", first),
@@ -112,6 +118,10 @@ def setup():
 def backfill():
     # Recover unambiguous existing first approvers without inventing a management approver.
     for employee in frappe.get_all("Employee", fields=["name", "leave_approver", "custom_first_approval", *SNAPSHOT[:1]]):
+        if employee.custom_leave_approval_level == NONE:
+            frappe.db.set_value("Employee", employee.name, {field: None for field in
+                ("custom_first_approval", "custom_second_approval", "leave_approver", "custom_second_leave_approver")}, update_modified=False)
+            continue
         values = {}
         if not employee.custom_leave_approval_level:
             values["custom_leave_approval_level"] = ONE

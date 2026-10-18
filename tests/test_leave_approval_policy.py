@@ -122,6 +122,41 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(doc.leave_approver, "first")
         self.assertIsNone(doc.custom_second_leave_approver)
 
+    def test_no_approval_clears_managers_and_routes_to_hr(self):
+        employee = Doc(custom_leave_approval_level=self.policy.NONE,
+            custom_first_approval="FIRST", custom_second_approval="SECOND",
+            leave_approver="first", custom_second_leave_approver="second")
+        self.frappe.get_doc = lambda dt, name: employee
+        doc = self.document("Open")
+        self.policy.validate_leave(doc)
+        for field in ("custom_first_approval", "custom_second_approval", "leave_approver", "custom_second_leave_approver"):
+            self.assertIsNone(employee.get(field))
+        self.assertEqual(doc.custom_leave_approval_level, self.policy.NONE)
+        self.assertIsNone(doc.leave_approver)
+        self.assertIsNone(doc.custom_second_leave_approver)
+        self.frappe.session.user = "employee"
+        for target, status in [("Pending Approval", 0), ("Pending Management Approval", 0), ("Approved", 1)]:
+            with self.assertRaises(PermissionError):
+                self.transition(doc, target, status)
+        pending = self.transition(doc, "Pending HR Approval")
+        with self.assertRaises(PermissionError):
+            self.transition(pending, "Approved", 1)
+        self.frappe.session.user = "hr"
+        self.roles = ["HR Leave Approver"]
+        self.assertEqual(self.transition(pending, "Approved", 1).status, "Approved")
+        self.assertEqual(self.transition(pending, "Rejected").status, "Rejected")
+
+    def test_direct_hr_submission_requires_applicant_and_no_approval_level(self):
+        self.frappe.session.user = "other"
+        with self.assertRaises(PermissionError):
+            self.transition(self.document("Open", self.policy.NONE), "Pending HR Approval")
+        self.frappe.session.user = "employee"
+        for level in (self.policy.ONE, self.policy.TWO):
+            with self.assertRaises(PermissionError):
+                self.transition(self.document("Open", level), "Pending HR Approval")
+            self.assertEqual(self.transition(self.document("Open", level), "Pending Approval").workflow_state,
+                "Pending Approval")
+
     def test_assignment_reconciliation_and_terminal_cleanup(self):
         calls = []
         module = types.ModuleType("frappe.desk.form.assign_to")
