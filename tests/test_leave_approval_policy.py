@@ -40,6 +40,8 @@ class PolicyTests(unittest.TestCase):
         raise exc(message)
 
     def get_value(self, dt, name, field):
+        if dt == "Employee" and field == "company":
+            return "Employee Company"
         return self.users.get(name) if dt == "Employee" else 1
 
     def document(self, state="Pending Approval", level=None):
@@ -68,6 +70,16 @@ class PolicyTests(unittest.TestCase):
             self.assertEqual(final.status, "Approved")
             self.roles = ["Leave Approver"]
             self.frappe.session.user = "first"
+
+    def test_missing_company_is_filled_from_employee(self):
+        doc = self.transition(self.document(), "Pending HR Approval")
+        self.assertEqual(doc.company, "Employee Company")
+
+    def test_existing_company_is_preserved(self):
+        old = self.document()
+        old.company = "Existing Company"
+        doc = self.transition(old, "Pending HR Approval")
+        self.assertEqual(doc.company, "Existing Company")
 
     def test_rejection_all_stages_and_terminal(self):
         for state, user, role in [("Pending Approval", "first", "Leave Approver"),
