@@ -4,6 +4,9 @@ frappe.ui.form.on("Leave Application", {
     },
     refresh(frm) {
         frm.set_df_property("leave_approver", "read_only", 1);
+        frm.set_df_property("company", "hidden", 0);
+        frm.set_df_property("company", "depends_on", "");
+        frm.set_df_property("company", "read_only", 0);
         if (frm.is_new() && !frm.doc.company) {
             return set_employee_company(frm);
         }

@@ -4,10 +4,30 @@ import frappe
 from administration.leave_approval import ONE, TWO, NONE, SNAPSHOT
 
 
+def setup_leave_company_field():
+    from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+
+    # Keep the mandatory field accessible to ordinary employees, including sites
+    # with older Customize Form settings that hid it or raised its permission level.
+    for property_name, value, property_type in (
+        ("hidden", 0, "Check"),
+        ("permlevel", 0, "Int"),
+        ("read_only", 0, "Check"),
+        ("depends_on", "", "Data"),
+        ("read_only_depends_on", "", "Data"),
+        ("fetch_from", "employee.company", "Small Text"),
+        ("fetch_if_empty", 0, "Check"),
+        ("insert_after", "employee", "Data"),
+    ):
+        make_property_setter("Leave Application", "company", property_name, value, property_type)
+
+
 def setup():
     from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
     from frappe.custom.doctype.property_setter.property_setter import make_property_setter
     from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
+
+    setup_leave_company_field()
 
     for role in ("Leave Approver", "HR Leave Approver"):
         if not frappe.db.exists("Role", role):
