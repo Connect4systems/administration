@@ -1,6 +1,8 @@
 frappe.ui.form.on("Leave Application", {
-    setup(frm) {
-        frm.add_fetch("employee", "company", "company");
+    onload(frm) {
+        if (frm.is_new() && !frm.doc.company) {
+            return set_employee_company(frm);
+        }
     },
     refresh(frm) {
         frm.set_df_property("leave_approver", "read_only", 1);
@@ -23,11 +25,18 @@ frappe.ui.form.on("Leave Application", {
 
 async function set_employee_company(frm) {
     const employee = frm.doc.employee;
+    const default_company = frappe.defaults.get_user_default("Company");
     if (!employee) {
-        return frm.set_value("company", null);
+        if (!frm.doc.company && default_company) {
+            return frm.set_value("company", default_company);
+        }
+        return;
     }
     const result = await frappe.db.get_value("Employee", employee, "company");
     if (frm.doc.employee === employee) {
-        return frm.set_value("company", result.message?.company || null);
+        const company = result.message?.company || frm.doc.company || default_company;
+        if (company) {
+            return frm.set_value("company", company);
+        }
     }
 }

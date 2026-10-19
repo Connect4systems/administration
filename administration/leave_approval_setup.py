@@ -15,8 +15,10 @@ def setup_leave_company_field():
         ("read_only", 0, "Check"),
         ("depends_on", "", "Data"),
         ("read_only_depends_on", "", "Data"),
-        ("fetch_from", "employee.company", "Small Text"),
-        ("fetch_if_empty", 0, "Check"),
+        # The form script handles the employee/default fallback. A native fetch
+        # would overwrite the user's default with an empty Employee.company.
+        ("fetch_from", "", "Small Text"),
+        ("fetch_if_empty", 1, "Check"),
         ("insert_after", "employee", "Data"),
     ):
         make_property_setter("Leave Application", "company", property_name, value, property_type)

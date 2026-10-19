@@ -56,7 +56,10 @@ def can_act(doc, user=None):
 
 def validate_leave(doc, method=None):
     if doc.employee and not doc.get("company"):
-        doc.company = frappe.db.get_value("Employee", doc.employee, "company")
+        doc.company = (
+            frappe.db.get_value("Employee", doc.employee, "company")
+            or frappe.defaults.get_user_default("Company")
+        )
     old = doc.get_doc_before_save()
     if not old:
         employee = frappe.get_doc("Employee", doc.employee)

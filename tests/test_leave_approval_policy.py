@@ -28,6 +28,7 @@ class PolicyTests(unittest.TestCase):
         self.frappe._ = lambda text: text
         self.frappe.PermissionError = PermissionError
         self.frappe.session = Doc(user="first")
+        self.frappe.defaults = Doc(get_user_default=lambda key: "User Default Company")
         self.frappe.get_roles = lambda user=None: self.roles
         self.frappe.throw = lambda message, exc=ValueError: self.raise_error(message, exc)
         self.frappe.db = Doc(get_value=self.get_value, escape=lambda value: "'" + value + "'")
@@ -80,6 +81,23 @@ class PolicyTests(unittest.TestCase):
         old.company = "Existing Company"
         doc = self.transition(old, "Pending HR Approval")
         self.assertEqual(doc.company, "Existing Company")
+
+    def test_empty_employee_company_uses_current_user_default(self):
+        original = self.frappe.db.get_value
+        self.frappe.db.get_value = lambda dt, name, field: (
+            None if dt == "Employee" and field == "company" else original(dt, name, field)
+        )
+        doc = self.transition(self.document(), "Pending HR Approval")
+        self.assertEqual(doc.company, "User Default Company")
+
+    def test_missing_employee_company_and_user_default_stays_empty(self):
+        original = self.frappe.db.get_value
+        self.frappe.db.get_value = lambda dt, name, field: (
+            None if dt == "Employee" and field == "company" else original(dt, name, field)
+        )
+        self.frappe.defaults.get_user_default = lambda key: None
+        doc = self.transition(self.document(), "Pending HR Approval")
+        self.assertIsNone(doc.company)
 
     def test_rejection_all_stages_and_terminal(self):
         for state, user, role in [("Pending Approval", "first", "Leave Approver"),
