@@ -73,6 +73,8 @@ def provision_employee_user_access(doc):
         ensure_permission(user, "Project", doc.custom_project)
     if doc.get("create_user_permission"):
         ensure_permission(user, "Employee", doc.name, is_default=True)
+        if doc.get("company"):
+            ensure_permission(user, "Company", doc.company, is_default=True)
 
 
 def ensure_permission(user, allow, value, is_default=False):

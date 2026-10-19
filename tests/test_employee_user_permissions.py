@@ -23,7 +23,7 @@ class EmployeeAccessTests(unittest.TestCase):
     def employee(self, **values):
         doc = Mock()
         values = {"user_id": "employee@example.com", "custom_project": "HQ",
-            "name": "EMP-001", "create_user_permission": 1, **values}
+            "name": "EMP-001", "create_user_permission": 1, "company": "CSCEC", **values}
         doc.get.side_effect = values.get
         for field, value in values.items():
             setattr(doc, field, value)
@@ -39,6 +39,8 @@ class EmployeeAccessTests(unittest.TestCase):
         self.assertEqual(ensure.call_args_list[0].args, ("employee@example.com", "Project", "HQ"))
         self.assertEqual(ensure.call_args_list[1].args, ("employee@example.com", "Employee", "EMP-001"))
         self.assertEqual(ensure.call_args_list[1].kwargs, {"is_default": True})
+        self.assertEqual(ensure.call_args_list[2].args, ("employee@example.com", "Company", "CSCEC"))
+        self.assertEqual(ensure.call_args_list[2].kwargs, {"is_default": True})
 
     def test_unchecked_employee_permission_still_grants_project(self):
         user = self.frappe.get_doc.return_value
@@ -52,7 +54,13 @@ class EmployeeAccessTests(unittest.TestCase):
         self.frappe.get_doc.return_value.get.return_value = []
         with patch.object(self.access, "ensure_permission") as ensure:
             self.access.provision_employee_user_access(self.employee(custom_project=None))
-        ensure.assert_called_once_with("employee@example.com", "Employee", "EMP-001", is_default=True)
+        self.assertEqual([call.args[1] for call in ensure.call_args_list], ["Employee", "Company"])
+
+    def test_missing_company_does_not_create_empty_permission(self):
+        self.frappe.get_doc.return_value.get.return_value = []
+        with patch.object(self.access, "ensure_permission") as ensure:
+            self.access.provision_employee_user_access(self.employee(company=None))
+        self.assertEqual([call.args[1] for call in ensure.call_args_list], ["Project", "Employee"])
 
     def test_unlinked_and_builtin_users_are_skipped(self):
         for user in (None, "Administrator", "Guest"):
