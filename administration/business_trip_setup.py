@@ -11,6 +11,22 @@ def permission_query(user=None):
 
 def setup():
     from frappe.custom.doctype.custom_field.custom_field import create_custom_fields
+    from frappe.custom.doctype.property_setter.property_setter import make_property_setter
+    from frappe.permissions import add_permission, setup_custom_perms, update_permission_property
+
+    # Existing sites may have Custom DocPerm rows overriding DocType permissions.
+    setup_custom_perms("Business Trip Request")
+    for role in ("Leave Approver", "HR Leave Approver"):
+        if not frappe.db.exists("Custom DocPerm", {"parent": "Business Trip Request", "role": role, "permlevel": 0}):
+            add_permission("Business Trip Request", role)
+        for right in ("read", "write", "report"):
+            update_permission_property("Business Trip Request", role, 0, right, 1)
+        if role == "HR Leave Approver":
+            for right in ("submit", "cancel"):
+                update_permission_property("Business Trip Request", role, 0, right, 1)
+    for field in ("leave_approver", "custom_second_leave_approver"):
+        make_property_setter("Business Trip Request", field, "fieldtype", "Data", "Data")
+        make_property_setter("Business Trip Request", field, "options", "Email", "Data")
 
     create_custom_fields({"Attendance": [{
         "fieldname": "custom_business_trip_request", "label": "Business Trip Request",

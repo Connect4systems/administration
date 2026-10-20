@@ -164,6 +164,12 @@ def has_permission(doc, user=None, ptype=None):
     user = user or frappe.session.user
     if user == "Administrator" or set(frappe.get_roles(user)) & {"System Manager", "HR Manager", "HR User", "HR Leave Approver"}:
         return None
-    if doc.owner == user or frappe.db.get_value("Employee", doc.employee, "user_id") == user or can_act(doc, user):
+    # During workflow.save() the in-memory state is already the next stage.
+    # Authorize against the persisted stage; validation still checks the exact
+    # transition and assignee before any change can be committed.
+    approval_doc = doc
+    if ptype in ("read", "write") and not doc.is_new():
+        approval_doc = frappe.get_doc(doc.doctype, doc.name)
+    if doc.owner == user or frappe.db.get_value("Employee", doc.employee, "user_id") == user or can_act(approval_doc, user):
         return None
     return False

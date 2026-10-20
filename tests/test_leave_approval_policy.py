@@ -240,6 +240,19 @@ class PolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "First Approval is required"):
             self.transition(old, "Open")
 
+    def test_approver_write_check_uses_persisted_stage(self):
+        old = self.document("Pending Approval")
+        new = self.document("Pending HR Approval")
+        new.doctype = "Business Trip Request"
+        new.is_new = lambda: False
+        self.frappe.get_doc = lambda dt, name: old
+        self.assertIsNone(self.policy.has_permission(new, "first", "write"))
+        self.assertFalse(self.policy.has_permission(new, "other", "write"))
+        # Transition validation still denies unrelated users and stage skipping.
+        self.frappe.session.user = "other"
+        with self.assertRaises(PermissionError):
+            self.transition(old, "Pending HR Approval")
+
     def test_pending_scope(self):
         self.assertIn("leave_approver='first'", self.policy.pending_conditions("first"))
         self.assertNotIn("workflow_state='Pending HR Approval'", self.policy.pending_conditions("first"))

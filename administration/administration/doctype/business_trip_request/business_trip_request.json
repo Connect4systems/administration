@@ -159,17 +159,19 @@
   {
    "fieldname": "leave_approver",
    "label": "First Approver",
-   "fieldtype": "Link",
-   "options": "User",
-   "read_only": 1
+   "fieldtype": "Data",
+   "options": "Email",
+   "read_only": 1,
+   "ignore_user_permissions": 1
   },
   {
    "fieldname": "custom_second_leave_approver",
    "label": "Second Approver",
-   "fieldtype": "Link",
-   "options": "User",
+   "fieldtype": "Data",
+   "options": "Email",
    "read_only": 1,
-   "depends_on": "eval:doc.custom_leave_approval_level == \"Two Level Approval\""
+   "depends_on": "eval:doc.custom_leave_approval_level == \"Two Level Approval\"",
+   "ignore_user_permissions": 1
   }
  ],
  "grid_page_length": 50,
