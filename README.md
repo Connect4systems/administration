@@ -243,6 +243,9 @@ application using normal cancellation.
 Pending stages use the standard HRMS `status = Open`; `workflow_state` identifies
 the approval stage. This retains standard overlap, balance and validation behavior.
 Approved, Rejected and Cancelled synchronize both fields. No core files are changed.
+Configured first and second approvers retain read access after their stage, including
+completed requests, so a successful approval can reload the form without a permission
+error. Only the current stage's approver can act; pending reports remain stage-scoped.
 The **Pending Approval** shortcut in My Profile opens **Pending Leave Approval**,
 a role restricted report scoped to the logged-in user's current approval stage.
 Refresh the report after taking an action in another browser tab.

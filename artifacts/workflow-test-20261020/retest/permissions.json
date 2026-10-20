@@ -1,0 +1,96 @@
+{
+  "requester": {
+    "employee": [
+      {
+        "name": "360",
+        "user_id": "essam_mohamed@chinaconstruction.com",
+        "company": "CSCEC",
+        "create_user_permission": 1,
+        "custom_leave_approval_level": "Two Level Approval",
+        "leave_approver": "ahmed_sabaah@chinaconstruction.com",
+        "custom_second_leave_approver": "noha.saleh@chinaconstruction.com"
+      }
+    ],
+    "permissions": [
+      {
+        "name": "cfekhal21k",
+        "allow": "Project",
+        "for_value": "24-CICE-EMR-BV-EGY-001",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      },
+      {
+        "name": "oaef51jhiq",
+        "allow": "Company",
+        "for_value": "CSCEC",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      }
+    ]
+  },
+  "first": {
+    "employee": [
+      {
+        "name": "735",
+        "user_id": "ahmed_sabaah@chinaconstruction.com",
+        "company": "CSCEC",
+        "create_user_permission": 1,
+        "custom_leave_approval_level": "One Level Approval",
+        "leave_approver": "ahmed_sabaah@chinaconstruction.com",
+        "custom_second_leave_approver": null
+      }
+    ],
+    "permissions": [
+      {
+        "name": "aekkelgm5t",
+        "allow": "Company",
+        "for_value": "CSCEC",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      },
+      {
+        "name": "apakhv30ga",
+        "allow": "Project",
+        "for_value": "24-CICE-EMR-BV-EGY-001",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      }
+    ]
+  },
+  "second": {
+    "employee": [
+      {
+        "name": "299",
+        "user_id": "noha.saleh@chinaconstruction.com",
+        "company": "CSCEC",
+        "create_user_permission": 1,
+        "custom_leave_approval_level": "One Level Approval",
+        "leave_approver": "zhou_zhimeng@chinaconstruction.com",
+        "custom_second_leave_approver": null
+      }
+    ],
+    "permissions": [
+      {
+        "name": "objoua3p1g",
+        "allow": "Company",
+        "for_value": "CSCEC",
+        "is_default": 1,
+        "apply_to_all_doctypes": 1
+      }
+    ]
+  },
+  "hr": {
+    "employee": [
+      {
+        "name": "337",
+        "user_id": "fady_atef_atta@chinaconstruction.com",
+        "company": "CSCEC",
+        "create_user_permission": 0,
+        "custom_leave_approval_level": "One Level Approval",
+        "leave_approver": "mahmoud_badawy@chinaconstruction.com",
+        "custom_second_leave_approver": null
+      }
+    ],
+    "permissions": []
+  }
+}

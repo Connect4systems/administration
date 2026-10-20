@@ -1,0 +1,119 @@
+{
+  "accounts": {
+    "requester": "essam_mohamed@chinaconstruction.com",
+    "first": "ahmed_sabaah@chinaconstruction.com",
+    "second": "noha.saleh@chinaconstruction.com",
+    "hr": "fady_atef_atta@chinaconstruction.com"
+  },
+  "checks": [
+    {
+      "check": "Login requester",
+      "passed": true
+    },
+    {
+      "check": "Login first",
+      "passed": true
+    },
+    {
+      "check": "Login second",
+      "passed": true
+    },
+    {
+      "check": "Login hr",
+      "passed": true
+    },
+    {
+      "check": "Leave Application create",
+      "passed": true
+    },
+    {
+      "check": "Leave Application submit for approval",
+      "passed": true
+    },
+    {
+      "check": "Leave Application first approval",
+      "passed": true
+    },
+    {
+      "check": "Leave Application second approval",
+      "passed": true
+    },
+    {
+      "check": "Leave Application hr approval",
+      "passed": true
+    },
+    {
+      "check": "Leave Application creates linked submitted On Leave attendance",
+      "passed": true
+    },
+    {
+      "check": "Annual leave debit ledger",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request create",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request submit for approval",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request first approval",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request second approval",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request hr approval",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request creates linked submitted Present attendance",
+      "passed": true
+    }
+  ],
+  "records": [
+    {
+      "doctype": "Leave Application",
+      "name": "HR-LAP-2026-00017",
+      "date": "2026-10-19",
+      "final_state": "Approved",
+      "docstatus": 1,
+      "attendance": [
+        {
+          "name": "HR-ATT-2026-00002",
+          "attendance_date": "2026-10-19",
+          "status": "On Leave",
+          "docstatus": 1,
+          "leave_application": "HR-LAP-2026-00017"
+        }
+      ],
+      "ledger": [
+        {
+          "name": "eme57atrkp",
+          "leaves": -1.0,
+          "docstatus": 1
+        }
+      ]
+    },
+    {
+      "doctype": "Business Trip Request",
+      "name": "enc7i5r3o8",
+      "date": "2026-10-20",
+      "final_state": "Approved",
+      "docstatus": 1,
+      "attendance": [
+        {
+          "name": "HR-ATT-2026-00003",
+          "attendance_date": "2026-10-20",
+          "status": "Present",
+          "docstatus": 1,
+          "custom_business_trip_request": "enc7i5r3o8"
+        }
+      ]
+    }
+  ]
+}

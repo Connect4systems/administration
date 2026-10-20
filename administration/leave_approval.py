@@ -156,8 +156,16 @@ def permission_query(user=None, document_type="Leave Application"):
     if user == "Administrator" or set(roles) & {"System Manager", "HR Manager", "HR User", "HR Leave Approver"}:
         return ""
     quoted = frappe.db.escape(user)
+    approver_read = "1=0"
+    if "Leave Approver" in roles:
+        approver_read = (
+            f"(`tab{document_type}`.workflow_state != 'Open' AND "
+            f"(`tab{document_type}`.leave_approver={quoted} OR "
+            f"(`tab{document_type}`.custom_leave_approval_level='Two Level Approval' AND "
+            f"`tab{document_type}`.custom_second_leave_approver={quoted})))"
+        )
     return (f"(`tab{document_type}`.owner={quoted} OR `tab{document_type}`.employee IN "
-        f"(SELECT name FROM `tabEmployee` WHERE user_id={quoted}) OR (" + pending_conditions(user) + "))")
+        f"(SELECT name FROM `tabEmployee` WHERE user_id={quoted}) OR " + approver_read + ")")
 
 
 def has_permission(doc, user=None, ptype=None):
@@ -170,6 +178,14 @@ def has_permission(doc, user=None, ptype=None):
     approval_doc = doc
     if ptype in ("read", "write") and not doc.is_new():
         approval_doc = frappe.get_doc(doc.doctype, doc.name)
+    # Form reloads after a successful action. Keep snapshot approvers able to
+    # read the request after handoff, without extending their write/action rights.
+    if ptype == "read" and approval_doc.get("workflow_state") != "Open" and "Leave Approver" in frappe.get_roles(user):
+        if user == approval_doc.leave_approver or (
+            approval_doc.custom_leave_approval_level == TWO
+            and user == approval_doc.custom_second_leave_approver
+        ):
+            return None
     if doc.owner == user or frappe.db.get_value("Employee", doc.employee, "user_id") == user or can_act(approval_doc, user):
         return None
     return False

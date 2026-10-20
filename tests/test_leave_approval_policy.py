@@ -259,6 +259,41 @@ class PolicyTests(unittest.TestCase):
         self.roles = []
         self.assertIn("1=0", self.policy.pending_conditions("employee"))
 
+    def test_snapshot_approvers_keep_read_access_after_handoff_only(self):
+        for doctype in ("Leave Application", "Business Trip Request"):
+            for state in ("Pending HR Approval", "Approved", "Rejected", "Cancelled"):
+                doc = self.document(state, self.policy.TWO)
+                doc.doctype = doctype
+                doc.is_new = lambda: False
+                self.frappe.get_doc = lambda dt, name: doc
+                for user in ("first", "second"):
+                    self.assertIsNone(self.policy.has_permission(doc, user, "read"))
+                    self.assertFalse(self.policy.has_permission(doc, user, "write"))
+                    self.assertFalse(self.policy.can_act(doc, user))
+                self.assertFalse(self.policy.has_permission(doc, "other", "read"))
+
+    def test_read_history_does_not_expose_drafts_or_unused_second_approver(self):
+        doc = self.document("Open", self.policy.TWO)
+        doc.doctype = "Leave Application"
+        doc.is_new = lambda: False
+        self.frappe.get_doc = lambda dt, name: doc
+        self.assertFalse(self.policy.has_permission(doc, "first", "read"))
+        doc.workflow_state = "Approved"
+        doc.custom_leave_approval_level = self.policy.ONE
+        self.assertFalse(self.policy.has_permission(doc, "second", "read"))
+        self.roles = []
+        self.assertFalse(self.policy.has_permission(doc, "first", "read"))
+
+    def test_history_list_scope_and_pending_report_scope_are_separate(self):
+        for doctype in ("Leave Application", "Business Trip Request"):
+            query = self.policy.permission_query("first", document_type=doctype)
+            self.assertIn(f"`tab{doctype}`.workflow_state != 'Open'", query)
+            self.assertIn(f"`tab{doctype}`.custom_second_leave_approver='first'", query)
+            self.assertIn("custom_leave_approval_level='Two Level Approval'", query)
+        self.assertIn("docstatus=0", self.policy.pending_conditions("first"))
+        self.roles = []
+        self.assertNotIn("custom_second_leave_approver", self.policy.permission_query("other"))
+
 
 if __name__ == "__main__":
     unittest.main()
