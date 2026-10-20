@@ -27,8 +27,6 @@ def setup():
             # Legacy drafts acquire a validated approval snapshot on their next
             # save. Incomplete Employee settings must not block site migration.
             values = {}
-            values.update({field: employee.get(field) for field in SNAPSHOT})
-                values["company"] = trip.company or employee.company
             values.update({
                 "workflow_state": "Cancelled" if row.docstatus == 2 else "Open",
                 "status": "Cancelled" if row.docstatus == 2 else "Open",
