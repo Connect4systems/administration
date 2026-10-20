@@ -1,0 +1,192 @@
+{
+  "accounts": {
+    "requester": "essam_mohamed@chinaconstruction.com",
+    "first": "ahmed_sabaah@chinaconstruction.com",
+    "second": "noha.saleh@chinaconstruction.com",
+    "hr": "fady_atef_atta@chinaconstruction.com"
+  },
+  "checks": [
+    {
+      "check": "Login requester",
+      "passed": true
+    },
+    {
+      "check": "Login first",
+      "passed": true
+    },
+    {
+      "check": "Login second",
+      "passed": true
+    },
+    {
+      "check": "Login hr",
+      "passed": true
+    },
+    {
+      "check": "Leave Application approve create",
+      "passed": true
+    },
+    {
+      "check": "Leave Application approve request",
+      "passed": true
+    },
+    {
+      "check": "Leave Application approve second cannot approve first stage",
+      "passed": true,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Leave Application - HR-LAP-2026-00015\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Leave Application approve requester cannot approve",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"68482b1aedca47520db10fbdab5c7e0b7afac9b61bbafadf8913e54f\\\"}\"]"
+    },
+    {
+      "check": "Leave Application approve first approves",
+      "passed": true
+    },
+    {
+      "check": "Leave Application approve first cannot approve second stage",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"1e9f99547e30c9f98049e566c8b327e054039072917606eed79ed62f\\\"}\"]"
+    },
+    {
+      "check": "Leave Application approve second approves",
+      "passed": false,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Leave Application - HR-LAP-2026-00015\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Leave Application reject_first create",
+      "passed": false,
+      "detail": "417 [\"{\\\"message\\\": \\\"Employee 360 has already applied for Annual Leave between 26-10-2026 and 26-10-2026 : <a href=\\\\\\\"https://admin.cscec.live/app/leave-application/HR-LAP-2026-00015\\\\\\\">HR-LAP-2026-00015</a>\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"9deec6b1576522e0c87d4b87fde21e3f5e0323fb77901833c990c1f0\\\"}\"]"
+    },
+    {
+      "check": "Leave Application reject_second create",
+      "passed": false,
+      "detail": "417 [\"{\\\"message\\\": \\\"Employee 360 has already applied for Annual Leave between 26-10-2026 and 26-10-2026 : <a href=\\\\\\\"https://admin.cscec.live/app/leave-application/HR-LAP-2026-00015\\\\\\\">HR-LAP-2026-00015</a>\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"4c3a0e1536155d08378175dc49794de899c3359b51f206a1874f0549\\\"}\"]"
+    },
+    {
+      "check": "Leave Application reject_hr create",
+      "passed": false,
+      "detail": "417 [\"{\\\"message\\\": \\\"Employee 360 has already applied for Annual Leave between 26-10-2026 and 26-10-2026 : <a href=\\\\\\\"https://admin.cscec.live/app/leave-application/HR-LAP-2026-00015\\\\\\\">HR-LAP-2026-00015</a>\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"5e96164c5f965de8cac91f44a6a0eb25e53fbbbe5a7f961a0282a20b\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request approve create",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request approve request",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request approve second cannot approve first stage",
+      "passed": true,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5e6f6n28ku\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request approve requester cannot approve",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"64d2209a1e6aff87d70c1c15c91b17527a53dae47ac1af110944ac94\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request approve first approves",
+      "passed": false,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>ahmed_sabaah@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5e6f6n28ku\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_first create",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_first request",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_first second cannot approve first stage",
+      "passed": true,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5enflgusgc\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_first requester cannot approve",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"405e2286c440d1f983f3753d5d894dee595333923900c9aece83fedd\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject first",
+      "passed": false,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>ahmed_sabaah@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5enflgusgc\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_second create",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_second request",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_second second cannot approve first stage",
+      "passed": true,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5f5skan3q7\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_second requester cannot approve",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"36fab7222eb25a74c046331f1b06164fa356beb57be5969c889a5317\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_second first approves",
+      "passed": false,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>ahmed_sabaah@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5f5skan3q7\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_hr create",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_hr request",
+      "passed": true
+    },
+    {
+      "check": "Business Trip Request reject_hr second cannot approve first stage",
+      "passed": true,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>noha.saleh@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5flf8ckd5g\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_hr requester cannot approve",
+      "passed": true,
+      "detail": "417 [\"{\\\"message\\\": \\\"Not a valid Workflow Action\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"884b62307c49dcc6b4472c6dd0e0745e1f75c57a11546ac8a993276c\\\"}\"]"
+    },
+    {
+      "check": "Business Trip Request reject_hr first approves",
+      "passed": false,
+      "detail": "403 [\"{\\\"message\\\": \\\"Not allowed via controller permission check<br>User <strong>ahmed_sabaah@chinaconstruction.com</strong> does not have access to this document: Business Trip Request - 5flf8ckd5g\\\", \\\"title\\\": \\\"Message\\\"}\"]"
+    }
+  ],
+  "records": [
+    {
+      "doctype": "Leave Application",
+      "name": "HR-LAP-2026-00015",
+      "scenario": "approve"
+    },
+    {
+      "doctype": "Business Trip Request",
+      "name": "5e6f6n28ku",
+      "scenario": "approve"
+    },
+    {
+      "doctype": "Business Trip Request",
+      "name": "5enflgusgc",
+      "scenario": "reject_first"
+    },
+    {
+      "doctype": "Business Trip Request",
+      "name": "5f5skan3q7",
+      "scenario": "reject_second"
+    },
+    {
+      "doctype": "Business Trip Request",
+      "name": "5flf8ckd5g",
+      "scenario": "reject_hr"
+    }
+  ]
+}

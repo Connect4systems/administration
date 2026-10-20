@@ -1,0 +1,56 @@
+[
+  {
+    "check": "Trip details immutable after requesting",
+    "passed": true,
+    "detail": {
+      "code": 417,
+      "error": "[\"{\\\"message\\\": \\\"Trip details cannot change after requesting approval.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"e7945416a0353ae7442fef285bfe34f81e021a8f7a925e9d59a07fc6\\\"}\"]"
+    }
+  },
+  {
+    "check": "Annual leave approval snapshot immutable",
+    "passed": true,
+    "detail": {
+      "code": 417,
+      "error": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"2229ec9fdab1fd351e20fd81aef28677a31a9c397339a7b82c71f063\\\"}\"]"
+    }
+  },
+  {
+    "check": "Trip approval snapshot immutable",
+    "passed": true,
+    "detail": {
+      "code": 417,
+      "error": "[\"{\\\"message\\\": \\\"The Employee and approval configuration cannot be changed. Create a new application.\\\", \\\"title\\\": \\\"Message\\\", \\\"indicator\\\": \\\"red\\\", \\\"raise_exception\\\": 1, \\\"__frappe_exc_id\\\": \\\"f4db9e5f8862400a94714293602a06412bcfdb65af89b351b93df1ff\\\"}\"]"
+    }
+  },
+  {
+    "check": "Leave Application one current-stage assignment",
+    "passed": true,
+    "detail": [
+      {
+        "allocated_to": "noha.saleh@chinaconstruction.com",
+        "status": "Open"
+      }
+    ]
+  },
+  {
+    "check": "No leave debit before final HR approval",
+    "passed": true,
+    "detail": []
+  },
+  {
+    "check": "Business Trip Request one current-stage assignment",
+    "passed": true,
+    "detail": [
+      {
+        "allocated_to": "ahmed_sabaah@chinaconstruction.com",
+        "status": "Open"
+      }
+    ]
+  },
+  {
+    "check": "No attendance before final trip approval",
+    "passed": true,
+    "detail": []
+  }
+]

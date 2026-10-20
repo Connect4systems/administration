@@ -1,0 +1,72 @@
+{
+  "Employee": [
+    {
+      "name": "299",
+      "employee_name": "Noha Mohamed Saleh Eid",
+      "user_id": "noha.saleh@chinaconstruction.com",
+      "company": "CSCEC",
+      "custom_leave_approval_level": "One Level Approval",
+      "custom_first_approval": "A-023",
+      "custom_second_approval": null,
+      "leave_approver": "zhou_zhimeng@chinaconstruction.com",
+      "custom_second_leave_approver": null
+    },
+    {
+      "name": "360",
+      "employee_name": "Essam  Mohamed  Mahmoud Ahmed",
+      "user_id": "essam_mohamed@chinaconstruction.com",
+      "company": "CSCEC",
+      "custom_leave_approval_level": "Two Level Approval",
+      "custom_first_approval": "735",
+      "custom_second_approval": "299",
+      "leave_approver": "ahmed_sabaah@chinaconstruction.com",
+      "custom_second_leave_approver": "noha.saleh@chinaconstruction.com"
+    }
+  ],
+  "Workflow": [
+    {
+      "name": "Administration Business Trip Approval",
+      "document_type": "Business Trip Request",
+      "is_active": 1
+    },
+    {
+      "name": "Administration Leave Approval",
+      "document_type": "Leave Application",
+      "is_active": 1
+    },
+    {
+      "name": "Leave Application",
+      "document_type": "Leave Application",
+      "is_active": 0
+    }
+  ],
+  "Leave Type": [
+    {
+      "name": "Compensatory Off"
+    },
+    {
+      "name": "Leave Without Pay"
+    },
+    {
+      "name": "Permission"
+    },
+    {
+      "name": "Business Trip"
+    },
+    {
+      "name": "Casual Leave"
+    },
+    {
+      "name": "Sick Leave"
+    },
+    {
+      "name": "Annual Leave"
+    }
+  ],
+  "User": [
+    {
+      "name": "test@connect4systems.com",
+      "enabled": 1
+    }
+  ]
+}

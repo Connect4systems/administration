@@ -1,0 +1,14 @@
+[
+  {
+    "action": "Submit for Approval",
+    "code": 200,
+    "state": "Pending Approval",
+    "name": "HR-LAP-2026-00016"
+  },
+  {
+    "action": "Reject",
+    "code": 200,
+    "state": "Rejected",
+    "name": "HR-LAP-2026-00016"
+  }
+]
