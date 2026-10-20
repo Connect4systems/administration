@@ -224,6 +224,10 @@ mit
 
 ### Leave approval
 
+New Business Trip Requests use `BT-{employee ID}-.##`, for example `BT-360-01`.
+The sequence increments separately for each Employee. Existing request names
+are preserved.
+
 When **Create User Permission** is checked on an Employee with a linked User,
 saving the Employee ensures default User Permissions for that Employee and its
 Company. Existing matching permissions are reused; other defaults for the same

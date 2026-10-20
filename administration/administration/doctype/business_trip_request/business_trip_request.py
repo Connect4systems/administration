@@ -7,6 +7,13 @@ from administration.leave_approval import before_cancel, sync_assignments, valid
 
 
 class BusinessTripRequest(Document):
+    def autoname(self):
+        from frappe.model.naming import make_autoname
+
+        if not self.employee:
+            frappe.throw(_("Please select an Employee before saving."))
+        self.name = make_autoname(f"BT-{self.employee}-.##", doc=self)
+
     def before_validate(self):
         validate_leave(self)
         old = self.get_doc_before_save()

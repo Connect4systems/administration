@@ -51,6 +51,15 @@ class AttendanceTests(unittest.TestCase):
             self.assertEqual(row.status, "Present")
             row.submit.assert_called_once()
 
+    def test_naming_uses_employee_specific_two_digit_series(self):
+        naming = types.ModuleType("frappe.model.naming")
+        naming.make_autoname = Mock(return_value="BT-360-01")
+        self.trip.employee = "360"
+        with patch.dict(sys.modules, {"frappe.model.naming": naming}):
+            self.trip.autoname()
+        naming.make_autoname.assert_called_once_with("BT-360-.##", doc=self.trip)
+        self.assertEqual(self.trip.name, "BT-360-01")
+
     def test_conflict_preflight_creates_nothing(self):
         self.frappe.db.exists.side_effect = [False, True]
         with self.assertRaises(ValueError):
