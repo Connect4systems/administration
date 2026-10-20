@@ -12,6 +12,7 @@ class AttendanceTests(unittest.TestCase):
     def setUp(self):
         self.frappe = types.ModuleType("frappe")
         self.frappe._ = lambda text: text
+        self.frappe.whitelist = lambda: (lambda fn: fn)
         self.frappe.throw = Mock(side_effect=ValueError("conflict"))
         self.frappe.db = types.SimpleNamespace(get_value=Mock(), exists=Mock(return_value=False))
         self.records = []

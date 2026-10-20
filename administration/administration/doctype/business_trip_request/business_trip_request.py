@@ -71,3 +71,25 @@ class BusinessTripRequest(Document):
             else:
                 frappe.delete_doc("Attendance", name, ignore_permissions=True)
         sync_assignments(self)
+
+
+@frappe.whitelist()
+def employee_details(employee):
+    """Permission-checked employee details for the unsaved request form."""
+    employee = frappe.get_doc("Employee", employee)
+    employee.check_permission("read")
+    level = employee.get("custom_leave_approval_level") or "One Level Approval"
+    first = employee.get("custom_first_approval")
+    second = employee.get("custom_second_approval")
+    return {
+        "full_name": employee.employee_name,
+        "department": employee.department,
+        "company": employee.company,
+        "custom_leave_approval_level": level,
+        "leave_approver": (
+            frappe.db.get_value("Employee", first, "user_id") if first else employee.get("leave_approver")
+        ) if level != "No Approval Required" else None,
+        "custom_second_leave_approver": (
+            frappe.db.get_value("Employee", second, "user_id") if second else employee.get("custom_second_leave_approver")
+        ) if level == "Two Level Approval" else None,
+    }
