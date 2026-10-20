@@ -128,7 +128,7 @@ def sync_assignments(doc, method=None):
                 flags={"ignore_share_permission": True})
         if not kept:
             _add({"doctype": doc.doctype, "name": doc.name, "assign_to": [target],
-                "description": _("Leave Application awaiting your approval")}, ignore_permissions=True)
+                "description": _("{0} awaiting your approval").format(doc.doctype)}, ignore_permissions=True)
 
 
 def pending_conditions(user):
@@ -143,13 +143,13 @@ def pending_conditions(user):
     return "docstatus=0 AND (" + " OR ".join(parts or ["1=0"]) + ")"
 
 
-def permission_query(user=None):
+def permission_query(user=None, document_type="Leave Application"):
     user = user or frappe.session.user
     roles = frappe.get_roles(user)
     if user == "Administrator" or set(roles) & {"System Manager", "HR Manager", "HR User", "HR Leave Approver"}:
         return ""
     quoted = frappe.db.escape(user)
-    return (f"(`tabLeave Application`.owner={quoted} OR `tabLeave Application`.employee IN "
+    return (f"(`tab{document_type}`.owner={quoted} OR `tab{document_type}`.employee IN "
         f"(SELECT name FROM `tabEmployee` WHERE user_id={quoted}) OR (" + pending_conditions(user) + "))")
 
 

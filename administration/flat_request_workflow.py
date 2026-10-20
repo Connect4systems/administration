@@ -48,8 +48,8 @@ _APPROVAL_TOKEN = object()
 @frappe.whitelist()
 def apply_workflow(doc, action):
 	payload = frappe.parse_json(doc) if isinstance(doc, str) else doc
-	if payload.get("doctype") == "Leave Application":
-		current = frappe.get_doc("Leave Application", payload.get("name"), for_update=True)
+	if payload.get("doctype") in ("Leave Application", "Business Trip Request"):
+		current = frappe.get_doc(payload["doctype"], payload.get("name"), for_update=True)
 		current.check_permission("read")
 		if str(payload.get("modified")) != str(current.modified):
 			frappe.throw(_("This request has changed. Reload it before taking a workflow action."))

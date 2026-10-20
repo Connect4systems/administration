@@ -79,45 +79,8 @@ def setup():
             for permission in ("submit", "cancel"):
                 update_permission_property("Leave Application", role, 0, permission, 1)
 
-    states = [("Open", 0, "Employee"), ("Pending Approval", 0, "Leave Approver"),
-        ("Pending Management Approval", 0, "Leave Approver"), ("Pending HR Approval", 0, "HR Leave Approver"),
-        ("Approved", 1, "HR Leave Approver"), ("Rejected", 0, "HR Leave Approver"),
-        ("Cancelled", 2, "HR Leave Approver")]
-    first = "doc.leave_approver == frappe.session.user"
-    second = 'doc.custom_second_leave_approver == frappe.session.user and doc.custom_leave_approval_level == "Two Level Approval"'
-    applicant = "(doc.owner == frappe.session.user or frappe.db.get_value('Employee', doc.employee, 'user_id') == frappe.session.user)"
-    transitions = [
-        ("Open", "Submit for Approval", "Pending Approval", "Employee", applicant + ' and doc.custom_leave_approval_level in ("One Level Approval", "Two Level Approval")'),
-        ("Open", "Submit for Approval", "Pending HR Approval", "Employee", applicant + ' and doc.custom_leave_approval_level == "No Approval Required"'),
-        ("Pending Approval", "Approve", "Pending HR Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "One Level Approval"'),
-        ("Pending Approval", "Approve", "Pending Management Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "Two Level Approval"'),
-        ("Pending Approval", "Reject", "Rejected", "Leave Approver", first),
-        ("Pending Management Approval", "Approve", "Pending HR Approval", "Leave Approver", second),
-        ("Pending Management Approval", "Reject", "Rejected", "Leave Approver", second),
-        ("Pending HR Approval", "Approve", "Approved", "HR Leave Approver", ""),
-        ("Pending HR Approval", "Reject", "Rejected", "HR Leave Approver", ""),
-        ("Approved", "Cancel", "Cancelled", "HR Leave Approver", ""),
-    ]
-    for state, _, _ in states:
-        if not frappe.db.exists("Workflow State", state):
-            frappe.get_doc({"doctype": "Workflow State", "workflow_state_name": state}).insert(ignore_permissions=True)
-    for action in {row[1] for row in transitions}:
-        if not frappe.db.exists("Workflow Action Master", action):
-            frappe.get_doc({"doctype": "Workflow Action Master", "workflow_action_name": action}).insert(ignore_permissions=True)
     backfill()
-    name = "Administration Leave Approval"
-    for existing in frappe.get_all("Workflow", filters={"document_type": "Leave Application", "is_active": 1}, pluck="name"):
-        if existing != name:
-            frappe.db.set_value("Workflow", existing, "is_active", 0)
-    workflow = frappe.get_doc("Workflow", name) if frappe.db.exists("Workflow", name) else frappe.new_doc("Workflow")
-    workflow.update({"workflow_name": name, "document_type": "Leave Application", "is_active": 1,
-        "workflow_state_field": "workflow_state", "send_email_alert": 0,
-        "states": [{"state": state, "doc_status": str(status), "allow_edit": role,
-            "update_field": "status", "update_value": state if state in ("Approved", "Rejected", "Cancelled") else "Open"}
-            for state, status, role in states],
-        "transitions": [{"state": state, "action": action, "next_state": target, "allowed": role,
-            "condition": condition, "allow_self_approval": 1} for state, action, target, role, condition in transitions]})
-    workflow.save(ignore_permissions=True)
+    setup_approval_workflow("Leave Application")
     from administration.leave_approval import sync_assignments
     for name in frappe.get_all("Leave Application", pluck="name"):
         sync_assignments(frappe.get_doc("Leave Application", name))
@@ -181,3 +144,45 @@ def backfill():
                 else "Rejected" if doc.status == "Rejected" else "Pending Approval" if doc.workflow_state == "Pending" else "Open")
         if values:
             frappe.db.set_value("Leave Application", doc.name, values, update_modified=False)
+
+
+def setup_approval_workflow(document_type):
+    """Keep leave and business trip approval routes identical."""
+    states = [("Open", 0, "Employee"), ("Pending Approval", 0, "Leave Approver"),
+        ("Pending Management Approval", 0, "Leave Approver"), ("Pending HR Approval", 0, "HR Leave Approver"),
+        ("Approved", 1, "HR Leave Approver"), ("Rejected", 0, "HR Leave Approver"),
+        ("Cancelled", 2, "HR Leave Approver")]
+    first = "doc.leave_approver == frappe.session.user"
+    second = 'doc.custom_second_leave_approver == frappe.session.user and doc.custom_leave_approval_level == "Two Level Approval"'
+    applicant = "(doc.owner == frappe.session.user or frappe.db.get_value('Employee', doc.employee, 'user_id') == frappe.session.user)"
+    transitions = [
+        ("Open", "Submit for Approval", "Pending Approval", "Employee", applicant + ' and doc.custom_leave_approval_level in ("One Level Approval", "Two Level Approval")'),
+        ("Open", "Submit for Approval", "Pending HR Approval", "Employee", applicant + ' and doc.custom_leave_approval_level == "No Approval Required"'),
+        ("Pending Approval", "Approve", "Pending HR Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "One Level Approval"'),
+        ("Pending Approval", "Approve", "Pending Management Approval", "Leave Approver", first + ' and doc.custom_leave_approval_level == "Two Level Approval"'),
+        ("Pending Approval", "Reject", "Rejected", "Leave Approver", first),
+        ("Pending Management Approval", "Approve", "Pending HR Approval", "Leave Approver", second),
+        ("Pending Management Approval", "Reject", "Rejected", "Leave Approver", second),
+        ("Pending HR Approval", "Approve", "Approved", "HR Leave Approver", ""),
+        ("Pending HR Approval", "Reject", "Rejected", "HR Leave Approver", ""),
+        ("Approved", "Cancel", "Cancelled", "HR Leave Approver", ""),
+    ]
+    for state, _, _ in states:
+        if not frappe.db.exists("Workflow State", state):
+            frappe.get_doc({"doctype": "Workflow State", "workflow_state_name": state}).insert(ignore_permissions=True)
+    for action in {row[1] for row in transitions}:
+        if not frappe.db.exists("Workflow Action Master", action):
+            frappe.get_doc({"doctype": "Workflow Action Master", "workflow_action_name": action}).insert(ignore_permissions=True)
+    name = "Administration Leave Approval" if document_type == "Leave Application" else "Administration Business Trip Approval"
+    for existing in frappe.get_all("Workflow", filters={"document_type": document_type, "is_active": 1}, pluck="name"):
+        if existing != name:
+            frappe.db.set_value("Workflow", existing, "is_active", 0)
+    workflow = frappe.get_doc("Workflow", name) if frappe.db.exists("Workflow", name) else frappe.new_doc("Workflow")
+    workflow.update({"workflow_name": name, "document_type": document_type, "is_active": 1,
+        "workflow_state_field": "workflow_state", "send_email_alert": 0,
+        "states": [{"state": state, "doc_status": str(status), "allow_edit": role,
+            "update_field": "status", "update_value": state if state in ("Approved", "Rejected", "Cancelled") else "Open"}
+            for state, status, role in states],
+        "transitions": [{"state": state, "action": action, "next_state": target, "allowed": role,
+            "condition": condition, "allow_self_approval": 1} for state, action, target, role, condition in transitions]})
+    workflow.save(ignore_permissions=True)

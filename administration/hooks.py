@@ -105,6 +105,7 @@ after_install = [
     "administration.flat_request_layout.ensure_flat_contract_request_approval_layout",
     "administration.flat_lifecycle_setup.install",
     "administration.leave_approval_setup.setup",
+    "administration.business_trip_setup.setup",
     "administration.employee_user_permissions.setup_user_manager_permissions",
     "administration.system_email.setup_system_sender",
 ]
@@ -113,6 +114,7 @@ after_migrate = [
     "administration.employee_user_permissions.setup_user_manager_permissions",
     "administration.flat_lifecycle_setup.allow_submitted_flat_contents",
     "administration.leave_approval_setup.setup",
+    "administration.business_trip_setup.setup",
 	"administration.flat_lifecycle_setup.repair_termination_permissions",
     "administration.travel_request.setup_document_approval",
     "administration.legal_document_status.update_statuses",
@@ -386,5 +388,11 @@ fixtures = [
     {"dt": "Custom DocPerm", "filters": [["role", "=", "User Manager"]]},
 ]
 
-permission_query_conditions = {"Leave Application": "administration.leave_approval.permission_query"}
-has_permission = {"Leave Application": "administration.leave_approval.has_permission"}
+permission_query_conditions = {
+    "Leave Application": "administration.leave_approval.permission_query",
+    "Business Trip Request": "administration.business_trip_setup.permission_query",
+}
+has_permission = {
+    "Leave Application": "administration.leave_approval.has_permission",
+    "Business Trip Request": "administration.leave_approval.has_permission",
+}
