@@ -67,6 +67,20 @@ class EmployeeAccessTests(unittest.TestCase):
             self.access.provision_employee_user_access(self.employee(user_id=user))
         self.frappe.get_doc.assert_not_called()
 
+    def test_default_permission_sync_does_not_reapply_roles_or_project_access(self):
+        with patch.object(self.access, "ensure_permission") as ensure:
+            self.access.ensure_employee_default_permissions(self.employee())
+        self.assertEqual([call.args[1] for call in ensure.call_args_list], ["Employee", "Company"])
+        self.assertTrue(all(call.kwargs == {"is_default": True} for call in ensure.call_args_list))
+        self.frappe.get_doc.assert_not_called()
+
+    def test_default_permission_sync_respects_opt_out_and_missing_user(self):
+        with patch.object(self.access, "ensure_permission") as ensure:
+            for values in ({"create_user_permission": 0}, {"user_id": None},
+                           {"user_id": "Administrator"}, {"user_id": "Guest"}):
+                self.access.ensure_employee_default_permissions(self.employee(**values))
+        ensure.assert_not_called()
+
     def test_permission_creation_applies_to_all_doctypes(self):
         self.frappe.db.exists.return_value = None
         self.access.ensure_permission("user", "Project", "HQ")
@@ -221,7 +235,11 @@ class EmployeeAccessTests(unittest.TestCase):
         user.module_profile = "Manager Profile"
         user.block_modules = [{"module": "Administration"}]
         employee.update_user()
-        employee.update_user_permissions()
+        with patch.dict(sys.modules, {"administration.employee_user_permissions": self.access}), patch.object(
+            self.access, "ensure_employee_default_permissions"
+        ) as defaults:
+            employee.update_user_permissions()
+        defaults.assert_called_once_with(employee)
         self.assertEqual(user.roles, [])
         self.assertEqual(user.module_profile, "Manager Profile")
         self.assertEqual(user.block_modules, [{"module": "Administration"}])

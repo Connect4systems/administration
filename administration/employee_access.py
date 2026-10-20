@@ -6,8 +6,9 @@ from erpnext.setup.doctype.employee.employee import Employee
 
 class AdministrationEmployee(Employee):
     def update_user_permissions(self):
-        # Initial permissions are provisioned by the create_user wrapper only.
-        return
+        from administration.employee_user_permissions import ensure_employee_default_permissions
+
+        ensure_employee_default_permissions(self)
 
     def update_user(self):
         # Preserve profile synchronization and grant baseline roles only on a new link.

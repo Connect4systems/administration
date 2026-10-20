@@ -224,6 +224,14 @@ mit
 
 ### Leave approval
 
+When **Create User Permission** is checked on an Employee with a linked User,
+saving the Employee ensures default User Permissions for that Employee and its
+Company. Existing matching permissions are reused; other defaults for the same
+User and permission type are cleared without removing their access. This does
+not reapply roles, module settings or Project permissions on ordinary saves.
+Migration repairs these defaults for existing opted-in employees. Ambiguous
+users linked to multiple opted-in employees are logged for manual selection.
+
 The app installs **Administration Leave Approval** on install and after each migrate.
 Employee approval settings appear in Attendance & Leaves. First and second approver
 users are derived from their Employee records, and each Leave Application keeps its

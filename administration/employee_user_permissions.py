@@ -1,4 +1,4 @@
-"""Set initial access only when creating a User from Employee."""
+"""Provision new users and maintain opted-in Employee and Company defaults."""
 
 import frappe
 
@@ -71,10 +71,16 @@ def provision_employee_user_access(doc):
 
     if doc.get("custom_project"):
         ensure_permission(user, "Project", doc.custom_project)
-    if doc.get("create_user_permission"):
-        ensure_permission(user, "Employee", doc.name, is_default=True)
-        if doc.get("company"):
-            ensure_permission(user, "Company", doc.company, is_default=True)
+    ensure_employee_default_permissions(doc)
+
+
+def ensure_employee_default_permissions(doc):
+    user = doc.get("user_id")
+    if not doc.get("create_user_permission") or not user or user in ("Administrator", "Guest"):
+        return
+    ensure_permission(user, "Employee", doc.name, is_default=True)
+    if doc.get("company"):
+        ensure_permission(user, "Company", doc.company, is_default=True)
 
 
 def ensure_permission(user, allow, value, is_default=False):
