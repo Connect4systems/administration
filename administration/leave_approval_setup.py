@@ -59,6 +59,12 @@ def setup():
         make_property_setter(dt, "leave_approver", "read_only", 1, "Check")
         make_property_setter(dt, "leave_approver", "reqd", 0, "Check")
         make_property_setter(dt, "leave_approver", "depends_on", approval, "Data")
+    # Approvers are routing references. A requester restricted to their own
+    # Employee must not also need User Permission for their manager's Employee.
+    # The Employee record's own access checks remain in force.
+    for field in ("custom_first_approval", "custom_second_approval",
+                  "leave_approver", "custom_second_leave_approver"):
+        make_property_setter("Employee", field, "ignore_user_permissions", 1, "Check")
     make_property_setter("Employee", "leave_approver", "insert_after", "custom_first_approval", "Data")
     order = [f.fieldname for f in frappe.get_meta("Employee").fields]
     approval_fields = ["custom_leave_approval_level", "custom_first_approval", "leave_approver",
