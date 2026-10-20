@@ -9,6 +9,14 @@ from administration.leave_approval import before_cancel, sync_assignments, valid
 class BusinessTripRequest(Document):
     def before_validate(self):
         validate_leave(self)
+        old = self.get_doc_before_save()
+        if not old or old.get("workflow_state") == "Open":
+            employee = frappe.db.get_value(
+                "Employee", self.employee, ["employee_name", "department", "company"], as_dict=True
+            ) if self.employee else None
+            self.full_name = employee.get("employee_name") if employee else None
+            self.department = employee.get("department") if employee else None
+            self.company = employee.get("company") if employee else None
 
     def validate(self):
         if not self.employee or not self.from_date or not self.to_date:

@@ -70,7 +70,9 @@
    "fetch_from": "employee.employee_name",
    "fieldname": "full_name",
    "fieldtype": "Data",
-   "label": "Full Name"
+   "label": "Full Name",
+   "read_only": 1,
+   "fetch_if_empty": 0
   },
   {
    "default": "Today",
@@ -82,7 +84,10 @@
    "fieldname": "department",
    "fieldtype": "Link",
    "label": "Department",
-   "options": "Department"
+   "options": "Department",
+   "fetch_from": "employee.department",
+   "read_only": 1,
+   "fetch_if_empty": 0
   },
   {
    "fieldname": "dates_and_reason_section",
@@ -116,7 +121,9 @@
    "fieldtype": "Link",
    "options": "Company",
    "reqd": 1,
-   "fetch_from": "employee.company"
+   "fetch_from": "employee.company",
+   "read_only": 1,
+   "fetch_if_empty": 0
   },
   {
    "fieldname": "approval_section",

@@ -61,7 +61,14 @@ def validate_leave(doc, method=None):
             or frappe.defaults.get_user_default("Company")
         )
     old = doc.get_doc_before_save()
-    if not old:
+    legacy_trip = bool(
+        old and doc.doctype == "Business Trip Request"
+        and old.get("workflow_state") == "Open" and not old.docstatus
+        and not old.get("custom_leave_approval_level")
+    )
+    if legacy_trip and doc.employee != old.employee:
+        frappe.throw(_("The Employee cannot be changed. Create a new application."))
+    if not old or legacy_trip:
         employee = frappe.get_doc("Employee", doc.employee)
         validate_employee(employee)
         for field in SNAPSHOT:

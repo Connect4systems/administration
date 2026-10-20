@@ -219,6 +219,27 @@ class PolicyTests(unittest.TestCase):
             self.policy.sync_assignments(doc)
             self.assertFalse(any(call[0] == "add" for call in calls))
 
+    def test_legacy_trip_initializes_snapshot_after_employee_is_configured(self):
+        old = self.document("Open")
+        old.doctype = "Business Trip Request"
+        old.custom_leave_approval_level = None
+        old.leave_approver = None
+        employee = Doc(custom_first_approval="FIRST", custom_leave_approval_level=self.policy.ONE)
+        self.frappe.get_doc = lambda dt, name: employee
+        saved = self.transition(old, "Open")
+        self.assertEqual(saved.leave_approver, "first")
+        self.assertEqual(saved.custom_leave_approval_level, self.policy.ONE)
+        self.frappe.session.user = "employee"
+        self.assertEqual(self.transition(saved, "Pending Approval").workflow_state, "Pending Approval")
+
+    def test_legacy_trip_still_rejects_incomplete_employee_settings(self):
+        old = self.document("Open")
+        old.doctype = "Business Trip Request"
+        old.custom_leave_approval_level = None
+        self.frappe.get_doc = lambda dt, name: Doc(custom_leave_approval_level=self.policy.ONE)
+        with self.assertRaisesRegex(ValueError, "First Approval is required"):
+            self.transition(old, "Open")
+
     def test_pending_scope(self):
         self.assertIn("leave_approver='first'", self.policy.pending_conditions("first"))
         self.assertNotIn("workflow_state='Pending HR Approval'", self.policy.pending_conditions("first"))

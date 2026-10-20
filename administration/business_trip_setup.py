@@ -1,7 +1,6 @@
 """Business trips share the employee leave approval policy."""
 import frappe
 
-from administration.leave_approval import SNAPSHOT, validate_employee
 from administration.leave_approval import permission_query as leave_permission_query
 from administration.leave_approval_setup import setup_approval_workflow
 
@@ -25,12 +24,10 @@ def setup():
             if row.docstatus == 1:
                 frappe.throw("Resolve legacy submitted Business Trip Request " + row.name +
                     " through normal cancellation before enabling the approval workflow.")
-            trip = frappe.get_doc("Business Trip Request", row.name)
+            # Legacy drafts acquire a validated approval snapshot on their next
+            # save. Incomplete Employee settings must not block site migration.
             values = {}
-            if row.docstatus == 0:
-                employee = frappe.get_doc("Employee", trip.employee)
-                validate_employee(employee)
-                values.update({field: employee.get(field) for field in SNAPSHOT})
+            values.update({field: employee.get(field) for field in SNAPSHOT})
                 values["company"] = trip.company or employee.company
             values.update({
                 "workflow_state": "Cancelled" if row.docstatus == 2 else "Open",
