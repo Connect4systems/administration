@@ -383,7 +383,9 @@ doctype_js = {
 
 
 fixtures = [
-    "Custom Field", "Property Setter", "DocType Link", "Web Form",
+    # Loan is optional and is not available on all administration sites.
+    {"dt": "Custom Field", "filters": [["dt", "!=", "Loan"]]},
+    "Property Setter", "DocType Link", "Web Form",
     {"dt": "Role", "filters": [["name", "=", "User Manager"]]},
     {"dt": "Custom DocPerm", "filters": [["role", "=", "User Manager"]]},
 ]
