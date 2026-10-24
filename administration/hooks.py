@@ -383,8 +383,8 @@ doctype_js = {
 
 
 fixtures = [
-    # Exclude optional Loan DocTypes that are unavailable on administration sites.
-    {"dt": "Custom Field", "filters": [["dt", "not in", ["Loan", "Loan Disbursement", "Loan Interest Accrual", "Loan Demand", "Loan Repayment", "Loan Refund"]]]},
+    # Exclude optional DocTypes that are unavailable on administration sites.
+    {"dt": "Custom Field", "filters": [["dt", "not in", ["Loan", "Loan Disbursement", "Loan Interest Accrual", "Loan Demand", "Loan Repayment", "Loan Refund", "Wages"]]]},
     "Property Setter", "DocType Link", "Web Form",
     {"dt": "Role", "filters": [["name", "=", "User Manager"]]},
     {"dt": "Custom DocPerm", "filters": [["role", "=", "User Manager"]]},
