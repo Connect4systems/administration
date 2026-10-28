@@ -14,19 +14,24 @@ bench install-app administration
 
 ### Accounting employee selection
 
-Accounts User can select any active Employee as a party in Journal Entry and
-General Ledger even when Employee User Permissions limit their employee access.
-The accounting lookup returns only employee IDs and names and requires access to
-the relevant accounting screen. Existing Employee permissions remain unchanged.
-Other party types retain their standard queries.
+Accounts User can select active Employees in document Employee link fields and
+Employee party fields even when Employee User Permissions limit employee access.
+Document load/save/method operations and ERPNext accounting lookups receive an
+expanded Employee permission list in the request-local cache. This also supports
+the party balance lookup after selecting an Employee in Journal Entry. Existing
+role checks, Company and Project restrictions still apply. Stored User Permissions
+and the shared Redis cache are unchanged. Direct Employee list, form and read/write
+requests keep their normal permissions. Other roles and party types are unchanged.
 
 The General Ledger selector is appended by the report script endpoint after the
 standard report definition loads. Journal Entry uses its doctype script hook.
 After deploying, run `bench build --app administration` and
 `bench --site <site> clear-cache`, restart Bench, and hard-refresh Desk.
-Validate with an Accounts User restricted to one Employee: both accounting party
-selectors should find another active Employee, exclude inactive Employees, and
-leave Employee list/form access restricted as before.
+Validate with an Accounts User restricted to one Employee: document selectors
+should find another active Employee and exclude inactive Employees. Select that
+Employee in Journal Entry, check the balance lookup and save a valid entry. Also
+check another document's Employee link, confirm Company/Project restrictions still
+apply, and verify Employee list/form access remains restricted.
 
 ### Legal document status
 

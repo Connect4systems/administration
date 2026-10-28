@@ -322,6 +322,7 @@ override_whitelisted_methods = {
 # Request Events
 # ----------------
 # before_request = ["administration.utils.before_request"]
+before_request = ["administration.employee_selection_access.allow_employee_selection"]
 # after_request = ["administration.utils.after_request"]
 
 # Job Events
