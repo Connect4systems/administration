@@ -12,6 +12,20 @@ bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app administration
 ```
 
+### Accounting employee selection
+
+Accounts User can select any active Employee as a party in Journal Entry and
+General Ledger even when Employee User Permissions limit their employee access.
+The accounting lookup returns only employee IDs and names and requires access to
+the relevant accounting screen. Existing Employee permissions remain unchanged.
+Other party types retain their standard queries.
+
+After deploying, run `bench build --app administration` and
+`bench --site <site> clear-cache`, restart Bench, and hard-refresh Desk.
+Validate with an Accounts User restricted to one Employee: both accounting party
+selectors should find another active Employee, exclude inactive Employees, and
+leave Employee list/form access restricted as before.
+
 ### Legal document status
 
 Legal documents use the last row of the legal Document table to calculate Status.

@@ -27,6 +27,7 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/administration/css/administration.css"
 app_include_js = [
+    "/assets/administration/js/accounting_employee_selection.js",
     "/assets/administration/js/document_approval.js?v=20261013-flat-actions",
     "/assets/administration/js/flat_transaction_buttons.js?v=20261013-2",
 ]
@@ -370,6 +371,7 @@ override_whitelisted_methods = {
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "Journal Entry": "public/js/journal_entry_employee_selection.js",
     "Flat": "public/js/flat_transaction_buttons.js",
     "Flat Contract": "public/js/flat_transaction_buttons.js",
     "Add Flat to Contract": "public/js/flat_transaction_buttons.js",
