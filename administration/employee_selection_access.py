@@ -14,11 +14,15 @@ def get_document(doctype, name=None, filters=None, parent=None):
     selector. Employee form loading and all Employee writes remain unchanged.
     """
     from frappe.client import get as standard_get
+    from frappe.permissions import has_permission
 
     if doctype != "Employee" or not name or "Accounts User" not in frappe.get_roles():
         return standard_get(doctype, name=name, filters=filters, parent=parent)
     doc = frappe.get_doc("Employee", str(name))
-    if doc.has_permission("read") or doc.get("status") != "Active":
+    # Document.has_permission logs a user-facing denial even when it merely
+    # returns False. This is a capability probe; the select check below remains
+    # authoritative and must still report real failures.
+    if has_permission("Employee", "read", doc=doc, raise_exception=False) or doc.get("status") != "Active":
         return standard_get(doctype, name=name, filters=filters, parent=parent)
 
     from frappe.core.doctype.user_permission.user_permission import get_user_permissions

@@ -24,6 +24,7 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
                          "Company": [{"doc": "Allowed Company"}],
                          "Project": [{"doc": "Allowed Project"}]}
         self.permission_api = Mock()
+        self.silent_read = Mock(return_value=False)
         self.permission_api.get_user_permissions.return_value = self.original
         spec = importlib.util.spec_from_file_location(
             "employee_selection_access_test",
@@ -34,6 +35,7 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
             "frappe": self.frappe,
             "frappe.core.doctype.user_permission.user_permission": self.permission_api,
             "frappe.client": types.SimpleNamespace(get=Mock(return_value={"standard": True})),
+            "frappe.permissions": types.SimpleNamespace(has_permission=self.silent_read),
         })
         self.patches.start()
         self.addCleanup(self.patches.stop)
@@ -121,6 +123,7 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
         doc = self.frappe.get_doc.return_value
         doc.get.side_effect = values.get
         doc.has_permission.return_value = can_read
+        self.silent_read.return_value = can_read
         return doc
 
     def test_restricted_employee_get_returns_only_selection_fields(self):
@@ -135,6 +138,8 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
         result = self.module.get_document("Employee", name="EMP-002")
         self.assertEqual(set(result), {"doctype", "name", "employee_name", "company", "status"})
         self.assertIs(self.frappe.local.cache[b"site|user_permissions"]["account@example.com"], self.original)
+        self.silent_read.assert_called_once_with("Employee", "read", doc=doc, raise_exception=False)
+        doc.has_permission.assert_not_called()
         sys.modules["frappe.client"].get.assert_not_called()
 
     def test_identity_lookup_denied_by_other_permissions_restores_cache(self):
