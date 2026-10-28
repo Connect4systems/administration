@@ -22,6 +22,8 @@ the party balance lookup after selecting an Employee in Journal Entry. Existing
 role checks, Company and Project restrictions still apply. Stored User Permissions
 and the shared Redis cache are unchanged. Direct Employee list, form and read/write
 requests keep their normal permissions. Other roles and party types are unchanged.
+The access hook runs after authentication and resolves RPC methods from the URL;
+Frappe has not yet set `form_dict.cmd` when request/authentication hooks run.
 
 The General Ledger selector is appended by the report script endpoint after the
 standard report definition loads. Journal Entry uses its doctype script hook.

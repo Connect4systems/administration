@@ -12,7 +12,7 @@ from unittest.mock import Mock, patch
 class EmployeeSelectionAccessTests(unittest.TestCase):
     def setUp(self):
         self.frappe = Mock()
-        self.frappe.local = types.SimpleNamespace(form_dict={}, cache={})
+        self.frappe.local = types.SimpleNamespace(form_dict={}, cache={}, request=types.SimpleNamespace(path="/"))
         self.frappe.session.user = "account@example.com"
         self.frappe.get_roles.return_value = ["Accounts User"]
         self.frappe.get_meta.return_value.istable = False
@@ -93,3 +93,22 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
             "doctype": "Employee Education", "parenttype": "Employee", "parent": "EMP-002",
         }))
         self.frappe.get_all.assert_not_called()
+
+    def test_browser_balance_rpc_has_no_cmd_before_dispatch(self):
+        self.frappe.local.request.path = "/api/method/erpnext.accounts.utils.get_balance_on"
+        self.frappe.local.form_dict = {"party_type": "Employee", "party": "EMP-002"}
+        self.module.allow_employee_selection()
+        cached = self.frappe.local.cache.get(b"site|user_permissions", {}).get("account@example.com")
+        self.assertIsNotNone(cached)
+        self.assertIn("EMP-002", [row["doc"] for row in cached["Employee"]])
+
+    def test_api_path_overrides_a_conflicting_payload_command(self):
+        self.frappe.local.request.path = "/api/method/frappe.client.get"
+        self.assertIsNone(self.run_request("erpnext.accounts.utils.get_balance_on", doctype="Employee"))
+        self.frappe.get_all.assert_not_called()
+
+    def test_versioned_rpc_search_has_no_cmd_before_dispatch(self):
+        self.frappe.local.request.path = "/api/v1/method/frappe.desk.search.search_link"
+        self.frappe.local.form_dict = {"doctype": "Employee"}
+        self.module.allow_employee_selection()
+        self.assertEqual(self.frappe.local.form_dict.get("filters"), {"status": "Active"})

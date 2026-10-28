@@ -322,7 +322,6 @@ override_whitelisted_methods = {
 # Request Events
 # ----------------
 # before_request = ["administration.utils.before_request"]
-before_request = ["administration.employee_selection_access.allow_employee_selection"]
 # after_request = ["administration.utils.after_request"]
 
 # Job Events
@@ -360,6 +359,7 @@ before_request = ["administration.employee_selection_access.allow_employee_selec
 # auth_hooks = [
 # 	"administration.auth.validate"
 # ]
+auth_hooks = ["administration.employee_selection_access.allow_employee_selection"]
 
 # Automatically update python controller files with type annotations for this app.
 # export_python_type_annotations = True

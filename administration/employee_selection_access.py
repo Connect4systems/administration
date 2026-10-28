@@ -31,6 +31,18 @@ def _document_type(args):
     return document.get("doctype") if isinstance(document, dict) else None
 
 
+def _request_command(args):
+    # API dispatch sets form_dict.cmd only AFTER request/auth hooks have run.
+    # Match the v1 router, including its legacy trailing-path handling. The URL
+    # wins over a payload cmd, since the dispatcher also overwrites that value.
+    request = getattr(frappe.local, "request", None)
+    path = getattr(request, "path", "") if request else ""
+    for prefix in ("/api/method/", "/api/v1/method/"):
+        if path.startswith(prefix):
+            return path[len(prefix):].split("/", 1)[0]
+    return args.get("cmd") or ""
+
+
 def allow_employee_selection():
     """Expand only this request's cached Employee permissions for document use.
 
@@ -39,7 +51,7 @@ def allow_employee_selection():
     All standard role checks and other User Permission rules still run.
     """
     args = frappe.local.form_dict
-    command = args.get("cmd", "")
+    command = _request_command(args)
     searching = command in SEARCH_METHODS and args.get("doctype") == "Employee"
     document_operation = command in DOCUMENT_METHODS
     accounting_operation = command.startswith("erpnext.accounts.")
