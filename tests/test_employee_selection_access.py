@@ -12,6 +12,7 @@ from unittest.mock import Mock, patch
 class EmployeeSelectionAccessTests(unittest.TestCase):
     def setUp(self):
         self.frappe = Mock()
+        self.frappe.whitelist.return_value = lambda function: function
         self.frappe.local = types.SimpleNamespace(form_dict={}, cache={}, request=types.SimpleNamespace(path="/"))
         self.frappe.session.user = "account@example.com"
         self.frappe.get_roles.return_value = ["Accounts User"]
@@ -32,6 +33,7 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
         self.patches = patch.dict(sys.modules, {
             "frappe": self.frappe,
             "frappe.core.doctype.user_permission.user_permission": self.permission_api,
+            "frappe.client": types.SimpleNamespace(get=Mock(return_value={"standard": True})),
         })
         self.patches.start()
         self.addCleanup(self.patches.stop)
@@ -112,3 +114,47 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
         self.frappe.local.form_dict = {"doctype": "Employee"}
         self.module.allow_employee_selection()
         self.assertEqual(self.frappe.local.form_dict.get("filters"), {"status": "Active"})
+
+    def employee_document(self, can_read=False, status="Active"):
+        values = {"name": "EMP-002", "employee_name": "Other Employee", "company": "Allowed Company",
+                  "status": status, "bank_ac_no": "private", "salary": "private"}
+        doc = self.frappe.get_doc.return_value
+        doc.get.side_effect = values.get
+        doc.has_permission.return_value = can_read
+        return doc
+
+    def test_restricted_employee_get_returns_only_selection_fields(self):
+        doc = self.employee_document()
+        self.frappe.local.cache[b"site|user_permissions"] = {"account@example.com": self.original}
+        def check_scope(permission):
+            self.assertEqual(permission, "select")
+            scoped = self.frappe.local.cache[b"site|user_permissions"]["account@example.com"]
+            self.assertNotIn("Employee", scoped)
+            self.assertEqual(scoped["Company"], self.original["Company"])
+        doc.check_permission.side_effect = check_scope
+        result = self.module.get_document("Employee", name="EMP-002")
+        self.assertEqual(set(result), {"doctype", "name", "employee_name", "company", "status"})
+        self.assertIs(self.frappe.local.cache[b"site|user_permissions"]["account@example.com"], self.original)
+        sys.modules["frappe.client"].get.assert_not_called()
+
+    def test_identity_lookup_denied_by_other_permissions_restores_cache(self):
+        doc = self.employee_document()
+        doc.check_permission.side_effect = PermissionError("Company restriction")
+        with self.assertRaises(PermissionError):
+            self.module.get_document("Employee", name="EMP-002")
+        self.assertNotIn("account@example.com", self.frappe.local.cache[b"site|user_permissions"])
+
+    def test_permitted_reads_keep_standard_field_filtering(self):
+        self.employee_document(can_read=True)
+        self.assertEqual(self.module.get_document("Employee", name="EMP-002"), {"standard": True})
+
+    def test_inactive_employee_reads_are_not_expanded(self):
+        self.employee_document(status="Left")
+        self.assertEqual(self.module.get_document("Employee", name="EMP-002"), {"standard": True})
+        self.permission_api.get_user_permissions.assert_not_called()
+
+    def test_other_roles_and_doctypes_keep_standard_document_reads(self):
+        self.frappe.get_roles.return_value = ["Employee"]
+        self.assertEqual(self.module.get_document("Employee", name="EMP-002"), {"standard": True})
+        self.assertEqual(self.module.get_document("Journal Entry", name="JV-001"), {"standard": True})
+        self.frappe.get_doc.assert_not_called()

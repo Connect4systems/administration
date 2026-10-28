@@ -22,6 +22,11 @@ the party balance lookup after selecting an Employee in Journal Entry. Existing
 role checks, Company and Project restrictions still apply. Stored User Permissions
 and the shared Redis cache are unchanged. Direct Employee list, form and read/write
 requests keep their normal permissions. Other roles and party types are unchanged.
+Some client scripts call `frappe.client.get` for the selected Employee. When an
+Accounts User cannot read that active Employee, this endpoint returns only
+`doctype`, `name`, `employee_name`, `company`, and `status`, after checking Select
+permission and the remaining user restrictions. It does not expose HR details or
+grant Employee form access. Existing permitted full reads are unchanged.
 The access hook runs after authentication and resolves RPC methods from the URL;
 Frappe has not yet set `form_dict.cmd` when request/authentication hooks run.
 

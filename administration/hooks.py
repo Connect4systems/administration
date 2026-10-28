@@ -294,6 +294,7 @@ scheduler_events = {"daily": [
 # ------------------------------
 #
 override_whitelisted_methods = {
+    "frappe.client.get": "administration.employee_selection_access.get_document",
     "frappe.desk.query_report.get_script": "administration.accounting_employee_selection.get_report_script",
     "frappe.model.workflow.apply_workflow": "administration.flat_request_workflow.apply_workflow",
     "erpnext.setup.doctype.employee.employee.create_user": "administration.employee_user_permissions.create_user",

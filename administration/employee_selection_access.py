@@ -5,6 +5,47 @@ from copy import deepcopy
 import frappe
 
 
+@frappe.whitelist()
+def get_document(doctype, name=None, filters=None, parent=None):
+    """Allow identity-only Employee fetches used by document client scripts.
+
+    A normal permitted read still uses Frappe's full, field-filtered response.
+    A restricted Accounts User gets only the same identity information as a link
+    selector. Employee form loading and all Employee writes remain unchanged.
+    """
+    from frappe.client import get as standard_get
+
+    if doctype != "Employee" or not name or "Accounts User" not in frappe.get_roles():
+        return standard_get(doctype, name=name, filters=filters, parent=parent)
+    doc = frappe.get_doc("Employee", str(name))
+    if doc.has_permission("read") or doc.get("status") != "Active":
+        return standard_get(doctype, name=name, filters=filters, parent=parent)
+
+    from frappe.core.doctype.user_permission.user_permission import get_user_permissions
+
+    # Check role and all other link restrictions without the Employee self rule.
+    # Restore the request cache immediately; never persist this projection scope.
+    user = frappe.session.user
+    permissions = deepcopy(get_user_permissions(user))
+    permissions.pop("Employee", None)
+    key = frappe.cache.make_key("user_permissions")
+    cache = frappe.local.cache.setdefault(key, {})
+    missing = object()
+    previous = cache.get(user, missing)
+    try:
+        cache[user] = permissions
+        doc.check_permission("select")
+        allowed_fields = ("name", "employee_name", "company", "status")
+        result = {field: doc.get(field) for field in allowed_fields}
+        result["doctype"] = "Employee"
+        return result
+    finally:
+        if previous is missing:
+            cache.pop(user, None)
+        else:
+            cache[user] = previous
+
+
 SEARCH_METHODS = {"frappe.desk.search.search_link", "frappe.desk.search.search_widget"}
 DOCUMENT_METHODS = {
     "frappe.desk.form.save.savedocs",
@@ -92,3 +133,57 @@ def allow_employee_selection():
         else:
             filters = [*filters, ["Employee", "status", "=", "Active"]]
         args["filters"] = filters
+
+
+def diagnose_employee_selection(user, employee):
+    """Read-only bench diagnostic; deliberately not exposed as a browser RPC.
+
+    Reports actual installed hooks and permission outcomes using the site's own
+    Frappe code. Restores the original user and request-local state even on failure.
+    """
+    from hashlib import sha256
+    from pathlib import Path
+    from types import SimpleNamespace
+
+    from frappe.core.doctype.user_permission.user_permission import get_user_permissions
+
+    original_user = frappe.session.user
+    original_args = frappe.local.form_dict
+    original_request = getattr(frappe.local, "request", None)
+    original_cache = deepcopy(frappe.local.cache)
+    try:
+        frappe.set_user(user)
+        employee = str(employee)
+        report = {
+            "frappe_version": frappe.__version__,
+            "module_revision": sha256(Path(__file__).read_bytes()).hexdigest()[:12],
+            "auth_hooks": list(frappe.get_hooks("auth_hooks", [])),
+            "before_request_hooks": list(frappe.get_hooks("before_request", [])),
+            "is_accounts_user": "Accounts User" in frappe.get_roles(),
+            "employee_exists": bool(frappe.db.exists("Employee", employee)),
+            "employee_status": frappe.db.get_value("Employee", employee, "status"),
+            "employee_read_before": bool(frappe.has_permission("Employee", "read", employee)),
+        }
+        frappe.local.form_dict = frappe._dict(party_type="Employee", party=employee)
+        # Reproduce a browser RPC before Frappe dispatch populates cmd.
+        frappe.local.request = SimpleNamespace(path="/api/method/erpnext.accounts.utils.get_balance_on")
+        report["resolved_command"] = _request_command(frappe.local.form_dict)
+        baseline = deepcopy(get_user_permissions(user))
+        allow_employee_selection()
+        effective = get_user_permissions(user)
+        report.update({
+            "employee_in_effective_permissions": any(
+                str(row.get("doc")) == employee and not row.get("applicable_for")
+                for row in effective.get("Employee", [])
+            ),
+            "employee_read_after": bool(frappe.has_permission("Employee", "read", employee)),
+            "other_user_permissions_unchanged": {
+                key: value for key, value in baseline.items() if key != "Employee"
+            } == {key: value for key, value in effective.items() if key != "Employee"},
+        })
+        return report
+    finally:
+        frappe.set_user(original_user)
+        frappe.local.form_dict = original_args
+        frappe.local.request = original_request
+        frappe.local.cache = original_cache
