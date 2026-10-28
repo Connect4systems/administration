@@ -14,8 +14,13 @@ bench install-app administration
 
 ### Accounting employee selection
 
-Accounts User can select active Employees in document Employee link fields and
-Employee party fields even when Employee User Permissions limit employee access.
+Accounts User, Site Admin, Fleet Manager, Fleet admin,
+Admin supervisor (Accommodation), Admin supervisor (Travel), and Administration
+Manager can select active Employees in document Employee link fields and Employee
+party fields even when Employee User Permissions limit employee access. This
+includes assigning existing Employees to Beds, Vehicles, travel, and related app
+documents, subject to the user's existing document permissions. It does not grant
+permission to create Employee master records.
 Document load/save/method operations and ERPNext accounting lookups receive an
 expanded Employee permission list in the request-local cache. This also supports
 the party balance lookup after selecting an Employee in Journal Entry. Existing
@@ -23,10 +28,14 @@ role checks, Company and Project restrictions still apply. Stored User Permissio
 and the shared Redis cache are unchanged. Direct Employee list, form and read/write
 requests keep their normal permissions. Other roles and party types are unchanged.
 Some client scripts call `frappe.client.get` for the selected Employee. When an
-Accounts User cannot read that active Employee, this endpoint returns only
+eligible user cannot read that active Employee, this endpoint returns only
 `doctype`, `name`, `employee_name`, `company`, and `status`, after checking Select
 permission and the remaining user restrictions. It does not expose HR details or
 grant Employee form access. Existing permitted full reads are unchanged.
+Operational Employee field fetches (including Bed department and employment type)
+also support these roles. Arbitrary fields, private data and non-name filter
+queries do not receive expanded access. Existing document query filters, including
+project, accommodation type and transportation type, remain in force.
 The access hook runs after authentication and resolves RPC methods from the URL;
 Frappe has not yet set `form_dict.cmd` when request/authentication hooks run.
 

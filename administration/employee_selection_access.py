@@ -5,18 +5,34 @@ from copy import deepcopy
 import frappe
 
 
+EMPLOYEE_SELECTION_ROLES = frozenset({
+    "Accounts User", "Site Admin", "Fleet Manager", "Fleet admin",
+    "Admin supervisor (Accommodation)", "Admin supervisor (Travel)",
+    "Administration Manager",
+})
+EMPLOYEE_SELECTION_FIELDS = frozenset({
+    "name", "employee_name", "company", "status", "department", "employment_type",
+    "branch", "designation", "custom_project", "custom_accommidation",
+    "custom_transportation", "reports_to", "leave_approver", "company_email",
+})
+
+
+def has_employee_selection_role():
+    return bool(EMPLOYEE_SELECTION_ROLES.intersection(frappe.get_roles()))
+
+
 @frappe.whitelist()
 def get_document(doctype, name=None, filters=None, parent=None):
     """Allow identity-only Employee fetches used by document client scripts.
 
     A normal permitted read still uses Frappe's full, field-filtered response.
-    A restricted Accounts User gets only the same identity information as a link
+    An eligible restricted user gets only the same identity information as a link
     selector. Employee form loading and all Employee writes remain unchanged.
     """
     from frappe.client import get as standard_get
     from frappe.permissions import has_permission
 
-    if doctype != "Employee" or not name or "Accounts User" not in frappe.get_roles():
+    if doctype != "Employee" or not name or not has_employee_selection_role():
         return standard_get(doctype, name=name, filters=filters, parent=parent)
     doc = frappe.get_doc("Employee", str(name))
     # Document.has_permission logs a user-facing denial even when it merely
@@ -51,6 +67,11 @@ def get_document(doctype, name=None, filters=None, parent=None):
 
 
 SEARCH_METHODS = {"frappe.desk.search.search_link", "frappe.desk.search.search_widget"}
+APP_SELECTION_METHODS = {
+    "administration.administration.doctype.bed.bed.check_employee_assignment",
+    "administration.administration.doctype.bed.bed.employee_left",
+    "administration.administration.doctype.vehicles.vehicles.get_employee_vehicles",
+}
 DOCUMENT_METHODS = {
     "frappe.desk.form.save.savedocs",
     "frappe.desk.form.load.getdoc",
@@ -88,6 +109,27 @@ def _request_command(args):
     return args.get("cmd") or ""
 
 
+def _selection_field_fetch(command, args):
+    """Permit operational fetch_from fields, never arbitrary Employee fields."""
+    if args.get("doctype") != "Employee":
+        return False
+    if command == "frappe.client.get_value":
+        fields = args.get("fieldname")
+        filters = args.get("filters")
+        if isinstance(filters, str) and filters.startswith("{"):
+            filters = frappe.parse_json(filters)
+        if not (isinstance(filters, str) and filters or
+                isinstance(filters, dict) and set(filters) == {"name"} and filters.get("name")):
+            return False
+    elif command == "frappe.client.validate_link":
+        fields = args.get("fields") or []
+    else:
+        return False
+    if isinstance(fields, str):
+        fields = frappe.parse_json(fields) if fields.startswith("[") else [fields]
+    return isinstance(fields, (list, tuple)) and set(fields).issubset(EMPLOYEE_SELECTION_FIELDS)
+
+
 def allow_employee_selection():
     """Expand only this request's cached Employee permissions for document use.
 
@@ -100,7 +142,9 @@ def allow_employee_selection():
     searching = command in SEARCH_METHODS and args.get("doctype") == "Employee"
     document_operation = command in DOCUMENT_METHODS
     accounting_operation = command.startswith("erpnext.accounts.")
-    if not (searching or document_operation or accounting_operation):
+    field_fetch = _selection_field_fetch(command, args)
+    app_operation = command in APP_SELECTION_METHODS
+    if not (searching or document_operation or accounting_operation or field_fetch or app_operation):
         return
     if document_operation:
         doctype = _document_type(args)
@@ -110,7 +154,7 @@ def allow_employee_selection():
         # Document forms send their parent document, so no child RPC needs this.
         if frappe.get_meta(doctype).istable:
             return
-    if "Accounts User" not in frappe.get_roles():
+    if not has_employee_selection_role():
         return
 
     from frappe.core.doctype.user_permission.user_permission import get_user_permissions
@@ -164,6 +208,7 @@ def diagnose_employee_selection(user, employee):
             "auth_hooks": list(frappe.get_hooks("auth_hooks", [])),
             "before_request_hooks": list(frappe.get_hooks("before_request", [])),
             "is_accounts_user": "Accounts User" in frappe.get_roles(),
+            "has_employee_selection_role": has_employee_selection_role(),
             "employee_exists": bool(frappe.db.exists("Employee", employee)),
             "employee_status": frappe.db.get_value("Employee", employee, "status"),
             "employee_read_before": bool(frappe.has_permission("Employee", "read", employee)),

@@ -163,3 +163,54 @@ class EmployeeSelectionAccessTests(unittest.TestCase):
         self.assertEqual(self.module.get_document("Employee", name="EMP-002"), {"standard": True})
         self.assertEqual(self.module.get_document("Journal Entry", name="JV-001"), {"standard": True})
         self.frappe.get_doc.assert_not_called()
+
+    def test_each_requested_role_can_select_and_assign_other_employees(self):
+        roles = ("Site Admin", "Fleet Manager", "Fleet admin",
+                 "Admin supervisor (Accommodation)", "Admin supervisor (Travel)",
+                 "Administration Manager", "Accounts User")
+        for role in roles:
+            with self.subTest(role=role):
+                self.frappe.get_roles.return_value = [role]
+                self.frappe.local.cache = {}
+                selected = self.run_request("frappe.desk.search.search_link", doctype="Employee")
+                self.assertIn("EMP-002", [row["doc"] for row in selected["Employee"]])
+                for doctype in ("Bed", "Vehicles", "Travel Request"):
+                    self.frappe.local.cache = {}
+                    saved = self.run_request("frappe.desk.form.save.savedocs", doc={"doctype": doctype})
+                    self.assertIn("EMP-002", [row["doc"] for row in saved["Employee"]])
+                self.employee_document()
+                self.assertEqual(self.module.get_document("Employee", name="EMP-002")["name"], "EMP-002")
+
+    def test_operational_employee_fetches_preserve_other_restrictions(self):
+        self.frappe.get_roles.return_value = ["Admin supervisor (Accommodation)"]
+        result = self.run_request("frappe.client.get_value", doctype="Employee", filters="EMP-002",
+                                  fieldname=["department", "employment_type"])
+        self.assertIn("EMP-002", [row["doc"] for row in result["Employee"]])
+        self.assertEqual(result["Company"], self.original["Company"])
+        self.assertEqual(result["Project"], self.original["Project"])
+
+    def test_link_validation_can_fetch_bed_operational_fields(self):
+        self.frappe.get_roles.return_value = ["Fleet admin"]
+        result = self.run_request("frappe.client.validate_link", doctype="Employee", docname="EMP-002",
+                                  fields=["department", "status", "employment_type"])
+        self.assertIn("EMP-002", [row["doc"] for row in result["Employee"]])
+
+    def test_private_fields_and_filter_probes_are_never_expanded(self):
+        for field in ("bank_ac_no", "salary", "*", "name as salary"):
+            with self.subTest(field=field):
+                self.assertIsNone(self.run_request("frappe.client.get_value", doctype="Employee",
+                                                  filters="EMP-002", fieldname=[field]))
+                self.assertIsNone(self.run_request("frappe.client.validate_link", doctype="Employee",
+                                                  docname="EMP-002", fields=[field]))
+        self.assertIsNone(self.run_request("frappe.client.get_value", doctype="Employee",
+                                          filters={"salary": 1000}, fieldname="name"))
+
+    def test_bed_release_and_vehicle_assignment_helpers_receive_same_access(self):
+        for role, command in (
+            ("Admin supervisor (Accommodation)", "administration.administration.doctype.bed.bed.employee_left"),
+            ("Fleet Manager", "administration.administration.doctype.vehicles.vehicles.get_employee_vehicles"),
+        ):
+            self.frappe.local.cache = {}
+            self.frappe.get_roles.return_value = [role]
+            result = self.run_request(command, employee="EMP-002")
+            self.assertIn("EMP-002", [row["doc"] for row in result["Employee"]])
