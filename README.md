@@ -20,6 +20,8 @@ The accounting lookup returns only employee IDs and names and requires access to
 the relevant accounting screen. Existing Employee permissions remain unchanged.
 Other party types retain their standard queries.
 
+The General Ledger selector is appended by the report script endpoint after the
+standard report definition loads. Journal Entry uses its doctype script hook.
 After deploying, run `bench build --app administration` and
 `bench --site <site> clear-cache`, restart Bench, and hard-refresh Desk.
 Validate with an Accounts User restricted to one Employee: both accounting party

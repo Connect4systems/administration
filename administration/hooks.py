@@ -27,7 +27,6 @@ app_license = "mit"
 # include js, css files in header of desk.html
 # app_include_css = "/assets/administration/css/administration.css"
 app_include_js = [
-    "/assets/administration/js/accounting_employee_selection.js",
     "/assets/administration/js/document_approval.js?v=20261013-flat-actions",
     "/assets/administration/js/flat_transaction_buttons.js?v=20261013-2",
 ]
@@ -295,6 +294,7 @@ scheduler_events = {"daily": [
 # ------------------------------
 #
 override_whitelisted_methods = {
+    "frappe.desk.query_report.get_script": "administration.accounting_employee_selection.get_report_script",
     "frappe.model.workflow.apply_workflow": "administration.flat_request_workflow.apply_workflow",
     "erpnext.setup.doctype.employee.employee.create_user": "administration.employee_user_permissions.create_user",
 }

@@ -2,6 +2,19 @@
 
 import frappe
 from frappe.utils import cint
+from pathlib import Path
+
+
+@frappe.whitelist()
+def get_report_script(report_name):
+    """Apply the selector after the standard report script has been loaded."""
+    from frappe.desk.query_report import get_script
+
+    result = get_script(report_name)
+    if report_name == "General Ledger":
+        script = Path(__file__).parent / "public/js/accounting_employee_selection.js"
+        result["script"] += "\n" + script.read_text(encoding="utf-8")
+    return result
 
 
 @frappe.whitelist()

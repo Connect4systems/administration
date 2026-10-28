@@ -61,3 +61,19 @@ class AccountingEmployeeSelectionTests(unittest.TestCase):
         report_api.get_report_doc.assert_called_once_with("General Ledger")
         report_api.get_report_doc.return_value.check_permission.assert_called_once_with("read")
         self.frappe.has_permission.assert_called_once_with("GL Entry", "read", throw=True)
+
+    def test_ledger_script_contains_selector_after_standard_definition(self):
+        report_api = Mock()
+        report_api.get_script.return_value = {"script": "standard_report_script;", "html_format": "test"}
+        with patch.dict(sys.modules, {"frappe.desk.query_report": report_api}):
+            result = self.module.get_report_script("General Ledger")
+        self.assertTrue(result["script"].startswith("standard_report_script;\n"))
+        self.assertIn("administration.accounting_employee_selection.employee_query", result["script"])
+        self.assertEqual(result["html_format"], "test")
+
+    def test_other_report_scripts_are_unchanged(self):
+        report_api = Mock()
+        report_api.get_script.return_value = {"script": "other_report_script;"}
+        with patch.dict(sys.modules, {"frappe.desk.query_report": report_api}):
+            self.assertEqual(self.module.get_report_script("Trial Balance"),
+                             {"script": "other_report_script;"})
