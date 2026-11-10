@@ -248,6 +248,7 @@ doc_events = {
         "on_trash": "administration.user_employee.clear_employee_from_user",
     },
     "User": {
+        "onload": "administration.user_modules.ensure_module_choices",
         "validate": "administration.user_employee.set_user_employee_details",
     },
 }
