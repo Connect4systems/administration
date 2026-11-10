@@ -108,6 +108,7 @@ after_install = [
     "administration.business_trip_setup.setup",
     "administration.employee_user_permissions.setup_user_manager_permissions",
     "administration.system_email.setup_system_sender",
+    "administration.my_profile_workspace.setup",
 ]
 after_migrate = [
     "administration.system_email.setup_system_sender",
@@ -128,6 +129,7 @@ after_migrate = [
     "administration.user_employee.setup_employee_details",
     "administration.flat_request_layout.ensure_approval_layout",
     "administration.flat_request_layout.ensure_contract_approval_layout",
+    "administration.my_profile_workspace.setup",
 ]
 
 # Uninstallation
@@ -248,7 +250,6 @@ doc_events = {
         "on_trash": "administration.user_employee.clear_employee_from_user",
     },
     "User": {
-        "onload": "administration.user_modules.ensure_module_choices",
         "validate": "administration.user_employee.set_user_employee_details",
     },
 }
@@ -374,6 +375,7 @@ auth_hooks = ["administration.employee_selection_access.allow_employee_selection
 
 # Load JS only on the Purchase Order doctype
 doctype_js = {
+    "User": "public/js/user_modules.js",
     "Journal Entry": "public/js/journal_entry_employee_selection.js",
     "Flat": "public/js/flat_transaction_buttons.js",
     "Flat Contract": "public/js/flat_transaction_buttons.js",

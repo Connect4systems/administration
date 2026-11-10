@@ -12,6 +12,28 @@ bench get-app $URL_OF_THIS_REPO --branch develop
 bench install-app administration
 ```
 
+### User module selector
+
+My Profile is available to Employee and Employee Self Service roles independently
+of the Administration module checkbox. Its installed workspace has no module
+filter; the source remains owned by Administration for synchronization. Existing
+document and report permissions still control the shortcuts. After deploying,
+run `bench --site <production-site> migrate` and clear the site cache, then reload
+Desk. To apply only this workspace adjustment without a full migration, run
+`bench --site <production-site> execute administration.my_profile_workspace.setup`.
+
+The User form refresh handler reveals the `modules_html` control when Frappe has
+created the module editor for an enabled System User and the operator can edit
+roles. This handles production forms where the control retains `hide-control`
+despite having rendered module checkboxes. Module Profile restrictions still use
+the standard editor behavior.
+
+After deploying, run `bench build --app administration`,
+`bench --site <production-site> clear-cache`, and `bench restart`, then hard-refresh
+Desk. No schema migration is required for this change. Check that module choices
+remain visible after reloading the User form and that a Module Profile still
+controls which choices can be edited.
+
 ### Accounting employee selection
 
 Accounts User, Site Admin, Fleet Manager, Fleet admin,
